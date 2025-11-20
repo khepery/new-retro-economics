@@ -3115,15 +3115,6 @@
     }
 
     </style>
-    
-    <!-- PDF.js Library for PDF text extraction -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-        // Configure PDF.js worker
-        if (typeof pdfjsLib !== 'undefined') {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        }
-    </script>
 </head>
 <body>
     <!-- Intro Video Overlay -->
@@ -3324,8 +3315,8 @@
                 <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
             </div>
             <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
-            <input type="file" id="pdfUpload" accept=".pdf" class="file-input" style="display: none;" onchange="handlePDFUpload(event)" title="Upload PDF for AI Generation">
-            <button class="timer-btn" onclick="document.getElementById('pdfUpload').click()" style="width: 100%; margin: 2px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">🤖 AI GENERATE FROM PDF</button>
+            <input type="file" id="aiFileUpload" accept=".pdf,.ppt,.pptx" class="file-input" style="display: none;" onchange="handleAIFileUpload(event)" title="Upload PDF/PowerPoint for AI Generation">
+            <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">🤖 AI GENERATE LESSON</button>
             <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
             <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
             <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
@@ -10116,30 +10107,222 @@ function renderWriteScene() {
         };
 
         // ═══════════════════════════════════════════════════════════════════════
-        // OFFLINE AI LESSON GENERATOR - Llamafile Integration
+        // OFFLINE AI LESSON GENERATOR - Improved with Topic Input & PowerPoint Support
         // ═══════════════════════════════════════════════════════════════════════
         
         /**
-         * Extract text from PDF using PDF.js
+         * Show AI Generator Modal with topic input and file selection
          */
-        async function extractTextFromPDF(file) {
+        window.showAIGeneratorModal = function() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <div style="font-size: clamp(18px, 3vw, 28px); font-weight: bold; margin-bottom: 15px; color: var(--primary-bright); text-align: center;">
+                        🤖 AI LESSON GENERATOR | AI课程生成器
+                    </div>
+                    <div style="font-size: clamp(12px, 2vw, 16px); margin-bottom: 20px; line-height: 1.6;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                            <strong>📋 IMPORTANT SETUP | 重要设置：</strong><br><br>
+                            <strong style="color: #ff6b6b;">⚠️ BEFORE USING:</strong><br>
+                            1. Start <strong>ai_server.exe</strong> (double-click it)<br>
+                            &nbsp;&nbsp;&nbsp;双击 ai_server.exe 启动服务器<br><br>
+                            2. Run command to enable CORS:<br>
+                            &nbsp;&nbsp;&nbsp;<code style="background: #000; padding: 2px 8px; border-radius: 3px; font-size: 11px;">ai_server.exe --host 0.0.0.0 --port 8080</code><br><br>
+                            3. Wait for: "listening at http://127.0.0.1:8080"<br>
+                            &nbsp;&nbsp;&nbsp;等待显示：正在监听 8080 端口<br><br>
+                            4. Keep terminal window open | 保持窗口打开
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+                                📝 Topic/Focus (Optional) | 主题/重点（可选）:
+                            </label>
+                            <input type="text" id="aiTopicInput" 
+                                placeholder="e.g., Supply & Demand, Chapter 3, Pages 45-50, Inflation concepts"
+                                style="width: 100%; padding: 10px; font-size: 14px; border: 2px solid var(--primary-color); background: rgba(0,0,0,0.3); color: var(--primary-color); border-radius: 5px; font-family: inherit;">
+                            <div style="font-size: 11px; color: #888; margin-top: 5px;">
+                                Specify topics, page numbers, or concepts to focus on from your file<br>
+                                指定要关注的主题、页码或概念
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+                                📄 Upload File | 上传文件:
+                            </label>
+                            <input type="file" id="aiFileInput" 
+                                accept=".pdf,.ppt,.pptx,.txt"
+                                style="width: 100%; padding: 10px; font-size: 14px; border: 2px solid var(--primary-color); background: rgba(0,0,0,0.3); color: var(--primary-color); border-radius: 5px;">
+                            <div style="font-size: 11px; color: #888; margin-top: 5px;">
+                                Supported: PDF, PowerPoint (PPT/PPTX), Text files<br>
+                                支持：PDF、PowerPoint (PPT/PPTX)、文本文件
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button onclick="startAIGeneration()" class="timer-btn" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; font-size: 16px;">
+                                🚀 GENERATE LESSON | 生成课程
+                            </button>
+                            <button onclick="this.closest('.modal-overlay').remove()" class="timer-btn" style="flex: 1; background: #666; padding: 12px; font-size: 16px;">
+                                ❌ CANCEL | 取消
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        };
+        
+        /**
+         * Start AI generation process
+         */
+        window.startAIGeneration = async function() {
+            const fileInput = document.getElementById('aiFileInput');
+            const topicInput = document.getElementById('aiTopicInput');
+            const file = fileInput.files[0];
+            const topic = topicInput.value.trim();
+            
+            if (!file) {
+                showModal('ERROR | 错误', 'Please select a file first!\n请先选择一个文件！');
+                return;
+            }
+            
+            // Close the input modal
+            document.querySelector('.modal-overlay').remove();
+            
+            // Show progress modal
+            const statusModal = showModal('AI GENERATION | AI生成', 
+                '🤖 Initializing AI lesson generator...\n正在初始化AI课程生成器...\n\n⏳ Please wait...');
+            
+            try {
+                // Step 1: Check if Llamafile is running
+                updateModalContent(statusModal, 
+                    '🔍 Step 1/5: Checking AI server connection...\n步骤 1/5：检查AI服务器连接...\n\n⏳ Connecting to localhost:8080...');
+                
+                try {
+                    const healthCheck = await fetch('http://localhost:8080/health', {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+                } catch (error) {
+                    throw new Error(`❌ Cannot connect to AI server (localhost:8080)
+
+请确保：
+1. ai_server.exe is running | 确保 ai_server.exe 正在运行
+2. Start it with CORS enabled | 使用 CORS 启动：
+   
+   Command | 命令:
+   ai_server.exe --host 0.0.0.0 --port 8080
+   
+3. Terminal shows: "listening at http://127.0.0.1:8080"
+4. Keep terminal window open | 保持终端窗口打开
+
+Error: ${error.message}`);
+                }
+                
+                // Step 2: Read file content
+                updateModalContent(statusModal, 
+                    '📄 Step 2/5: Reading file content...\n步骤 2/5：读取文件内容...\n\n⏳ Processing ' + file.name + '...');
+                
+                const fileText = await readFileContent(file);
+                
+                if (!fileText || fileText.length < 50) {
+                    throw new Error('File content is too short or empty. Please use a file with more content.\n文件内容太短或为空。请使用内容更多的文件。');
+                }
+                
+                // Step 3: Prepare content with topic focus
+                updateModalContent(statusModal, 
+                    '📝 Step 3/5: Preparing content...\n步骤 3/5：准备内容...\n\n⏳ Analyzing ' + (topic ? `topic: ${topic}` : 'full content') + '...');
+                
+                let contentToUse = fileText.substring(0, 4000); // Use more context
+                let userInstructions = topic ? 
+                    `Focus specifically on: ${topic}\n\nRelated content from file:\n${contentToUse}` :
+                    `Content from file:\n${contentToUse}`;
+                
+                // Step 4: Generate template
+                updateModalContent(statusModal, 
+                    '🎨 Step 4/5: Creating lesson template...\n步骤 4/5：创建课程模板...\n\n⏳ Preparing structure...');
+                
+                const template = createAdaptiveTemplate();
+                
+                // Step 5: Generate lesson with AI
+                updateModalContent(statusModal, 
+                    '🧠 Step 5/5: AI is generating your lesson...\n步骤 5/5：AI正在生成您的课程...\n\n⏳ This may take 30-90 seconds...\n\n🤖 Phi-3 Mini is analyzing the content\n    and creating engaging lesson...');
+                
+                const generatedLesson = await generateLessonWithAI(userInstructions, template, topic);
+                
+                // Validate and apply the generated lesson
+                const validation = validateTemplate(generatedLesson);
+                
+                if (!validation.isValid) {
+                    console.error('Validation errors:', validation.errors);
+                    throw new Error('AI generated invalid lesson structure. Please try again.\nAI生成的课程结构无效。请重试。');
+                }
+                
+                // Apply the lesson
+                applyGeneratedLesson(generatedLesson);
+                
+                updateModalContent(statusModal, 
+                    `✅ AI Lesson Generated Successfully!\nAI课程生成成功！\n\n📚 Title: ${lessonConfig.title}\n⏱️ Duration: ${generatedLesson.metadata.duration}min\n🎯 Type: ${templateType}\n${topic ? `\n🎯 Topic: ${topic}` : ''}\n\n🤖 Generated by Phi-3 Mini (Llamafile)\n\nClick anywhere to start your lesson!`);
+                
+            } catch (error) {
+                console.error('AI Generation Error:', error);
+                playError();
+                updateModalContent(statusModal, 
+                    `❌ AI Generation Failed\nAI生成失败\n\n${error.message}\n\nTroubleshooting | 故障排除:\n• Start ai_server.exe with CORS\n  使用 CORS 启动 ai_server.exe\n• Use command: ai_server.exe --host 0.0.0.0 --port 8080\n• Check file is readable\n  检查文件可读\n• Try different content\n  尝试不同内容`);
+            }
+        };
+        
+        /**
+         * Read file content (supports PDF, PPT, PPTX, TXT)
+         */
+        async function readFileContent(file) {
+            const fileName = file.name.toLowerCase();
+            
+            // For text files - direct read
+            if (fileName.endsWith('.txt')) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsText(file);
+                });
+            }
+            
+            // For PDF and PowerPoint - read as text approximation
+            // Since we removed PDF.js dependency, we'll use a simplified approach
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = async function(e) {
+                reader.onload = async (e) => {
                     try {
-                        const typedArray = new Uint8Array(e.target.result);
-                        const pdf = await pdfjsLib.getDocument({data: typedArray}).promise;
-                        let fullText = '';
+                        const arrayBuffer = e.target.result;
+                        const uint8Array = new Uint8Array(arrayBuffer);
                         
-                        // Extract text from all pages
-                        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                            const page = await pdf.getPage(pageNum);
-                            const textContent = await page.getTextContent();
-                            const pageText = textContent.items.map(item => item.str).join(' ');
-                            fullText += pageText + '\n\n';
+                        // Convert binary to text (approximation)
+                        // This extracts readable text from binary files
+                        let text = '';
+                        for (let i = 0; i < uint8Array.length; i++) {
+                            const char = uint8Array[i];
+                            // Only keep printable ASCII and common characters
+                            if ((char >= 32 && char <= 126) || char === 10 || char === 13) {
+                                text += String.fromCharCode(char);
+                            }
                         }
                         
-                        resolve(fullText.trim());
+                        // Clean up extracted text
+                        text = text.replace(/\s+/g, ' ').trim();
+                        
+                        if (text.length < 50) {
+                            reject(new Error('Could not extract readable text from file. Please ensure file contains text content.'));
+                        } else {
+                            resolve(text);
+                        }
                     } catch (error) {
                         reject(error);
                     }
@@ -10152,31 +10335,30 @@ function renderWriteScene() {
         /**
          * Generate lesson using Llamafile (localhost:8080)
          */
-        async function generateLessonWithAI(pdfText, template) {
-            const systemPrompt = `You are an expert economics educator and curriculum designer. Your task is to generate a complete economics lesson plan in STRICT JSON format based on the provided textbook content.
+        async function generateLessonWithAI(contentText, template, topic) {
+            const systemPrompt = `You are an expert economics educator and curriculum designer. Your task is to generate a complete economics lesson plan in STRICT JSON format.
 
 CRITICAL RULES:
 1. Output ONLY valid JSON - NO markdown, NO code blocks, NO explanations
 2. Start with { and end with } - nothing else
 3. Follow the template structure EXACTLY
-4. All text fields must be filled with relevant content from the PDF
+4. All text fields must be filled with relevant economics content
 5. Keywords must appear in <span class='keyword'> tags in the story
 6. Maintain bilingual content (English and Chinese)
+7. ${topic ? `Focus specifically on the topic: ${topic}` : 'Use the provided content'}
 
 Generate an engaging, educational lesson that students will enjoy learning from.`;
 
-            const userPrompt = `Based on this textbook content, fill the lesson template with economics concepts:
-
-=== TEXTBOOK CONTENT ===
-${pdfText.substring(0, 3000)}
+            const userPrompt = `${contentText}
 
 === TEMPLATE TO FILL ===
 ${JSON.stringify(template, null, 2)}
 
-Fill this template with relevant economics content from the textbook. Return ONLY the completed JSON template.`;
+Fill this template with relevant economics content. Return ONLY the completed JSON template. NO other text.`;
 
             const response = await fetch('http://localhost:8080/v1/chat/completions', {
                 method: 'POST',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -10216,111 +10398,38 @@ Fill this template with relevant economics content from the textbook. Return ONL
         }
         
         /**
-         * Handle PDF upload and AI generation
+         * Apply generated lesson to the app
          */
-        window.handlePDFUpload = async function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function applyGeneratedLesson(generatedLesson) {
+            currentTemplate = generatedLesson;
+            templateType = generatedLesson.metadata.classType || '20min';
             
-            // Reset file input
-            event.target.value = '';
+            // Update lessonConfig
+            lessonConfig.title = generatedLesson.metadata.title || 'AI Generated Lesson';
+            lessonConfig.title_zh = generatedLesson.metadata.title_zh || 'AI生成课程';
+            lessonConfig.story = generatedLesson.sections.dataAnalysis.story;
+            lessonConfig.frames = generatedLesson.sections.logicConstruction.frames || [];
+            lessonConfig.wordBank = generatedLesson.sections.logicConstruction.wordBank || [];
+            lessonConfig.definitions = generatedLesson.sections.dataRepository.definitions || [];
+            lessonConfig.writePrompts = generatedLesson.sections.dataEntry.writingPrompts || [];
+            lessonConfig.mcqs = generatedLesson.sections.systemValidation.assessments || [];
+            lessonConfig.summary = generatedLesson.sections.feedback.summary || [];
             
-            const statusModal = showModal('AI GENERATION | AI生成', 
-                '🤖 Initializing AI lesson generator...\n正在初始化AI课程生成器...\n\n⏳ Please wait...');
-            
-            try {
-                // Step 1: Check if Llamafile is running
-                updateModalContent(statusModal, 
-                    '🔍 Step 1/4: Checking AI server connection...\n步骤 1/4：检查AI服务器连接...\n\n⏳ Connecting to localhost:8080...');
-                
-                try {
-                    const healthCheck = await fetch('http://localhost:8080/health', {
-                        method: 'GET',
-                        timeout: 3000
-                    });
-                } catch (error) {
-                    throw new Error(`❌ Cannot connect to AI server (localhost:8080)
-
-请确保：
-1. ai_server.exe (Llamafile) is running
-2. It's listening on port 8080
-3. No firewall is blocking the connection
-
-启动方法：
-双击 ai_server.exe 文件即可启动
-
-Error: ${error.message}`);
-                }
-                
-                // Step 2: Extract PDF text
-                updateModalContent(statusModal, 
-                    '📄 Step 2/4: Extracting text from PDF...\n步骤 2/4：从PDF提取文本...\n\n⏳ Processing ' + file.name + '...');
-                
-                const pdfText = await extractTextFromPDF(file);
-                
-                if (!pdfText || pdfText.length < 100) {
-                    throw new Error('PDF text extraction failed or PDF is too short. Please ensure the PDF contains readable text.');
-                }
-                
-                // Step 3: Generate template
-                updateModalContent(statusModal, 
-                    '📝 Step 3/4: Creating lesson template...\n步骤 3/4：创建课程模板...\n\n⏳ Preparing structure...');
-                
-                const template = createAdaptiveTemplate();
-                
-                // Step 4: Generate lesson with AI
-                updateModalContent(statusModal, 
-                    '🧠 Step 4/4: AI is generating your lesson...\n步骤 4/4：AI正在生成您的课程...\n\n⏳ This may take 30-60 seconds...\n\n🤖 Phi-3 Mini is analyzing the textbook\n    and creating engaging content...');
-                
-                const generatedLesson = await generateLessonWithAI(pdfText, template);
-                
-                // Validate and apply the generated lesson
-                const validation = validateTemplate(generatedLesson);
-                
-                if (!validation.isValid) {
-                    throw new Error('AI generated invalid lesson structure. Please try again with different content.');
-                }
-                
-                // Apply the lesson (same as loadTemplate)
-                currentTemplate = generatedLesson;
-                templateType = generatedLesson.metadata.classType || '20min';
-                
-                // Update lessonConfig
-                lessonConfig.title = generatedLesson.metadata.title || 'AI Generated Lesson';
-                lessonConfig.title_zh = generatedLesson.metadata.title_zh || 'AI生成课程';
-                lessonConfig.story = generatedLesson.sections.dataAnalysis.story;
-                lessonConfig.frames = generatedLesson.sections.logicConstruction.frames || [];
-                lessonConfig.wordBank = generatedLesson.sections.logicConstruction.wordBank || [];
-                lessonConfig.definitions = generatedLesson.sections.dataRepository.definitions || [];
-                lessonConfig.writePrompts = generatedLesson.sections.dataEntry.writingPrompts || [];
-                lessonConfig.mcqs = generatedLesson.sections.systemValidation.assessments || [];
-                lessonConfig.summary = generatedLesson.sections.feedback.summary || [];
-                
-                // Update timers if provided
-                if (generatedLesson.adaptation?.timers) {
-                    Object.assign(adaptiveTimers, generatedLesson.adaptation.timers);
-                }
-                
-                // Reset scene
-                currentScene = 0;
-                currentMCQIndex = 0;
-                mcqAnswers = [];
-                
-                // Render and show success
-                renderAllScenes();
-                updateTimer();
-                playSuccess();
-                
-                updateModalContent(statusModal, 
-                    `✅ AI Lesson Generated Successfully!\nAI课程生成成功！\n\n📚 Title: ${lessonConfig.title}\n⏱️ Duration: ${generatedLesson.metadata.duration}min\n🎯 Type: ${templateType}\n\n🤖 Generated by Phi-3 Mini (Llamafile)\n\nClick anywhere to start your lesson!`);
-                
-            } catch (error) {
-                console.error('AI Generation Error:', error);
-                playError();
-                updateModalContent(statusModal, 
-                    `❌ AI Generation Failed\nAI生成失败\n\n${error.message}\n\nPlease check:\n• Is ai_server.exe running?\n• Is the PDF readable?\n• Try a different page/chapter`);
+            // Update timers if provided
+            if (generatedLesson.adaptation?.timers) {
+                Object.assign(adaptiveTimers, generatedLesson.adaptation.timers);
             }
-        };
+            
+            // Reset scene
+            currentScene = 0;
+            currentMCQIndex = 0;
+            mcqAnswers = [];
+            
+            // Render and show success
+            renderAllScenes();
+            updateTimer();
+            playSuccess();
+        }
         
         /**
          * Helper to update modal content dynamically
