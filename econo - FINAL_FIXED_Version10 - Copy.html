@@ -2787,6 +2787,231 @@
         line-height: 1.6;
     }
 
+    /* MVP Student Overlay Styles */
+    .mvp-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.95);
+    }
+
+    .mvp-background {
+        position: absolute;
+        inset: 0;
+        background: 
+            radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.15), transparent 50%),
+            radial-gradient(circle at 70% 60%, rgba(255, 165, 0, 0.15), transparent 50%);
+        animation: mvpBackgroundPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes mvpBackgroundPulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.7; }
+    }
+
+    .mvp-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        animation: mvpContentEntry 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes mvpContentEntry {
+        from {
+            opacity: 0;
+            transform: scale(0.3) rotate(-10deg);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+
+    .mvp-star {
+        font-size: clamp(80px, 15vw, 150px);
+        animation: mvpStarSpin 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+    }
+
+    @keyframes mvpStarSpin {
+        0%, 100% { 
+            transform: rotate(0deg) scale(1);
+            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+        }
+        50% { 
+            transform: rotate(180deg) scale(1.2);
+            filter: drop-shadow(0 0 60px rgba(255, 215, 0, 1));
+        }
+    }
+
+    .mvp-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(32px, 6vw, 56px);
+        font-weight: 900;
+        color: #ffd700;
+        text-shadow: 
+            0 0 10px #ffd700,
+            0 0 20px #ffaa00,
+            0 0 30px #ff8800,
+            0 5px 5px rgba(0, 0, 0, 0.8);
+        margin: 30px 0;
+        letter-spacing: 4px;
+        animation: mvpTitleGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes mvpTitleGlow {
+        0%, 100% { 
+            text-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px #ffaa00,
+                0 0 30px #ff8800,
+                0 5px 5px rgba(0, 0, 0, 0.8);
+        }
+        50% { 
+            text-shadow: 
+                0 0 20px #ffd700,
+                0 0 40px #ffaa00,
+                0 0 60px #ff8800,
+                0 0 80px #ff4400,
+                0 5px 5px rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    .mvp-subtitle {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(18px, 3vw, 28px);
+        color: #ffaa00;
+        margin-bottom: 30px;
+        text-shadow: 0 0 10px #ffaa00;
+    }
+
+    .mvp-student-name {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(40px, 8vw, 72px);
+        font-weight: 900;
+        background: linear-gradient(
+            135deg,
+            #ffd700,
+            #ffed4e,
+            #ffd700,
+            #ffaa00
+        );
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: mvpNameShine 2s linear infinite;
+        margin: 30px 0;
+        letter-spacing: 3px;
+        padding: 20px;
+        position: relative;
+    }
+
+    @keyframes mvpNameShine {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 300% 50%; }
+    }
+
+    .mvp-team {
+        font-size: clamp(20px, 4vw, 32px);
+        color: var(--primary-bright);
+        font-weight: bold;
+        text-shadow: 0 0 15px var(--primary-bright);
+        margin: 20px 0;
+    }
+
+    .mvp-sparkles {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        font-size: 30px;
+    }
+
+    .mvp-sparkle {
+        position: absolute;
+        animation: mvpSparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes mvpSparkle {
+        0%, 100% { 
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+        }
+        50% { 
+            opacity: 1;
+            transform: scale(1.5) rotate(180deg);
+        }
+    }
+
+    /* MVP Selection Panel Styles */
+    .mvp-selection-panel {
+        position: relative;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid var(--primary-bright);
+        border-radius: 8px;
+        padding: 30px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 70vh;
+        overflow-y: auto;
+        box-shadow: 0 0 40px var(--primary-glow);
+    }
+
+    .mvp-selection-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(24px, 4vw, 32px);
+        font-weight: 900;
+        color: var(--primary-bright);
+        text-shadow: 0 0 20px var(--primary-bright);
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    .mvp-student-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .mvp-student-item {
+        background: rgba(0, 255, 0, 0.1);
+        border: 1px solid var(--border-dim);
+        border-radius: 4px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Share Tech Mono', monospace;
+        color: var(--text-color);
+    }
+
+    .mvp-student-item:hover {
+        background: rgba(0, 255, 0, 0.2);
+        border-color: var(--primary-bright);
+        box-shadow: 0 0 20px var(--primary-glow);
+        transform: translateX(5px);
+    }
+
+    .mvp-student-item-name {
+        font-size: clamp(16px, 2.5vw, 20px);
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .mvp-student-item-team {
+        font-size: clamp(12px, 2vw, 14px);
+        color: var(--text-muted);
+    }
+
     </style>
 </head>
 <body>
@@ -2798,54 +3023,51 @@
       becomes visible.  The video file (intro.mp4) should reside in the
       same directory as this HTML file.
     -->
-    <!-- Epic Space Intro Animation -->
-    <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden; perspective: 1000px;">
-      <div id="introAnimation" style="width: 100%; height: 100%; position: relative;">
-        <!-- Star field background -->
-        <canvas id="starField" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+    <!-- Retro Arcade Intro Animation -->
+    <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden;">
+      <div id="introAnimation" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <!-- Scanline effect -->
+        <canvas id="scanlineCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.15;"></canvas>
         
-        <!-- Flying text crawl (Star Wars style) -->
-        <div id="crawlContainer" style="position: absolute; bottom: -100%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 800px; transform-style: preserve-3d; animation: crawlUp 15s linear forwards;">
-          <div style="transform: rotateX(25deg); color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: 32px; line-height: 1.8; text-align: justify; text-shadow: 0 0 10px var(--primary-color);">
-            <div style="text-align: center; font-size: 48px; font-weight: bold; margin-bottom: 40px; letter-spacing: 8px;">
-              RETRO ECONOMICS
+        <!-- Main intro container -->
+        <div id="introMainContent" style="text-align: center; z-index: 1;">
+          <!-- Retro logo with arcade-style text -->
+          <div id="arcadeLogo" style="font-family: 'Orbitron', monospace; margin-bottom: 40px; opacity: 0;">
+            <div style="font-size: clamp(40px, 8vw, 100px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark), 0 10px 10px rgba(0,0,0,0.8); letter-spacing: 8px; line-height: 1.2;">
+              RETRO
             </div>
-            <div style="text-align: center; font-size: 24px; margin-bottom: 60px; color: var(--primary-dim);">
-              防弹自适应课堂
+            <div style="font-size: clamp(40px, 8vw, 100px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark), 0 10px 10px rgba(0,0,0,0.8); letter-spacing: 8px; line-height: 1.2;">
+              ECONOMICS
             </div>
-            <p style="margin-bottom: 30px;">
-              In a world where knowledge flows like data through circuits, a new learning protocol emerges...
-            </p>
-            <p style="margin-bottom: 30px;">
-              The ADAPTIVE CLASSROOM SYSTEM combines ancient wisdom with cutting-edge technology to unlock the secrets of economics.
-            </p>
-            <p style="margin-bottom: 30px;">
-              Teams of explorers venture into the digital realm, guided by captains, documented by writers, and mentored by coaches.
-            </p>
-            <p>
-              Your journey begins now...
-            </p>
+          </div>
+          
+          <!-- Subtitle in Chinese -->
+          <div id="arcadeSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(18px, 3vw, 32px); color: var(--primary-dim); margin-bottom: 60px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
+            防弹自适应课堂
+          </div>
+          
+          <!-- Arcade-style message -->
+          <div id="arcadeMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(16px, 2.5vw, 24px); color: var(--primary-bright); max-width: 600px; margin: 0 auto 40px; opacity: 0; line-height: 1.6; padding: 0 20px;">
+            >> SYSTEM INITIALIZED <<br><br>
+            ADAPTIVE LEARNING PROTOCOL ACTIVE<br>
+            READY TO ENGAGE TEAMS<br><br>
+            INSERT COIN TO CONTINUE
+          </div>
+          
+          <!-- Coin slot animation -->
+          <div id="coinSlot" style="font-size: clamp(40px, 6vw, 80px); margin: 30px 0; opacity: 0;">
+            🪙
+          </div>
+          
+          <!-- Ready message -->
+          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(20px, 3vw, 36px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px;">
+            READY!
           </div>
         </div>
         
-        <!-- Epic logo zoom -->
-        <div id="logoZoom" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1); opacity: 0; animation: epicZoom 3s ease-out 1s forwards;">
-          <div style="font-family: 'Orbitron', monospace; font-size: 120px; font-weight: bold; color: var(--primary-bright); text-shadow: 0 0 40px var(--primary-color), 0 0 80px var(--primary-color), 0 0 120px var(--primary-color); white-space: nowrap;">
-            RETRO
-          </div>
-          <div style="font-family: 'Orbitron', monospace; font-size: 120px; font-weight: bold; color: var(--primary-bright); text-shadow: 0 0 40px var(--primary-color), 0 0 80px var(--primary-color), 0 0 120px var(--primary-color); white-space: nowrap;">
-            ECONOMICS
-          </div>
+        <div id="introPrompt" style="position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: clamp(14px, 2vw, 18px); letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright); padding: 0 20px;">
+          [ PRESS ANY KEY TO START ]
         </div>
-        
-        <!-- Particle burst effect -->
-        <canvas id="particleBurst" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
-        
-        <!-- Hyperspace lines -->
-        <canvas id="hyperspace" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
-      </div>
-      <div id="introPrompt" style="position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: 16px; letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright);">
-        [ PRESS ANY KEY TO ENTER ]
       </div>
     </div>
     
@@ -3904,7 +4126,7 @@
         // HOISTED INTRO VIDEO FUNCTION (SINGLE DEFINITION)
         // ============================================
         function showIntroAnimation() {
-            console.log('%c[INTRO] Starting EPIC space animation', 'color: var(--primary-bright); font-weight: bold');
+            console.log('%c[INTRO] Starting RETRO ARCADE animation', 'color: var(--primary-bright); font-weight: bold');
             
             var overlay = document.getElementById('introOverlay');
             var prompt = document.getElementById('introPrompt');
@@ -3923,22 +4145,23 @@
                 ensureAudioContext();
             }
             
-            // Initialize epic effects
-            initStarField();
-            initHyperspace();
-            initParticleBurst();
+            // Initialize arcade effects
+            initScanlineEffect();
             
-            // Play intro soundtrack with delay to ensure audio is ready
+            // Play arcade intro soundtrack
             setTimeout(function() {
-                playIntroSoundtrack();
+                playArcadeIntroSound();
             }, 150);
+            
+            // Animate intro sequence
+            animateArcadeIntro();
             
             // Create skip button
             var skipBtn = document.createElement('button');
             skipBtn.textContent = 'SKIP [ESC]';
-            skipBtn.style.cssText = 'position:absolute;top:20px;right:20px;background:rgba(0,0,0,0.9);color:var(--primary-bright);border:2px solid var(--primary-bright);padding:12px 24px;font-family:Orbitron,monospace;font-size:16px;cursor:pointer;border-radius:4px;z-index:20001;transition:all 0.3s;box-shadow:0 0 20px rgba(0,255,0,0.3);';
+            skipBtn.style.cssText = 'position:absolute;top:20px;right:20px;background:rgba(0,0,0,0.9);color:var(--primary-bright);border:2px solid var(--primary-bright);padding:12px 24px;font-family:Orbitron,monospace;font-size:16px;cursor:pointer;border-radius:4px;z-index:20001;transition:all 0.3s;box-shadow:0 0 20px var(--primary-bright);';
             skipBtn.onmouseenter = function() { this.style.boxShadow = '0 0 30px var(--primary-bright)'; this.style.transform = 'scale(1.05)'; };
-            skipBtn.onmouseleave = function() { this.style.boxShadow = '0 0 20px rgba(0,255,0,0.3)'; this.style.transform = 'scale(1)'; };
+            skipBtn.onmouseleave = function() { this.style.boxShadow = '0 0 20px var(--primary-bright)'; this.style.transform = 'scale(1)'; };
             overlay.appendChild(skipBtn);
             
             var dismiss = function() {
@@ -3964,255 +4187,240 @@
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 };
-            }, 12000);
+            }, 7000);
             
-            // Auto-dismiss after 18 seconds
+            // Auto-dismiss after 12 seconds
             setTimeout(function() {
                 if (document.body.contains(overlay) && overlay.style.display !== 'none') {
                     console.log('[INTRO] Auto-dismiss timeout');
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 }
-            }, 18000);
+            }, 12000);
         }
 
-        // Epic intro sound effects
+        // Arcade intro animation sequence
+        function animateArcadeIntro() {
+            var logo = document.getElementById('arcadeLogo');
+            var subtitle = document.getElementById('arcadeSubtitle');
+            var message = document.getElementById('arcadeMessage');
+            var coin = document.getElementById('coinSlot');
+            var ready = document.getElementById('readyMessage');
+            
+            if (!logo || !subtitle || !message || !coin || !ready) return;
+            
+            // Logo fade in with scale
+            setTimeout(function() {
+                logo.style.transition = 'opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                logo.style.opacity = '1';
+                logo.style.transform = 'scale(1)';
+            }, 300);
+            
+            // Subtitle fade in
+            setTimeout(function() {
+                subtitle.style.transition = 'opacity 0.6s ease-out';
+                subtitle.style.opacity = '1';
+            }, 1200);
+            
+            // Message fade in with typing effect
+            setTimeout(function() {
+                message.style.transition = 'opacity 0.8s ease-out';
+                message.style.opacity = '1';
+            }, 2000);
+            
+            // Coin drop animation
+            setTimeout(function() {
+                coin.style.transition = 'opacity 0.3s ease-out, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                coin.style.opacity = '1';
+                coin.style.transform = 'translateY(0) rotate(360deg)';
+                coin.style.transformOrigin = 'center';
+            }, 3500);
+            
+            // Ready message with pulse
+            setTimeout(function() {
+                ready.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                ready.style.opacity = '1';
+                ready.style.transform = 'scale(1.2)';
+                setTimeout(function() {
+                    ready.style.transform = 'scale(1)';
+                }, 300);
+            }, 5000);
+        }
+
+        // Arcade intro sound effects
         var introSoundInterval;
-        function playIntroSoundtrack() {
+        function playArcadeIntroSound() {
             if (!soundEnabled || !ensureAudioContext()) return;
             
-            // Deep bass rumble
-            setTimeout(function() { playDeepBass(40, 2000); }, 0);
+            // Power-on beep
+            setTimeout(function() { playArcadeBeep(440, 0.15, 0.1); }, 0);
             
-            // Ascending tones (space launch)
+            // Logo appearance - ascending tones
             setTimeout(function() { 
-                playMultiTone([100, 150, 200, 300, 400, 600, 800, 1000], 200);
-            }, 1000);
-            
-            // Epic whoosh
-            setTimeout(function() { playWhoosh(); }, 3000);
-            
-            // Triumphant fanfare
+                playArcadeBeep(523, 0.2, 0.08);  // C
+            }, 300);
             setTimeout(function() { 
-                playMultiTone([523, 659, 784, 1047], 300); // C major chord arpeggio
-            }, 4000);
+                playArcadeBeep(659, 0.2, 0.08);  // E
+            }, 500);
+            setTimeout(function() { 
+                playArcadeBeep(784, 0.2, 0.08);  // G
+            }, 700);
             
-            // Power up sound
-            setTimeout(function() { playPowerUp(); }, 6000);
+            // Subtitle - single tone
+            setTimeout(function() { 
+                playArcadeBeep(392, 0.25, 0.1);  // G
+            }, 1200);
+            
+            // Message - digital chirp sequence
+            setTimeout(function() { 
+                playDigitalChirp();
+            }, 2000);
+            
+            // Coin drop sound
+            setTimeout(function() { 
+                playCoinSound();
+            }, 3500);
+            
+            // Ready sound - triumphant chord
+            setTimeout(function() { 
+                playArcadeChord([523, 659, 784, 1047], 0.5);  // C major chord
+            }, 5000);
         }
         
-        function playDeepBass(freq, duration) {
-            if (!soundEnabled || !ensureAudioContext()) return;
-            var osc = audioContext.createOscillator();
-            var gain = audioContext.createGain();
-            var filter = audioContext.createBiquadFilter();
-            
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(200, audioContext.currentTime);
-            
-            gain.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration/1000);
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.start();
-            osc.stop(audioContext.currentTime + duration/1000);
-        }
-        
-        function playWhoosh() {
-            if (!soundEnabled || !ensureAudioContext()) return;
-            var osc = audioContext.createOscillator();
-            var gain = audioContext.createGain();
-            
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(2000, audioContext.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.5);
-            
-            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            osc.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.start();
-            osc.stop(audioContext.currentTime + 0.5);
-        }
-        
-        function playPowerUp() {
+        function playArcadeBeep(freq, duration, volume) {
             if (!soundEnabled || !ensureAudioContext()) return;
             var osc = audioContext.createOscillator();
             var gain = audioContext.createGain();
             
             osc.type = 'square';
-            osc.frequency.setValueAtTime(100, audioContext.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1000, audioContext.currentTime + 0.8);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
             
-            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+            gain.gain.setValueAtTime(volume || 0.15, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
             
             osc.connect(gain);
             gain.connect(audioContext.destination);
             
             osc.start();
-            osc.stop(audioContext.currentTime + 0.8);
+            osc.stop(audioContext.currentTime + duration);
+        }
+        
+        function playDigitalChirp() {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            var osc = audioContext.createOscillator();
+            var gain = audioContext.createGain();
+            
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+            
+            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.2);
+        }
+        
+        function playCoinSound() {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            
+            // Metallic ping
+            var osc1 = audioContext.createOscillator();
+            var gain1 = audioContext.createGain();
+            
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(1200, audioContext.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.15);
+            
+            gain1.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            osc1.connect(gain1);
+            gain1.connect(audioContext.destination);
+            
+            osc1.start();
+            osc1.stop(audioContext.currentTime + 0.15);
+            
+            // Echo
+            setTimeout(function() {
+                var osc2 = audioContext.createOscillator();
+                var gain2 = audioContext.createGain();
+                
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(900, audioContext.currentTime);
+                
+                gain2.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                osc2.connect(gain2);
+                gain2.connect(audioContext.destination);
+                
+                osc2.start();
+                osc2.stop(audioContext.currentTime + 0.1);
+            }, 100);
+        }
+        
+        function playArcadeChord(frequencies, duration) {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            
+            frequencies.forEach(function(freq, index) {
+                setTimeout(function() {
+                    var osc = audioContext.createOscillator();
+                    var gain = audioContext.createGain();
+                    
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + duration);
+                }, index * 80);
+            });
         }
 
-        // Star field effect
-        var starFieldInterval;
-        function initStarField() {
-            var canvas = document.getElementById('starField');
+        // Scanline CRT effect
+        var scanlineInterval;
+        function initScanlineEffect() {
+            var canvas = document.getElementById('scanlineCanvas');
             if (!canvas) return;
             
             var ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            var stars = [];
-            for (var i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 2 + 1
-                });
-            }
+            var scanlineY = 0;
+            var scanlineSpeed = 3;
             
-            function drawStars() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#ffffff';
-                for (var i = 0; i < stars.length; i++) {
-                    var s = stars[i];
-                    ctx.fillRect(s.x, s.y, s.size, s.size);
-                    s.x -= s.speed;
-                    if (s.x < 0) {
-                        s.x = canvas.width;
-                        s.y = Math.random() * canvas.height;
-                    }
-                }
-            }
-            
-            starFieldInterval = setInterval(drawStars, 30);
-        }
-        
-        // Hyperspace lines effect
-        var hyperspaceInterval;
-        function initHyperspace() {
-            var canvas = document.getElementById('hyperspace');
-            if (!canvas) return;
-            
-            var ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            var lines = [];
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
-            
-            function drawHyperspace() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Add new lines
-                if (Math.random() > 0.7) {
-                    var angle = Math.random() * Math.PI * 2;
-                    var distance = Math.random() * 100 + 50;
-                    lines.push({
-                        x: centerX + Math.cos(angle) * distance,
-                        y: centerY + Math.sin(angle) * distance,
-                        vx: Math.cos(angle) * 15,
-                        vy: Math.sin(angle) * 15,
-                        length: 0
-                    });
-                }
-                
-                // Draw and update lines
-                for (var i = lines.length - 1; i >= 0; i--) {
-                    var line = lines[i];
-                    
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(line.x, line.y);
-                    ctx.lineTo(line.x + line.vx * line.length, line.y + line.vy * line.length);
-                    ctx.stroke();
-                    
-                    line.length += 0.5;
-                    line.x += line.vx;
-                    line.y += line.vy;
-                    
-                    if (line.x < 0 || line.x > canvas.width || line.y < 0 || line.y > canvas.height) {
-                        lines.splice(i, 1);
-                    }
-                }
-            }
-            
-            hyperspaceInterval = setInterval(drawHyperspace, 30);
-        }
-        
-        // Particle burst effect
-        var particleBurstInterval;
-        function initParticleBurst() {
-            var canvas = document.getElementById('particleBurst');
-            if (!canvas) return;
-            
-            var ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            var particles = [];
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
-            
-            // Create initial burst
-            setTimeout(function() {
-                for (var i = 0; i < 100; i++) {
-                    var angle = Math.random() * Math.PI * 2;
-                    var speed = Math.random() * 8 + 2;
-                    particles.push({
-                        x: centerX,
-                        y: centerY,
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed,
-                        life: 1.0,
-                        size: Math.random() * 3 + 1
-                    });
-                }
-            }, 3500);
-            
-            function drawParticles() {
+            function drawScanline() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                for (var i = particles.length - 1; i >= 0; i--) {
-                    var p = particles[i];
-                    
-                    ctx.fillStyle = 'rgba(0, 255, 0, ' + p.life + ')';
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.life -= 0.01;
-                    
-                    if (p.life <= 0) {
-                        particles.splice(i, 1);
-                    }
+                // Draw horizontal scanlines
+                for (var i = 0; i < canvas.height; i += 4) {
+                    ctx.fillStyle = 'rgba(0, 255, 0, 0.03)';
+                    ctx.fillRect(0, i, canvas.width, 2);
                 }
+                
+                // Draw moving scanline
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+                ctx.fillRect(0, scanlineY, canvas.width, 3);
+                
+                scanlineY += scanlineSpeed;
+                if (scanlineY > canvas.height) scanlineY = 0;
             }
             
-            particleBurstInterval = setInterval(drawParticles, 30);
+            scanlineInterval = setInterval(drawScanline, 30);
         }
         
         function stopIntroEffects() {
-            if (starFieldInterval) clearInterval(starFieldInterval);
-            if (hyperspaceInterval) clearInterval(hyperspaceInterval);
-            if (particleBurstInterval) clearInterval(particleBurstInterval);
+            if (scanlineInterval) clearInterval(scanlineInterval);
             if (introSoundInterval) clearInterval(introSoundInterval);
         }
 
@@ -9666,6 +9874,17 @@ function renderWriteScene() {
                 });
             }
 
+            // MVP button handler
+            const mvpBtn = document.getElementById('odMVP');
+            if (mvpBtn) {
+                mvpBtn.addEventListener('click', () => {
+                    if (typeof audio === 'object' && typeof audio.click === 'function') {
+                        audio.click();
+                    }
+                    showMVPSelection();
+                });
+            }
+
             // Start ambient sound and audio context after first user interaction
             let audioInitialized = false;
             document.addEventListener('click', function initAudioOnInteraction() {
@@ -11651,6 +11870,197 @@ COACH: Iris Wang
             }
           };
 
+          // ============================================
+          // MVP (MOST VALUABLE STUDENT) FEATURE
+          // ============================================
+          window.showMVPSelection = function() {
+            if (!STATE.teams || STATE.teams.length === 0) {
+                showModal('NO TEAMS', 'Add teams before selecting an MVP student.');
+                return;
+            }
+            
+            // Collect all students from all teams
+            const students = [];
+            STATE.teams.forEach(team => {
+                if (team.captain) {
+                    students.push({ name: team.captain, team: team.name, role: 'Captain' });
+                }
+                if (team.writer) {
+                    students.push({ name: team.writer, team: team.name, role: 'Writer' });
+                }
+                if (team.coach) {
+                    students.push({ name: team.coach, team: team.name, role: 'Coach' });
+                }
+            });
+            
+            if (students.length === 0) {
+                showModal('NO STUDENTS', 'Add students to teams before selecting an MVP.');
+                return;
+            }
+            
+            // Show MVP selection panel
+            const overlay = document.getElementById('mvpOverlay');
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const studentList = document.getElementById('mvpStudentList');
+            
+            if (!overlay || !selectionPanel || !studentList) return;
+            
+            // Clear previous list
+            studentList.innerHTML = '';
+            
+            // Create student items
+            students.forEach(student => {
+                const item = document.createElement('div');
+                item.className = 'mvp-student-item';
+                item.innerHTML = `
+                    <div class="mvp-student-item-name">${student.name}</div>
+                    <div class="mvp-student-item-team">${student.team} - ${student.role}</div>
+                `;
+                item.onclick = () => {
+                    selectMVPStudent(student);
+                };
+                studentList.appendChild(item);
+            });
+            
+            // Show overlay and selection panel
+            overlay.style.display = 'flex';
+            selectionPanel.style.display = 'block';
+            displayContent.style.display = 'none';
+          };
+          
+          function selectMVPStudent(student) {
+            // Play sound effect
+            if (STATE.audioCtx && typeof audio === 'object' && typeof audio.click === 'function') {
+                audio.click();
+            }
+            
+            // Play MVP celebration sound
+            playMVPCelebrationSound();
+            
+            // Hide selection panel, show display content
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const studentNameEl = document.getElementById('mvpStudentName');
+            const teamNameEl = document.getElementById('mvpTeamName');
+            
+            if (!selectionPanel || !displayContent || !studentNameEl || !teamNameEl) return;
+            
+            selectionPanel.style.display = 'none';
+            displayContent.style.display = 'block';
+            
+            // Set student info
+            studentNameEl.textContent = student.name;
+            teamNameEl.textContent = `${student.team} - ${student.role}`;
+            
+            // Create sparkle effect
+            createMVPSparkles();
+            
+            // Voice announcement
+            if (STATE.voiceEnabled && STATE.chosenVoice) {
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(`Congratulations! ${student.name} is the Most Valuable Student!`);
+                    utterance.voice = STATE.chosenVoice;
+                    speechSynthesis.speak(utterance);
+                }, 500);
+            }
+          }
+          
+          function playMVPCelebrationSound() {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            
+            // Triumphant fanfare
+            const notes = [523, 659, 784, 1047, 1319];  // C, E, G, C, E (major chord arpeggio)
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + 0.5);
+                }, index * 100);
+            });
+            
+            // Bell sound
+            setTimeout(() => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(2000, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1500, audioContext.currentTime + 0.3);
+                
+                gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.3);
+            }, 600);
+          }
+          
+          function createMVPSparkles() {
+            const container = document.getElementById('mvpSparkles');
+            if (!container) return;
+            
+            // Clear previous sparkles
+            container.innerHTML = '';
+            
+            // Create sparkle elements at random positions
+            const sparklePositions = [
+                { top: '10%', left: '15%', delay: '0s' },
+                { top: '20%', right: '20%', delay: '0.3s' },
+                { top: '70%', left: '10%', delay: '0.6s' },
+                { top: '80%', right: '15%', delay: '0.9s' },
+                { top: '40%', left: '5%', delay: '0.2s' },
+                { top: '50%', right: '8%', delay: '0.5s' },
+                { top: '25%', left: '50%', delay: '0.4s' },
+                { top: '75%', left: '50%', delay: '0.8s' }
+            ];
+            
+            sparklePositions.forEach(pos => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'mvp-sparkle';
+                sparkle.textContent = '✨';
+                sparkle.style.top = pos.top;
+                if (pos.left) sparkle.style.left = pos.left;
+                if (pos.right) sparkle.style.right = pos.right;
+                sparkle.style.animationDelay = pos.delay;
+                container.appendChild(sparkle);
+            });
+          }
+          
+          window.closeMVPSelection = function() {
+            const overlay = document.getElementById('mvpOverlay');
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            
+            if (overlay) overlay.style.display = 'none';
+            if (selectionPanel) selectionPanel.style.display = 'none';
+            if (displayContent) displayContent.style.display = 'none';
+          };
+          
+          window.closeMVPDisplay = function() {
+            const overlay = document.getElementById('mvpOverlay');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const sparklesContainer = document.getElementById('mvpSparkles');
+            
+            if (overlay) overlay.style.display = 'none';
+            if (displayContent) displayContent.style.display = 'none';
+            if (sparklesContainer) sparklesContainer.innerHTML = '';
+          };
+
           if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
           } else {
@@ -11700,6 +12110,10 @@ COACH: Iris Wang
       <button id="odGameOver" class="od-btn" type="button" title="End Game and Show Winner" aria-label="Game over">
         <span class="od-glyph">🏆</span>
         <span class="od-label">GAME OVER</span>
+      </button>
+      <button id="odMVP" class="od-btn" type="button" title="Select Most Valuable Student" aria-label="Select MVP">
+        <span class="od-glyph">⭐</span>
+        <span class="od-label">MVP</span>
       </button>
     </div>
 
@@ -11958,6 +12372,29 @@ console.log('[UPGRADE] Hints system disabled');
         <div class="winner-score" id="winnerScore"></div>
         <div class="winner-fireworks" id="winnerFireworks"></div>
         <button class="btn success" onclick="closeWinnerOverlay()" style="margin-top: 30px; font-size: 18px; padding: 15px 40px;">
+            CLOSE | 关闭
+        </button>
+    </div>
+</div>
+
+<!-- MVP Student Overlay -->
+<div id="mvpOverlay" class="mvp-overlay">
+    <div class="mvp-background"></div>
+    <div id="mvpSelectionPanel" class="mvp-selection-panel" style="display: none;">
+        <div class="mvp-selection-title">SELECT MVP STUDENT | 选择最有价值学生</div>
+        <div class="mvp-student-list" id="mvpStudentList"></div>
+        <button class="btn" onclick="closeMVPSelection()" style="width: 100%; margin-top: 10px; font-size: 16px; padding: 12px;">
+            CANCEL | 取消
+        </button>
+    </div>
+    <div id="mvpDisplayContent" class="mvp-content" style="display: none;">
+        <div class="mvp-star">⭐</div>
+        <div class="mvp-title">MOST VALUABLE STUDENT</div>
+        <div class="mvp-subtitle">最有价值学生</div>
+        <div class="mvp-student-name" id="mvpStudentName"></div>
+        <div class="mvp-team" id="mvpTeamName"></div>
+        <div class="mvp-sparkles" id="mvpSparkles"></div>
+        <button class="btn success" onclick="closeMVPDisplay()" style="margin-top: 40px; font-size: 18px; padding: 15px 40px;">
             CLOSE | 关闭
         </button>
     </div>
