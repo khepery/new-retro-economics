@@ -9187,16 +9187,39 @@ function renderWriteScene() {
         }
         
         .keywords-grid {
-            display: grid;
-            grid-template-columns: ${is40min ? '80px' : '100px'} 1fr;
-            gap: ${is40min ? '3px' : '4px'};
+            display: block;
             font-size: ${is40min ? '7.5pt' : '8pt'};
+        }
+        
+        .keyword-item {
+            margin-bottom: ${is40min ? '8px' : '10px'};
+            padding: 4px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            background: #fafafa;
         }
         
         .keyword-term {
             font-weight: bold;
             padding: 2px 4px;
             background: #e8f4fd;
+            display: inline-block;
+            margin-bottom: 3px;
+            border-radius: 2px;
+        }
+        
+        .keyword-definition-label {
+            font-size: ${is40min ? '7pt' : '7.5pt'};
+            color: #666;
+            margin-top: 2px;
+            margin-bottom: 1px;
+        }
+        
+        .keyword-sentence-label {
+            font-size: ${is40min ? '7pt' : '7.5pt'};
+            color: #666;
+            margin-top: 3px;
+            margin-bottom: 1px;
         }
         
         .mcq-options {
@@ -9247,8 +9270,17 @@ function renderWriteScene() {
                 <div class="section-title">📝 2. KEY TERMS | 关键术语 (${keywords.length})</div>
                 <div class="keywords-grid">
                     ${keywords.map(kw => `
-                        <div class="keyword-term">${kw.term}</div>
-                        <div class="answer-lines"></div>
+                        <div class="keyword-item">
+                            <div class="keyword-term">${kw.term}</div>
+                            <div class="keyword-definition-label">Definition | 定义:</div>
+                            <div class="answer-lines" style="min-height: ${is40min ? '12px' : '14px'};"></div>
+                            <div class="keyword-sentence-label">Example Sentence | 例句:</div>
+                            <div class="answer-lines" style="min-height: ${is40min ? '16px' : '18px'}; border-bottom: none;">
+                                ${Array(2).fill(0).map(() => 
+                                    `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '8px' : '9px'};"></div>`
+                                ).join('')}
+                            </div>
+                        </div>
                     `).join('')}
                 </div>
             </div>
@@ -9276,9 +9308,9 @@ function renderWriteScene() {
                 ${writePrompts.map((prompt, index) => `
                     <div class="question">
                         <div class="question-text">${index + 1}. ${prompt.en || prompt}</div>
-                        <div class="answer-lines" style="min-height: ${is40min ? '25px' : '30px'}; border-bottom: none;">
-                            ${Array(is40min ? 3 : 4).fill(0).map(() => 
-                                `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '8px' : '10px'};"></div>`
+                        <div class="answer-lines" style="min-height: ${is40min ? '35px' : '40px'}; border-bottom: none;">
+                            ${Array(is40min ? 4 : 5).fill(0).map(() => 
+                                `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '9px' : '10px'};"></div>`
                             ).join('')}
                         </div>
                     </div>
