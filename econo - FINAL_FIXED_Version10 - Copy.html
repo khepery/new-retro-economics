@@ -2830,34 +2830,86 @@
         }
     }
 
+    /* MVP Star - Retro Space Theme */
     .mvp-star {
-        font-size: clamp(80px, 15vw, 150px);
-        animation: mvpStarSpin 3s ease-in-out infinite;
-        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+        width: clamp(100px, 20vw, 180px);
+        height: clamp(100px, 20vw, 180px);
+        margin: 0 auto 30px;
+        position: relative;
+        animation: mvpStarOrbit 4s linear infinite;
+        filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
     }
 
-    @keyframes mvpStarSpin {
+    .mvp-star::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        background: 
+            linear-gradient(45deg, transparent 40%, cyan 40%, cyan 60%, transparent 60%),
+            linear-gradient(-45deg, transparent 40%, cyan 40%, cyan 60%, transparent 60%);
+        background-size: 100% 100%;
+        animation: mvpStarPulse 2s ease-in-out infinite;
+    }
+
+    .mvp-star::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        border: 3px solid cyan;
+        border-radius: 50%;
+        animation: mvpStarRing 3s ease-in-out infinite;
+    }
+
+    @keyframes mvpStarOrbit {
         0%, 100% { 
-            transform: rotate(0deg) scale(1);
-            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+            transform: rotate(0deg);
         }
         50% { 
-            transform: rotate(180deg) scale(1.2);
-            filter: drop-shadow(0 0 60px rgba(255, 215, 0, 1));
+            transform: rotate(180deg);
+        }
+    }
+
+    @keyframes mvpStarPulse {
+        0%, 100% { 
+            opacity: 0.8;
+            filter: brightness(1);
+        }
+        50% { 
+            opacity: 1;
+            filter: brightness(1.5);
+        }
+    }
+
+    @keyframes mvpStarRing {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.3);
+            opacity: 0.3;
         }
     }
 
     .mvp-title {
         font-family: 'Orbitron', monospace;
-        font-size: clamp(32px, 6vw, 56px);
+        font-size: clamp(28px, 5vw, 48px);
         font-weight: 900;
-        color: #ffd700;
+        color: cyan;
         text-shadow: 
-            0 0 10px #ffd700,
-            0 0 20px #ffaa00,
-            0 0 30px #ff8800,
+            0 0 10px cyan,
+            0 0 20px cyan,
+            0 0 30px rgba(0, 255, 255, 0.5),
             0 5px 5px rgba(0, 0, 0, 0.8);
-        margin: 30px 0;
+        margin: 25px 0;
         letter-spacing: 4px;
         animation: mvpTitleGlow 1.5s ease-in-out infinite;
     }
@@ -2865,48 +2917,48 @@
     @keyframes mvpTitleGlow {
         0%, 100% { 
             text-shadow: 
-                0 0 10px #ffd700,
-                0 0 20px #ffaa00,
-                0 0 30px #ff8800,
+                0 0 10px cyan,
+                0 0 20px cyan,
+                0 0 30px rgba(0, 255, 255, 0.5),
                 0 5px 5px rgba(0, 0, 0, 0.8);
         }
         50% { 
             text-shadow: 
-                0 0 20px #ffd700,
-                0 0 40px #ffaa00,
-                0 0 60px #ff8800,
-                0 0 80px #ff4400,
+                0 0 20px cyan,
+                0 0 40px cyan,
+                0 0 60px rgba(0, 255, 255, 0.7),
+                0 0 80px rgba(0, 200, 255, 0.5),
                 0 5px 5px rgba(0, 0, 0, 0.8);
         }
     }
 
     .mvp-subtitle {
         font-family: 'Orbitron', monospace;
-        font-size: clamp(18px, 3vw, 28px);
-        color: #ffaa00;
-        margin-bottom: 30px;
-        text-shadow: 0 0 10px #ffaa00;
+        font-size: clamp(16px, 2.5vw, 24px);
+        color: var(--primary-bright);
+        margin-bottom: 25px;
+        text-shadow: 0 0 10px var(--primary-bright);
     }
 
     .mvp-student-name {
         font-family: 'Orbitron', monospace;
-        font-size: clamp(40px, 8vw, 72px);
+        font-size: clamp(32px, 6vw, 58px);
         font-weight: 900;
         background: linear-gradient(
             135deg,
-            #ffd700,
-            #ffed4e,
-            #ffd700,
-            #ffaa00
+            cyan,
+            #00ffff,
+            #0ff,
+            #00ccff
         );
         background-size: 300% 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         animation: mvpNameShine 2s linear infinite;
-        margin: 30px 0;
+        margin: 25px 0;
         letter-spacing: 3px;
-        padding: 20px;
+        padding: 15px;
         position: relative;
     }
 
@@ -2916,13 +2968,14 @@
     }
 
     .mvp-team {
-        font-size: clamp(20px, 4vw, 32px);
+        font-size: clamp(18px, 3.5vw, 28px);
         color: var(--primary-bright);
         font-weight: bold;
         text-shadow: 0 0 15px var(--primary-bright);
-        margin: 20px 0;
+        margin: 18px 0;
     }
 
+    /* Retro Space Particles instead of sparkles */
     .mvp-sparkles {
         position: absolute;
         top: 50%;
@@ -2931,22 +2984,26 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        font-size: 30px;
     }
 
     .mvp-sparkle {
         position: absolute;
-        animation: mvpSparkle 2s ease-in-out infinite;
+        width: 4px;
+        height: 4px;
+        background: cyan;
+        border-radius: 50%;
+        box-shadow: 0 0 10px cyan;
+        animation: mvpParticle 3s ease-in-out infinite;
     }
 
-    @keyframes mvpSparkle {
+    @keyframes mvpParticle {
         0%, 100% { 
             opacity: 0;
-            transform: scale(0) rotate(0deg);
+            transform: translate(0, 0) scale(0);
         }
         50% { 
             opacity: 1;
-            transform: scale(1.5) rotate(180deg);
+            transform: translate(var(--tx), var(--ty)) scale(2);
         }
     }
 
@@ -2977,39 +3034,84 @@
     }
 
     .mvp-student-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
         margin-bottom: 20px;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 10px;
     }
 
     .mvp-student-item {
-        background: rgba(0, 255, 0, 0.1);
-        border: 1px solid var(--border-dim);
-        border-radius: 4px;
-        padding: 15px;
+        background: rgba(0, 255, 0, 0.05);
+        border: 2px solid var(--border-dim);
+        border-radius: 6px;
+        padding: 18px 12px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-family: 'Share Tech Mono', monospace;
         color: var(--text-color);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mvp-student-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
     }
 
     .mvp-student-item:hover {
-        background: rgba(0, 255, 0, 0.2);
+        background: rgba(0, 255, 255, 0.15);
         border-color: var(--primary-bright);
-        box-shadow: 0 0 20px var(--primary-glow);
-        transform: translateX(5px);
+        box-shadow: 0 0 25px var(--primary-glow), inset 0 0 15px rgba(0, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+
+    .mvp-student-item:hover::before {
+        left: 100%;
     }
 
     .mvp-student-item-name {
-        font-size: clamp(16px, 2.5vw, 20px);
+        font-size: clamp(14px, 1.8vw, 17px);
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        color: var(--primary-bright);
+        text-shadow: 0 0 5px var(--primary-color);
     }
 
     .mvp-student-item-team {
-        font-size: clamp(12px, 2vw, 14px);
+        font-size: clamp(10px, 1.5vw, 12px);
         color: var(--text-muted);
+        line-height: 1.3;
+    }
+
+    .mvp-selection-panel {
+        background: rgba(0, 0, 0, 0.95);
+        border: 3px solid var(--primary-bright);
+        border-radius: 8px;
+        padding: 30px;
+        max-width: 90vw;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 0 40px var(--primary-glow), inset 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+
+    .mvp-selection-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(20px, 3vw, 28px);
+        color: var(--primary-bright);
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 0 0 15px var(--primary-color);
+        letter-spacing: 2px;
     }
 
     </style>
@@ -3025,61 +3127,60 @@
     -->
     <!-- Economics Terminal Intro Animation -->
     <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden;">
-      <div id="introAnimation" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <div id="introAnimation" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
         <!-- Terminal scanline effect -->
         <canvas id="scanlineCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.15;"></canvas>
         
-        <!-- Matrix rain background -->
-        <canvas id="matrixRain" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1;"></canvas>
+        <!-- Enhanced Matrix rain background -->
+        <canvas id="matrixRain" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.25;"></canvas>
         
-        <!-- Main intro container -->
-        <div id="introMainContent" style="text-align: center; z-index: 1; max-width: 90vw;">
+        <!-- Main intro container - adjusted for better fit -->
+        <div id="introMainContent" style="text-align: center; z-index: 1; max-width: 85vw; max-height: 90vh; display: flex; flex-direction: column; justify-content: center;">
           <!-- Terminal-style header -->
-          <div id="terminalHeader" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(12px, 2vw, 16px); color: var(--primary-dim); margin-bottom: 20px; opacity: 0; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+          <div id="terminalHeader" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(10px, 1.5vw, 14px); color: var(--primary-dim); margin-bottom: 15px; opacity: 0; text-align: left; max-width: 550px; margin-left: auto; margin-right: auto;">
             <div>SYSTEM: BULLETPROOF ADAPTIVE CLASSROOM v10.0</div>
             <div>STATUS: INITIALIZING...</div>
             <div>MODE: COLLABORATIVE LEARNING</div>
           </div>
           
-          <!-- Main title with economics icon -->
-          <div id="economicsTitle" style="font-family: 'Orbitron', monospace; margin: 40px 0; opacity: 0;">
-            <div style="font-size: clamp(60px, 12vw, 120px); margin-bottom: 10px;">📊</div>
-            <div style="font-size: clamp(36px, 7vw, 80px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
+          <!-- Main title -->
+          <div id="economicsTitle" style="font-family: 'Orbitron', monospace; margin: 25px 0; opacity: 0;">
+            <div style="font-size: clamp(32px, 6vw, 70px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
               ECONOMICS
             </div>
-            <div style="font-size: clamp(24px, 4vw, 48px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
+            <div style="font-size: clamp(22px, 4vw, 42px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
               TERMINAL
             </div>
           </div>
           
           <!-- Chinese subtitle -->
-          <div id="chineseSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(16px, 2.5vw, 28px); color: var(--primary-dim); margin-bottom: 50px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
+          <div id="chineseSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(14px, 2vw, 24px); color: var(--primary-dim); margin-bottom: 30px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
             复古经济学终端
           </div>
           
           <!-- Team formation message -->
-          <div id="teamMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(14px, 2vw, 20px); color: var(--primary-bright); max-width: 550px; margin: 0 auto 30px; opacity: 0; line-height: 1.8; padding: 0 20px;">
-            <div style="margin-bottom: 15px; color: var(--primary-bright); font-weight: bold;">>>> COLLABORATIVE MODE ACTIVE</div>
+          <div id="teamMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(11px, 1.5vw, 16px); color: var(--primary-bright); max-width: 500px; margin: 0 auto 20px; opacity: 0; line-height: 1.6; padding: 0 15px;">
+            <div style="margin-bottom: 10px; color: var(--primary-bright); font-weight: bold;">>>> COLLABORATIVE MODE ACTIVE</div>
             <div style="color: var(--primary-dim);">• Form teams with CAPTAIN, WRITER, COACH</div>
             <div style="color: var(--primary-dim);">• Analyze economic concepts together</div>
             <div style="color: var(--primary-dim);">• Build knowledge through teamwork</div>
           </div>
           
           <!-- Loading bar animation -->
-          <div id="loadingContainer" style="width: clamp(250px, 60vw, 400px); margin: 30px auto; opacity: 0;">
-            <div style="width: 100%; height: 8px; background: rgba(0, 255, 0, 0.1); border: 1px solid var(--primary-dim); border-radius: 4px; overflow: hidden;">
+          <div id="loadingContainer" style="width: clamp(200px, 50vw, 350px); margin: 20px auto; opacity: 0;">
+            <div style="width: 100%; height: 6px; background: rgba(0, 255, 0, 0.1); border: 1px solid var(--primary-dim); border-radius: 4px; overflow: hidden;">
               <div id="loadingBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-dark), var(--primary-bright), var(--primary-dark)); box-shadow: 0 0 10px var(--primary-color); transition: width 0.3s ease;"></div>
             </div>
-            <div id="loadingText" style="margin-top: 10px; font-family: 'Share Tech Mono', monospace; font-size: clamp(11px, 1.5vw, 14px); color: var(--primary-dim);">LOADING SYSTEM...</div>
+            <div id="loadingText" style="margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-size: clamp(10px, 1.2vw, 12px); color: var(--primary-dim);">LOADING SYSTEM...</div>
           </div>
           
           <!-- Ready message -->
-          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(22px, 3.5vw, 40px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px; margin-top: 20px;">
+          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(18px, 3vw, 32px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px; margin-top: 15px;">
             SYSTEM READY
           </div>
         </div>
         
-        <div id="introPrompt" style="position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: clamp(14px, 2vw, 18px); letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright); padding: 0 20px;">
+        <div id="introPrompt" style="position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: clamp(12px, 1.5vw, 16px); letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright); padding: 0 20px;">
           [ PRESS ANY KEY TO BEGIN ]
         </div>
       </div>
@@ -4421,7 +4522,7 @@
             });
         }
 
-        // Matrix rain effect for background
+        // Matrix rain effect for background - ENHANCED
         function initMatrixRain() {
             var canvas = document.getElementById('matrixRain');
             if (!canvas) return;
@@ -4430,33 +4531,50 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            var columns = Math.floor(canvas.width / 20);
+            var columns = Math.floor(canvas.width / 18);
             var drops = [];
             for (var i = 0; i < columns; i++) {
                 drops[i] = Math.random() * canvas.height;
             }
             
-            var chars = '01$¥€£';
+            // Enhanced characters for better visibility
+            var chars = '01$¥€£₿←→↑↓◆◇▲▼';
             
             function drawMatrix() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                // Slightly darker fade for better visibility
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                ctx.fillStyle = '#0f0';
-                ctx.font = '15px monospace';
+                // Brighter green for enhanced visibility
+                ctx.fillStyle = '#0ff';
+                ctx.font = 'bold 16px monospace';
                 
                 for (var i = 0; i < drops.length; i++) {
                     var text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * 20, drops[i]);
+                    var x = i * 18;
+                    var y = drops[i];
+                    
+                    // Add glow effect
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = '#0ff';
+                    ctx.fillText(text, x, y);
+                    ctx.shadowBlur = 0;
+                    
+                    // Draw fading trail
+                    if (y > 20) {
+                        ctx.fillStyle = 'rgba(0, 255, 255, 0.3)';
+                        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], x, y - 18);
+                        ctx.fillStyle = '#0ff';
+                    }
                     
                     if (drops[i] > canvas.height && Math.random() > 0.975) {
                         drops[i] = 0;
                     }
-                    drops[i] += 20;
+                    drops[i] += 18;
                 }
             }
             
-            matrixRainInterval = setInterval(drawMatrix, 50);
+            matrixRainInterval = setInterval(drawMatrix, 40);
         }
 
         // Scanline CRT effect
@@ -12115,31 +12233,30 @@ COACH: Iris Wang
             const container = document.getElementById('mvpSparkles');
             if (!container) return;
             
-            // Clear previous sparkles
+            // Clear previous particles
             container.innerHTML = '';
             
-            // Create sparkle elements at random positions
-            const sparklePositions = [
-                { top: '10%', left: '15%', delay: '0s' },
-                { top: '20%', right: '20%', delay: '0.3s' },
-                { top: '70%', left: '10%', delay: '0.6s' },
-                { top: '80%', right: '15%', delay: '0.9s' },
-                { top: '40%', left: '5%', delay: '0.2s' },
-                { top: '50%', right: '8%', delay: '0.5s' },
-                { top: '25%', left: '50%', delay: '0.4s' },
-                { top: '75%', left: '50%', delay: '0.8s' }
-            ];
+            // Create retro space particles at random positions
+            const particleCount = 12;
             
-            sparklePositions.forEach(pos => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'mvp-sparkle';
-                sparkle.textContent = '✨';
-                sparkle.style.top = pos.top;
-                if (pos.left) sparkle.style.left = pos.left;
-                if (pos.right) sparkle.style.right = pos.right;
-                sparkle.style.animationDelay = pos.delay;
-                container.appendChild(sparkle);
-            });
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mvp-sparkle';
+                
+                // Random positions
+                const angle = (Math.PI * 2 / particleCount) * i;
+                const distance = 100 + Math.random() * 150;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.top = '50%';
+                particle.style.left = '50%';
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.animationDelay = `${i * 0.15}s`;
+                
+                container.appendChild(particle);
+            }
           }
           
           window.closeMVPSelection = function() {
@@ -12489,7 +12606,7 @@ console.log('[UPGRADE] Hints system disabled');
         </button>
     </div>
     <div id="mvpDisplayContent" class="mvp-content" style="display: none;">
-        <div class="mvp-star">⭐</div>
+        <div class="mvp-star"></div>
         <div class="mvp-title">MOST VALUABLE STUDENT</div>
         <div class="mvp-subtitle">最有价值学生</div>
         <div class="mvp-student-name" id="mvpStudentName"></div>
