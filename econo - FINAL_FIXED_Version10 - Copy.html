@@ -3023,50 +3023,64 @@
       becomes visible.  The video file (intro.mp4) should reside in the
       same directory as this HTML file.
     -->
-    <!-- Retro Arcade Intro Animation -->
+    <!-- Economics Terminal Intro Animation -->
     <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden;">
       <div id="introAnimation" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <!-- Scanline effect -->
+        <!-- Terminal scanline effect -->
         <canvas id="scanlineCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.15;"></canvas>
         
+        <!-- Matrix rain background -->
+        <canvas id="matrixRain" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1;"></canvas>
+        
         <!-- Main intro container -->
-        <div id="introMainContent" style="text-align: center; z-index: 1;">
-          <!-- Retro logo with arcade-style text -->
-          <div id="arcadeLogo" style="font-family: 'Orbitron', monospace; margin-bottom: 40px; opacity: 0;">
-            <div style="font-size: clamp(40px, 8vw, 100px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark), 0 10px 10px rgba(0,0,0,0.8); letter-spacing: 8px; line-height: 1.2;">
-              RETRO
-            </div>
-            <div style="font-size: clamp(40px, 8vw, 100px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark), 0 10px 10px rgba(0,0,0,0.8); letter-spacing: 8px; line-height: 1.2;">
+        <div id="introMainContent" style="text-align: center; z-index: 1; max-width: 90vw;">
+          <!-- Terminal-style header -->
+          <div id="terminalHeader" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(12px, 2vw, 16px); color: var(--primary-dim); margin-bottom: 20px; opacity: 0; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div>SYSTEM: BULLETPROOF ADAPTIVE CLASSROOM v10.0</div>
+            <div>STATUS: INITIALIZING...</div>
+            <div>MODE: COLLABORATIVE LEARNING</div>
+          </div>
+          
+          <!-- Main title with economics icon -->
+          <div id="economicsTitle" style="font-family: 'Orbitron', monospace; margin: 40px 0; opacity: 0;">
+            <div style="font-size: clamp(60px, 12vw, 120px); margin-bottom: 10px;">📊</div>
+            <div style="font-size: clamp(36px, 7vw, 80px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
               ECONOMICS
             </div>
+            <div style="font-size: clamp(24px, 4vw, 48px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
+              TERMINAL
+            </div>
           </div>
           
-          <!-- Subtitle in Chinese -->
-          <div id="arcadeSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(18px, 3vw, 32px); color: var(--primary-dim); margin-bottom: 60px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
-            防弹自适应课堂
+          <!-- Chinese subtitle -->
+          <div id="chineseSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(16px, 2.5vw, 28px); color: var(--primary-dim); margin-bottom: 50px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
+            复古经济学终端
           </div>
           
-          <!-- Arcade-style message -->
-          <div id="arcadeMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(16px, 2.5vw, 24px); color: var(--primary-bright); max-width: 600px; margin: 0 auto 40px; opacity: 0; line-height: 1.6; padding: 0 20px;">
-            >> SYSTEM INITIALIZED <<br><br>
-            ADAPTIVE LEARNING PROTOCOL ACTIVE<br>
-            READY TO ENGAGE TEAMS<br><br>
-            INSERT COIN TO CONTINUE
+          <!-- Team formation message -->
+          <div id="teamMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(14px, 2vw, 20px); color: var(--primary-bright); max-width: 550px; margin: 0 auto 30px; opacity: 0; line-height: 1.8; padding: 0 20px;">
+            <div style="margin-bottom: 15px; color: var(--primary-bright); font-weight: bold;">>>> COLLABORATIVE MODE ACTIVE</div>
+            <div style="color: var(--primary-dim);">• Form teams with CAPTAIN, WRITER, COACH</div>
+            <div style="color: var(--primary-dim);">• Analyze economic concepts together</div>
+            <div style="color: var(--primary-dim);">• Build knowledge through teamwork</div>
           </div>
           
-          <!-- Coin slot animation -->
-          <div id="coinSlot" style="font-size: clamp(40px, 6vw, 80px); margin: 30px 0; opacity: 0;">
-            🪙
+          <!-- Loading bar animation -->
+          <div id="loadingContainer" style="width: clamp(250px, 60vw, 400px); margin: 30px auto; opacity: 0;">
+            <div style="width: 100%; height: 8px; background: rgba(0, 255, 0, 0.1); border: 1px solid var(--primary-dim); border-radius: 4px; overflow: hidden;">
+              <div id="loadingBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-dark), var(--primary-bright), var(--primary-dark)); box-shadow: 0 0 10px var(--primary-color); transition: width 0.3s ease;"></div>
+            </div>
+            <div id="loadingText" style="margin-top: 10px; font-family: 'Share Tech Mono', monospace; font-size: clamp(11px, 1.5vw, 14px); color: var(--primary-dim);">LOADING SYSTEM...</div>
           </div>
           
           <!-- Ready message -->
-          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(20px, 3vw, 36px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px;">
-            READY!
+          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(22px, 3.5vw, 40px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px; margin-top: 20px;">
+            SYSTEM READY
           </div>
         </div>
         
         <div id="introPrompt" style="position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: clamp(14px, 2vw, 18px); letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright); padding: 0 20px;">
-          [ PRESS ANY KEY TO START ]
+          [ PRESS ANY KEY TO BEGIN ]
         </div>
       </div>
     </div>
@@ -4126,7 +4140,7 @@
         // HOISTED INTRO VIDEO FUNCTION (SINGLE DEFINITION)
         // ============================================
         function showIntroAnimation() {
-            console.log('%c[INTRO] Starting RETRO ARCADE animation', 'color: var(--primary-bright); font-weight: bold');
+            console.log('%c[INTRO] Starting ECONOMICS TERMINAL animation', 'color: var(--primary-bright); font-weight: bold');
             
             var overlay = document.getElementById('introOverlay');
             var prompt = document.getElementById('introPrompt');
@@ -4145,16 +4159,17 @@
                 ensureAudioContext();
             }
             
-            // Initialize arcade effects
+            // Initialize effects
             initScanlineEffect();
+            initMatrixRain();
             
-            // Play arcade intro soundtrack
+            // Play terminal boot sounds
             setTimeout(function() {
-                playArcadeIntroSound();
+                playTerminalBootSound();
             }, 150);
             
             // Animate intro sequence
-            animateArcadeIntro();
+            animateTerminalIntro();
             
             // Create skip button
             var skipBtn = document.createElement('button');
@@ -4187,115 +4202,156 @@
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 };
-            }, 7000);
+            }, 8000);
             
-            // Auto-dismiss after 12 seconds
+            // Auto-dismiss after 14 seconds
             setTimeout(function() {
                 if (document.body.contains(overlay) && overlay.style.display !== 'none') {
                     console.log('[INTRO] Auto-dismiss timeout');
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 }
-            }, 12000);
+            }, 14000);
         }
 
-        // Arcade intro animation sequence
-        function animateArcadeIntro() {
-            var logo = document.getElementById('arcadeLogo');
-            var subtitle = document.getElementById('arcadeSubtitle');
-            var message = document.getElementById('arcadeMessage');
-            var coin = document.getElementById('coinSlot');
+        // Terminal intro animation sequence
+        function animateTerminalIntro() {
+            var header = document.getElementById('terminalHeader');
+            var title = document.getElementById('economicsTitle');
+            var subtitle = document.getElementById('chineseSubtitle');
+            var message = document.getElementById('teamMessage');
+            var loading = document.getElementById('loadingContainer');
+            var loadingBar = document.getElementById('loadingBar');
+            var loadingText = document.getElementById('loadingText');
             var ready = document.getElementById('readyMessage');
             
-            if (!logo || !subtitle || !message || !coin || !ready) return;
+            if (!header || !title || !subtitle || !message || !loading || !ready) return;
             
-            // Logo fade in with scale
+            // Terminal header types in
             setTimeout(function() {
-                logo.style.transition = 'opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                logo.style.opacity = '1';
-                logo.style.transform = 'scale(1)';
-            }, 300);
+                header.style.transition = 'opacity 0.5s ease-out';
+                header.style.opacity = '1';
+            }, 200);
+            
+            // Economics icon and title zoom in
+            setTimeout(function() {
+                title.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                title.style.opacity = '1';
+                title.style.transform = 'scale(1)';
+            }, 800);
             
             // Subtitle fade in
             setTimeout(function() {
-                subtitle.style.transition = 'opacity 0.6s ease-out';
+                subtitle.style.transition = 'opacity 0.5s ease-out';
                 subtitle.style.opacity = '1';
-            }, 1200);
+            }, 1600);
             
-            // Message fade in with typing effect
+            // Team formation message
             setTimeout(function() {
-                message.style.transition = 'opacity 0.8s ease-out';
+                message.style.transition = 'opacity 0.6s ease-out';
                 message.style.opacity = '1';
-            }, 2000);
+            }, 2400);
             
-            // Coin drop animation
+            // Loading bar appears
             setTimeout(function() {
-                coin.style.transition = 'opacity 0.3s ease-out, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-                coin.style.opacity = '1';
-                coin.style.transform = 'translateY(0) rotate(360deg)';
-                coin.style.transformOrigin = 'center';
-            }, 3500);
-            
-            // Ready message with pulse
-            setTimeout(function() {
-                ready.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-                ready.style.opacity = '1';
-                ready.style.transform = 'scale(1.2)';
-                setTimeout(function() {
-                    ready.style.transform = 'scale(1)';
-                }, 300);
-            }, 5000);
+                loading.style.transition = 'opacity 0.4s ease-out';
+                loading.style.opacity = '1';
+                
+                // Animate loading bar from 0 to 100%
+                var progress = 0;
+                var loadingMessages = [
+                    'LOADING SYSTEM...',
+                    'INITIALIZING TEAMS...',
+                    'LOADING ECONOMICS DATA...',
+                    'PREPARING WORKSPACE...',
+                    'READY TO START!'
+                ];
+                var msgIndex = 0;
+                
+                var loadInterval = setInterval(function() {
+                    progress += Math.random() * 15 + 10;
+                    if (progress >= 100) {
+                        progress = 100;
+                        loadingBar.style.width = '100%';
+                        loadingText.textContent = loadingMessages[4];
+                        clearInterval(loadInterval);
+                        
+                        // Show ready message
+                        setTimeout(function() {
+                            ready.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                            ready.style.opacity = '1';
+                            ready.style.transform = 'scale(1.1)';
+                            setTimeout(function() {
+                                ready.style.transform = 'scale(1)';
+                            }, 300);
+                        }, 200);
+                    } else {
+                        loadingBar.style.width = progress + '%';
+                        msgIndex = Math.min(Math.floor(progress / 25), loadingMessages.length - 2);
+                        loadingText.textContent = loadingMessages[msgIndex];
+                    }
+                }, 350);
+            }, 3200);
         }
 
-        // Arcade intro sound effects
+        // Terminal boot sounds - more thematic to economics/classroom
         var introSoundInterval;
-        function playArcadeIntroSound() {
+        var matrixRainInterval;
+        
+        function playTerminalBootSound() {
             if (!soundEnabled || !ensureAudioContext()) return;
             
-            // Power-on beep
-            setTimeout(function() { playArcadeBeep(440, 0.15, 0.1); }, 0);
+            // System power-on sound (deep hum)
+            setTimeout(function() { 
+                playSystemHum(60, 0.8);
+            }, 0);
             
-            // Logo appearance - ascending tones
+            // Boot sequence beeps (system checks)
             setTimeout(function() { 
-                playArcadeBeep(523, 0.2, 0.08);  // C
-            }, 300);
+                playSystemBeep(440, 0.12, 0.08);  // A
+            }, 400);
             setTimeout(function() { 
-                playArcadeBeep(659, 0.2, 0.08);  // E
-            }, 500);
+                playSystemBeep(554, 0.12, 0.08);  // C#
+            }, 600);
             setTimeout(function() { 
-                playArcadeBeep(784, 0.2, 0.08);  // G
-            }, 700);
+                playSystemBeep(659, 0.12, 0.08);  // E
+            }, 800);
             
-            // Subtitle - single tone
+            // Data loading sound (ascending sweep)
             setTimeout(function() { 
-                playArcadeBeep(392, 0.25, 0.1);  // G
-            }, 1200);
+                playDataLoadSound();
+            }, 2500);
             
-            // Message - digital chirp sequence
+            // Progress beeps during loading
             setTimeout(function() { 
-                playDigitalChirp();
-            }, 2000);
+                playSystemBeep(523, 0.08, 0.06);
+            }, 3600);
+            setTimeout(function() { 
+                playSystemBeep(587, 0.08, 0.06);
+            }, 4200);
+            setTimeout(function() { 
+                playSystemBeep(659, 0.08, 0.06);
+            }, 4800);
+            setTimeout(function() { 
+                playSystemBeep(784, 0.08, 0.06);
+            }, 5400);
             
-            // Coin drop sound
+            // System ready chord (triumphant)
             setTimeout(function() { 
-                playCoinSound();
-            }, 3500);
-            
-            // Ready sound - triumphant chord
-            setTimeout(function() { 
-                playArcadeChord([523, 659, 784, 1047], 0.5);  // C major chord
-            }, 5000);
+                playReadyChord([523, 659, 784, 1047], 0.7);  // C major chord
+            }, 6800);
         }
         
-        function playArcadeBeep(freq, duration, volume) {
+        function playSystemHum(freq, duration) {
             if (!soundEnabled || !ensureAudioContext()) return;
             var osc = audioContext.createOscillator();
             var gain = audioContext.createGain();
             
-            osc.type = 'square';
+            osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, audioContext.currentTime);
             
-            gain.gain.setValueAtTime(volume || 0.15, audioContext.currentTime);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.1);
             gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
             
             osc.connect(gain);
@@ -4305,65 +4361,44 @@
             osc.stop(audioContext.currentTime + duration);
         }
         
-        function playDigitalChirp() {
+        function playSystemBeep(freq, duration, volume) {
             if (!soundEnabled || !ensureAudioContext()) return;
             var osc = audioContext.createOscillator();
             var gain = audioContext.createGain();
             
             osc.type = 'square';
-            osc.frequency.setValueAtTime(800, audioContext.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
             
-            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            gain.gain.setValueAtTime(volume || 0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
             
             osc.connect(gain);
             gain.connect(audioContext.destination);
             
             osc.start();
-            osc.stop(audioContext.currentTime + 0.2);
+            osc.stop(audioContext.currentTime + duration);
         }
         
-        function playCoinSound() {
+        function playDataLoadSound() {
             if (!soundEnabled || !ensureAudioContext()) return;
+            var osc = audioContext.createOscillator();
+            var gain = audioContext.createGain();
             
-            // Metallic ping
-            var osc1 = audioContext.createOscillator();
-            var gain1 = audioContext.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.6);
             
-            osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(1200, audioContext.currentTime);
-            osc1.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
             
-            gain1.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gain1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
             
-            osc1.connect(gain1);
-            gain1.connect(audioContext.destination);
-            
-            osc1.start();
-            osc1.stop(audioContext.currentTime + 0.15);
-            
-            // Echo
-            setTimeout(function() {
-                var osc2 = audioContext.createOscillator();
-                var gain2 = audioContext.createGain();
-                
-                osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(900, audioContext.currentTime);
-                
-                gain2.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gain2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
-                osc2.connect(gain2);
-                gain2.connect(audioContext.destination);
-                
-                osc2.start();
-                osc2.stop(audioContext.currentTime + 0.1);
-            }, 100);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.6);
         }
         
-        function playArcadeChord(frequencies, duration) {
+        function playReadyChord(frequencies, duration) {
             if (!soundEnabled || !ensureAudioContext()) return;
             
             frequencies.forEach(function(freq, index) {
@@ -4371,10 +4406,10 @@
                     var osc = audioContext.createOscillator();
                     var gain = audioContext.createGain();
                     
-                    osc.type = 'square';
+                    osc.type = 'sine';
                     osc.frequency.setValueAtTime(freq, audioContext.currentTime);
                     
-                    gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gain.gain.setValueAtTime(0.12, audioContext.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
                     
                     osc.connect(gain);
@@ -4382,8 +4417,46 @@
                     
                     osc.start();
                     osc.stop(audioContext.currentTime + duration);
-                }, index * 80);
+                }, index * 100);
             });
+        }
+
+        // Matrix rain effect for background
+        function initMatrixRain() {
+            var canvas = document.getElementById('matrixRain');
+            if (!canvas) return;
+            
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            var columns = Math.floor(canvas.width / 20);
+            var drops = [];
+            for (var i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height;
+            }
+            
+            var chars = '01$¥€£';
+            
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#0f0';
+                ctx.font = '15px monospace';
+                
+                for (var i = 0; i < drops.length; i++) {
+                    var text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * 20, drops[i]);
+                    
+                    if (drops[i] > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i] += 20;
+                }
+            }
+            
+            matrixRainInterval = setInterval(drawMatrix, 50);
         }
 
         // Scanline CRT effect
@@ -4421,6 +4494,7 @@
         
         function stopIntroEffects() {
             if (scanlineInterval) clearInterval(scanlineInterval);
+            if (matrixRainInterval) clearInterval(matrixRainInterval);
             if (introSoundInterval) clearInterval(introSoundInterval);
         }
 
@@ -9246,6 +9320,30 @@ function renderWriteScene() {
                 },
                 "sections": {
                     "dataAnalysis": {
+                        "_STORY_WRITING_INSTRUCTIONS": {
+                            "CRITICAL_RULES": [
+                                "Write a STORY, not a textbook explanation",
+                                "Create characters, setting, conflict, and resolution",
+                                "The story must naturally demonstrate economic concepts",
+                                "Use vivid details and realistic dialogue",
+                                `Length: ${rules.storyLength} (${is40min ? 'more detailed plot with subplots' : 'focused single narrative'})`,
+                                `Must include ${rules.keywordCount} economics keywords marked with <span class='keyword' data-term='term'>term</span>`
+                            ],
+                            "STORY_ELEMENTS": {
+                                "SETTING": "Real-world location (school, market, neighborhood, business, etc.)",
+                                "CHARACTERS": "Named individuals with goals and motivations",
+                                "PLOT": "A situation that demonstrates economic principles through action",
+                                "CONFLICT": "Economic problem or decision the characters face",
+                                "RESOLUTION": "How economic concepts explain or solve the situation"
+                            },
+                            "GOOD_STORY_EXAMPLE": "Emma runs a popular food truck near the university. Last week, she noticed something strange: when she raised her sandwich price from $5 to $7, her sales dropped from 50 to 30 sandwiches per day. This confused her until her friend explained the <span class='keyword' data-term='law-of-demand'>law of demand</span>—as prices increase, the quantity consumers are willing to buy decreases. Emma also realized she faced <span class='keyword' data-term='scarcity'>scarcity</span> because her small truck could only make 60 sandwiches daily...",
+                            "BAD_STORY_EXAMPLE_1": "❌ Supply is when producers make goods. Demand is when consumers buy goods. Equilibrium is where they meet. Price elasticity measures responsiveness...",
+                            "BAD_STORY_EXAMPLE_2": "❌ Let's learn about markets. Markets have buyers and sellers. The price mechanism allocates resources. Competition improves efficiency...",
+                            "LENGTH_GUIDELINES": {
+                                "20min": "100 words = tight narrative, one main situation, 2-3 characters maximum",
+                                "40min": "200 words = developed story, multiple scenes, 4-5 characters, can include subplots"
+                            }
+                        },
                         "_KEYWORDS_INSTRUCTIONS": {
                             "CRITICAL": `Each keyword MUST have ${rules.examplesPerKeyword} examples that USE that keyword`,
                             "KEY_FORMAT": "Use lowercase-with-dashes: 'price-elasticity' not 'Price Elasticity'",
@@ -9269,7 +9367,7 @@ function renderWriteScene() {
                             }
                         },
                         "story": {
-                            "_WRITE_HERE": `Write ${rules.storyLength} story with ${rules.keywordCount} marked keywords`,
+                            "_WRITE_HERE": `Write ${rules.storyLength} NARRATIVE STORY (not textbook text) with ${rules.keywordCount} marked keywords`,
                             "text": `YOUR_STORY_HERE with <span class='keyword' data-term='TERM'>TERM</span> markers (${rules.storyLength})`,
                             "keywords": {
                                 "_EXAMPLE_FORMAT": {
@@ -11882,14 +11980,17 @@ COACH: Iris Wang
             // Collect all students from all teams
             const students = [];
             STATE.teams.forEach(team => {
-                if (team.captain) {
-                    students.push({ name: team.captain, team: team.name, role: 'Captain' });
-                }
-                if (team.writer) {
-                    students.push({ name: team.writer, team: team.name, role: 'Writer' });
-                }
-                if (team.coach) {
-                    students.push({ name: team.coach, team: team.name, role: 'Coach' });
+                // Teams store members in the 'members' object
+                if (team.members) {
+                    if (team.members.captain) {
+                        students.push({ name: team.members.captain, team: team.name, role: 'Captain' });
+                    }
+                    if (team.members.writer) {
+                        students.push({ name: team.members.writer, team: team.name, role: 'Writer' });
+                    }
+                    if (team.members.coach) {
+                        students.push({ name: team.members.coach, team: team.name, role: 'Coach' });
+                    }
                 }
             });
             
