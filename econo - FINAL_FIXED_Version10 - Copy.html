@@ -10114,6 +10114,7 @@ function renderWriteScene() {
          * Show AI Generator Modal with topic input and file selection
          */
         window.showAIGeneratorModal = function() {
+            console.log('[AI GENERATOR] showAIGeneratorModal called');
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
             modal.innerHTML = `
@@ -12656,6 +12657,9 @@ COACH: Iris Wang
             init();
           }
         })();
+        
+        // Log AI Generator function availability
+        console.log('[AI GENERATOR] Function registered:', typeof window.showAIGeneratorModal);
     </script>
 
     <!-- ============================================
