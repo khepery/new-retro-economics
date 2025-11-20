@@ -3316,7 +3316,7 @@
             </div>
             <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
             <input type="file" id="aiFileUpload" accept=".pdf,.ppt,.pptx" class="file-input" style="display: none;" onchange="handleAIFileUpload(event)" title="Upload PDF/PowerPoint for AI Generation">
-            <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">🤖 AI GENERATE LESSON</button>
+            <button id="aiGenerateBtn" class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">🤖 AI GENERATE LESSON</button>
             <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
             <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
             <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
@@ -10184,15 +10184,19 @@ function renderWriteScene() {
          * Start AI generation process
          */
         window.startAIGeneration = async function() {
+            console.log('[AI GENERATOR] startAIGeneration called');
             const fileInput = document.getElementById('aiFileInput');
             const topicInput = document.getElementById('aiTopicInput');
-            const file = fileInput.files[0];
-            const topic = topicInput.value.trim();
+            const file = fileInput?.files[0];
+            const topic = topicInput?.value.trim();
             
             if (!file) {
+                console.log('[AI GENERATOR] No file selected');
                 showModal('ERROR | 错误', 'Please select a file first!\n请先选择一个文件！');
                 return;
             }
+            
+            console.log('[AI GENERATOR] File selected:', file.name, 'Topic:', topic || '(none)');
             
             // Close the input modal
             document.querySelector('.modal-overlay').remove();
@@ -12660,6 +12664,25 @@ COACH: Iris Wang
         
         // Log AI Generator function availability
         console.log('[AI GENERATOR] Function registered:', typeof window.showAIGeneratorModal);
+        
+        // Add direct event listener as fallback for AI Generate button
+        document.addEventListener('DOMContentLoaded', function() {
+            const aiBtn = document.getElementById('aiGenerateBtn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', function(e) {
+                    console.log('[AI GENERATOR] Button clicked via event listener');
+                    if (typeof window.showAIGeneratorModal === 'function') {
+                        window.showAIGeneratorModal();
+                    } else {
+                        console.error('[AI GENERATOR] showAIGeneratorModal function not found!');
+                        alert('AI Generator function not loaded. Please refresh the page.');
+                    }
+                });
+                console.log('[AI GENERATOR] Event listener attached to button');
+            } else {
+                console.error('[AI GENERATOR] Button #aiGenerateBtn not found in DOM');
+            }
+        });
     </script>
 
     <!-- ============================================
