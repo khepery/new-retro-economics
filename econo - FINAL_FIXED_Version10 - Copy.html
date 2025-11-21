@@ -10115,7 +10115,6 @@ function renderWriteScene() {
          */
         window.showAIGeneratorModal = function() {
             console.log('[AI GENERATOR] showAIGeneratorModal called');
-            alert('AI Generator button clicked! Modal will open now.');
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
             modal.innerHTML = `
@@ -10174,6 +10173,7 @@ function renderWriteScene() {
                 </div>
             `;
             document.body.appendChild(modal);
+            modal.style.display = 'flex';  // Make modal visible
             
             // Close on background click
             modal.addEventListener('click', (e) => {
