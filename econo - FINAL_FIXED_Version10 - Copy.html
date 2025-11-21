@@ -10188,11 +10188,18 @@ function renderWriteScene() {
             console.log('[AI GENERATOR] startAIGeneration called');
             const fileInput = document.getElementById('aiFileInput');
             const topicInput = document.getElementById('aiTopicInput');
+            
+            console.log('[AI GENERATOR] fileInput element:', fileInput);
+            console.log('[AI GENERATOR] fileInput.files:', fileInput?.files);
+            console.log('[AI GENERATOR] fileInput.files.length:', fileInput?.files?.length);
+            
             const file = fileInput?.files[0];
             const topic = topicInput?.value.trim();
             
+            console.log('[AI GENERATOR] file object:', file);
+            
             if (!file) {
-                console.log('[AI GENERATOR] No file selected');
+                console.log('[AI GENERATOR] No file selected - showing error');
                 showModal('ERROR | 错误', 'Please select a file first!\n请先选择一个文件！');
                 return;
             }
