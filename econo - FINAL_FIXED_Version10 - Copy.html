@@ -5647,7 +5647,8 @@
         // Sanitize user input to prevent injection attacks
         function sanitizeInput(input) {
             // Remove potentially harmful characters while preserving normal text
-            return input.replace(/[<>{}[\]\\]/g, '').trim();
+            // Allows: letters, numbers, spaces, and common punctuation: ()-.,!?'":;
+            return input.replace(/[<>{}[\]\\`$]/g, '').trim();
         }
 
         window.generateLesson = async function() {
@@ -5672,6 +5673,16 @@
                 return;
             }
             
+            // Validate PDF file if provided
+            if (pdfFile) {
+                const validTypes = ['application/pdf', 'text/pdf'];
+                const fileExtension = pdfFile.name.toLowerCase().split('.').pop();
+                if (fileExtension !== 'pdf' && !validTypes.includes(pdfFile.type)) {
+                    showModal('ERROR | 错误', '❌ Please select a valid PDF file!<br>❌ 请选择有效的PDF文件！');
+                    return;
+                }
+            }
+            
             try {
                 // Close the AI Generator modal
                 closeAIGeneratorModal();
@@ -5686,7 +5697,9 @@
                 // Build the prompt safely
                 const promptParts = ['Generate a complete economics lesson about: ', topic];
                 if (pdfFile) {
-                    promptParts.push(`. Reference PDF: ${sanitizeInput(pdfFile.name)}`);
+                    // Only include filename for reference, sanitized
+                    const safePdfName = sanitizeInput(pdfFile.name);
+                    promptParts.push(`. Reference PDF: ${safePdfName}`);
                 }
                 const prompt = promptParts.join('');
                 
@@ -5725,8 +5738,12 @@
                         `The generated content is ready for review.`
                     );
                     
-                    // Here you could process and load the generated lesson into the app
-                    // For now, we'll just log it
+                    // TODO: Integrate generated lesson into the application
+                    // The generated content should be parsed and loaded into lessonConfig
+                    // to make it available in the lesson interface. This requires:
+                    // 1. Parsing the LLM response into the expected lesson format
+                    // 2. Validating the structure matches lessonConfig schema
+                    // 3. Calling the lesson loading function to display the content
                     console.log('[AI GENERATOR] Generated lesson content:', generatedText);
                 } else {
                     throw new Error('No text content in response');
@@ -5734,11 +5751,18 @@
                 
             } catch (error) {
                 console.error('[AI GENERATOR] Error generating lesson:', error);
+                // Parse hostname from URL safely
+                let serverHost;
+                try {
+                    serverHost = new URL(AI_GENERATOR_CONFIG.LLM_SERVER_URL).host;
+                } catch {
+                    serverHost = 'localhost:1234';
+                }
                 showModal(
                     'ERROR | 错误',
                     `❌ Failed to generate lesson<br>❌ 课程生成失败<br><br>` +
                     `Error: ${error.message}<br><br>` +
-                    `Make sure the LLM server is running at ${AI_GENERATOR_CONFIG.LLM_SERVER_URL.split('/')[2]}`
+                    `Make sure the LLM server is running at ${serverHost}`
                 );
             }
         }
