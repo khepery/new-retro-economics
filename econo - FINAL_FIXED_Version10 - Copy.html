@@ -5608,6 +5608,7 @@
         // AI Generator Configuration
         const AI_GENERATOR_CONFIG = {
             LLM_SERVER_URL: 'http://localhost:1234/v1/completions',
+            MODEL_NAME: 'local-model',
             MAX_TOKENS: 2000,
             TEMPERATURE: 0.7
         };
@@ -5647,8 +5648,9 @@
         // Sanitize user input to prevent injection attacks
         function sanitizeInput(input) {
             // Remove potentially harmful characters while preserving normal text
-            // Allows: letters, numbers, spaces, and common punctuation: ()-.,!?'":;
-            return input.replace(/[<>{}[\]\\`$]/g, '').trim();
+            // Removes: < > { } [ ] \ ` $
+            // Preserves: letters, numbers, spaces, and common punctuation: ( ) - . , ! ? ' " :
+            return input.replace(/[<>{}[\]\\`$;]/g, '').trim();
         }
 
         window.generateLesson = async function() {
@@ -5699,7 +5701,7 @@
                 if (pdfFile) {
                     // Only include filename for reference, sanitized
                     const safePdfName = sanitizeInput(pdfFile.name);
-                    promptParts.push(`. Reference PDF: ${safePdfName}`);
+                    promptParts.push(' Reference PDF: ', safePdfName);
                 }
                 const prompt = promptParts.join('');
                 
@@ -5710,7 +5712,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'local-model',
+                        model: AI_GENERATOR_CONFIG.MODEL_NAME,
                         prompt: prompt,
                         max_tokens: AI_GENERATOR_CONFIG.MAX_TOKENS,
                         temperature: AI_GENERATOR_CONFIG.TEMPERATURE
