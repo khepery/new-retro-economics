@@ -5605,6 +5605,13 @@
             }
         }
 
+        // AI Generator Configuration
+        const AI_GENERATOR_CONFIG = {
+            LLM_SERVER_URL: 'http://localhost:1234/v1/completions',
+            MAX_TOKENS: 2000,
+            TEMPERATURE: 0.7
+        };
+
         // AI Generator Functions
         window.showAIGeneratorModal = function() {
             console.log('[AI GENERATOR] showAIGeneratorModal called');
@@ -5637,6 +5644,12 @@
             }
         }
 
+        // Sanitize user input to prevent injection attacks
+        function sanitizeInput(input) {
+            // Remove potentially harmful characters while preserving normal text
+            return input.replace(/[<>{}[\]\\]/g, '').trim();
+        }
+
         window.generateLesson = async function() {
             console.log('[AI GENERATOR] generateLesson function called');
             
@@ -5644,8 +5657,11 @@
             const topicInput = document.getElementById('aiTopicInput');
             const pdfInput = document.getElementById('aiPdfInput');
             
-            const topic = topicInput.value.trim();
+            const rawTopic = topicInput.value.trim();
             const pdfFile = pdfInput.files[0];
+            
+            // Sanitize topic input
+            const topic = sanitizeInput(rawTopic);
             
             console.log('[AI GENERATOR] Topic:', topic);
             console.log('[AI GENERATOR] PDF file:', pdfFile ? pdfFile.name : 'None');
@@ -5665,26 +5681,26 @@
                 
                 console.log('[AI GENERATOR] Preparing request to LLM server...');
                 
-                // Prepare the request payload
-                const payload = {
-                    topic: topic,
-                    pdf: pdfFile ? await readFileAsBase64(pdfFile) : null,
-                    pdfName: pdfFile ? pdfFile.name : null
-                };
+                console.log(`[AI GENERATOR] Sending request to LLM server at ${AI_GENERATOR_CONFIG.LLM_SERVER_URL}`);
                 
-                console.log('[AI GENERATOR] Sending request to LLM server at http://localhost:1234/v1/completions');
+                // Build the prompt safely
+                const promptParts = ['Generate a complete economics lesson about: ', topic];
+                if (pdfFile) {
+                    promptParts.push(`. Reference PDF: ${sanitizeInput(pdfFile.name)}`);
+                }
+                const prompt = promptParts.join('');
                 
                 // Send request to local LLM server
-                const response = await fetch('http://localhost:1234/v1/completions', {
+                const response = await fetch(AI_GENERATOR_CONFIG.LLM_SERVER_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         model: 'local-model',
-                        prompt: `Generate a complete economics lesson about: ${topic}. ${pdfFile ? 'Use the provided PDF as reference.' : ''}`,
-                        max_tokens: 2000,
-                        temperature: 0.7
+                        prompt: prompt,
+                        max_tokens: AI_GENERATOR_CONFIG.MAX_TOKENS,
+                        temperature: AI_GENERATOR_CONFIG.TEMPERATURE
                     })
                 });
                 
@@ -5722,19 +5738,9 @@
                     'ERROR | 错误',
                     `❌ Failed to generate lesson<br>❌ 课程生成失败<br><br>` +
                     `Error: ${error.message}<br><br>` +
-                    `Make sure the LLM server is running at http://localhost:1234`
+                    `Make sure the LLM server is running at ${AI_GENERATOR_CONFIG.LLM_SERVER_URL.split('/')[2]}`
                 );
             }
-        }
-
-        // Helper function to read file as base64
-        function readFileAsBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
         }
 
         // Image Upload System with Storage Management
