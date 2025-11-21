@@ -10162,7 +10162,7 @@ function renderWriteScene() {
                         </div>
                         
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button onclick="startAIGeneration()" class="timer-btn" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; font-size: 16px;">
+                            <button id="generateLessonBtn" class="timer-btn" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; font-size: 16px;">
                                 🚀 GENERATE LESSON | 生成课程
                             </button>
                             <button onclick="this.closest('.modal-overlay').remove()" class="timer-btn" style="flex: 1; background: #666; padding: 12px; font-size: 16px;">
@@ -10174,6 +10174,15 @@ function renderWriteScene() {
             `;
             document.body.appendChild(modal);
             modal.style.display = 'flex';  // Make modal visible
+            
+            // Attach event listener to generate button
+            const generateBtn = document.getElementById('generateLessonBtn');
+            generateBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[AI GENERATOR] Generate button clicked!');
+                startAIGeneration();
+            });
             
             // Close on background click
             modal.addEventListener('click', (e) => {
