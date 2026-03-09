@@ -7808,7 +7808,7 @@ Chapter 5: Money and Banking
             const prompts = lessonConfig.writePrompts || [];
             
             writePrompts.innerHTML = `
-                <h3 style="color:#00ff00;margin-bottom:var(--space-5);font-size:var(--text-lg);">
+                <h3 style="color:var(--primary-bright);margin-bottom:var(--space-5);font-size:var(--text-lg);">
                     ✅ SAMPLE SOLUTIONS | 参考答案:
                 </h3>
                 ${prompts.map((prompt, index) => `
@@ -16941,11 +16941,26 @@ Output ONLY the JSON object now:`
                     <div class="content-box" style="margin-bottom: var(--space-4);">
                         <div style="margin-bottom: var(--space-3); font-size: var(--text-md);">${prompt.en}</div>
                         <div style="color: #888; margin-bottom: var(--space-3); font-size: var(--text-sm);">${prompt.zh}</div>
-                        <textarea style="width: 100%; min-height: 120px; background: var(--background-light); color: var(--primary-bright); border: 1px solid var(--border-dim); padding: var(--space-3); font-family: monospace; font-size: var(--text-sm);"></textarea>
+                        <textarea id="write-textarea-${index}" data-prompt-index="${index}" style="width: 100%; min-height: 120px; background: var(--background-light); color: var(--primary-bright); border: 1px solid var(--border-dim); padding: var(--space-3); font-family: monospace; font-size: var(--text-sm);"></textarea>
                     </div>
                 `).join('')}
             `;
-            
+
+            // Auto-save: restore saved answers and attach input listeners
+            const storageKey = 'writeAnswers_' + (lessonConfig.title || 'default');
+            const savedAnswers = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            prompts.forEach((_, index) => {
+                const textarea = document.getElementById('write-textarea-' + index);
+                if (!textarea) return;
+                if (savedAnswers[index]) {
+                    textarea.value = savedAnswers[index];
+                }
+                textarea.addEventListener('input', function() {
+                    savedAnswers[index] = this.value;
+                    localStorage.setItem(storageKey, JSON.stringify(savedAnswers));
+                });
+            });
+
             // Enable the show solutions button
             enableWriteSolutions();
         }
