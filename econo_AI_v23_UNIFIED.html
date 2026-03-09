@@ -11560,194 +11560,87 @@ IMPORTANT RULES:
             // GET ADAPTIVE CONSTRAINTS
             const C = getLessonConstraints(duration);
             const comicMode = !!options.comicMode;
-            
+
             return `You are an educational economics engine. Output ONLY valid JSON.
 
-═══════════════════════════════════════════════════════════════
-   🎯 ADAPTIVE NARRATIVE ENGINE - ${C.duration}-MINUTE LESSON 🎯
-═══════════════════════════════════════════════════════════════
+LESSON CONSTRAINTS (${C.duration} minutes):
+- Keywords: EXACTLY ${C.keywords}
+- Story: ~${C.storyWords} words containing ALL ${C.keywords} keyword terms
+- Comic panels: ${comicMode ? `EXACTLY ${C.panels}` : 'omit comic_panels key'}
+- MCQs: EXACTLY ${C.mcqs}
+- Write prompts: EXACTLY ${C.writePrompts}
+- Complexity: ${C.complexity}
+- Character: "${EMMA_STORY_NAME}" — use name only, never describe appearance
 
-CRITICAL CONSTRAINTS (DO NOT DEVIATE):
-┌─────────────────────────────────────────────────────────────┐
-│  Duration:        ${C.duration} minutes                              │
-│  Keywords:        EXACTLY ${C.keywords} (no more, no less)             │
-│  Story Length:    ~${C.storyWords} words                               │
-│  Comic Panels:    EXACTLY ${C.panels} panels                           │
-│  MCQs:            ${C.mcqs} questions                                  │
-│  Write Prompts:   ${C.writePrompts} prompts                                 │
-│  Complexity:      ${C.complexity}                       │
-└─────────────────────────────────────────────────────────────┘
-
-MAIN CHARACTER: ${EMMA_STORY_NAME}
-- Use ONLY her name in story text (e.g., "Emma walked into the store")
-- Do NOT describe her appearance in the story
-- Her visual appearance is handled separately by the image system
-
-═══════════════════════════════════════════════════════════════
-   📋 REQUIRED JSON STRUCTURE
-═══════════════════════════════════════════════════════════════
-
+JSON SCHEMA:
 {
-  "lesson_metadata": {
-    "topic": "${topic}",
-    "title": "Engaging title about ${topic}",
-    "title_zh": "中文标题",
-    "duration": ${C.duration},
-    "keyword_count": ${C.keywords}
-  },
-
-  "ib_meta": {
-    "goal": "Specific learning objective for ${topic}",
-    "goal_zh": "学习目标",
-    "context": "Real-world relevance for students",
-    "context_zh": "情境说明",
-    "success": "Observable success criteria",
-    "success_zh": "成功标准"
-  },
-
+  "lesson_metadata": {"topic":"${topic}","title":"...","title_zh":"...","duration":${C.duration},"keyword_count":${C.keywords}},
+  "ib_meta": {"goal":"...","goal_zh":"...","context":"...","context_zh":"...","success":"...","success_zh":"..."},
   "keywords": [
     {
       "id": "keyword-1",
-      "term": "Economic Term",
-      "term_zh": "经济术语",
-      "definition": "Clear definition (20-40 words)",
-      "definition_zh": "定义中文",
-      "gap_sentence": "Fill-in-blank: The _____ occurs when _____ happens.",
+      "term": "Economic Term", "term_zh": "经济术语",
+      "definition": "Clear definition (20-40 words)", "definition_zh": "定义中文",
+      "gap_sentence": "The _____ occurs when _____ happens.",
       "gap_blanks": ["term", "condition"],
       "examples": ["Example sentence 1", "Example sentence 2"]
     }
   ],
-
-  "story": {
-    "text": "${EMMA_STORY_NAME} discovered... [~${C.storyWords} words with ALL ${C.keywords} keywords]",
-    "text_zh": "艾玛发现..."
-  },
-
+  "story": {"text": "~${C.storyWords}-word narrative using all keyword terms", "text_zh": "..."},
   ${comicMode ? `"comic_panels": [
     {
       "panel_id": 1,
-      "visual_description": "ACTION description for image (5-10 words, NO character appearance)",
+      "visual_description": "Action only, 5-10 words, no appearance (e.g. 'pointing at supply-demand graph')",
       "speech_bubbles": [
-        {"speaker": "${EMMA_STORY_NAME}", "text": "Dialogue using **keyword**", "text_zh": "中文"},
-        {"speaker": "Teacher", "text": "Response explaining **keyword**", "text_zh": "中文"}
+        {"speaker": "${EMMA_STORY_NAME}", "text": "Question using keyword (15-30 words, complete sentence)", "text_zh": "..."},
+        {"speaker": "Teacher", "text": "Explanation of keyword (15-30 words, complete sentence)", "text_zh": "..."}
       ]
     }
   ],` : ''}
-
   "logic_build": [
     {
       "keyword_id": "keyword-1",
-      "term": "MUST match keyword term exactly",
-      "definition": "MUST match keyword definition exactly",
-      "gap_sentence": "MUST match keyword gap_sentence exactly",
-      "gap_blanks": ["MUST match keyword gap_blanks exactly"]
+      "term": "EXACT copy of keywords[0].term",
+      "definition": "EXACT copy of keywords[0].definition",
+      "gap_sentence": "EXACT copy of keywords[0].gap_sentence",
+      "gap_blanks": ["EXACT copy of keywords[0].gap_blanks"]
     }
   ],
-
   "mcqs": [
     {
-      "question_en": "Question testing keyword understanding?",
-      "question_zh": "问题中文？",
-      "options_en": ["Correct answer (based on keyword definition)", "Wrong A", "Wrong B", "Wrong C"],
-      "options_zh": ["正确答案", "错误A", "错误B", "错误C"],
+      "question_en": "...", "question_zh": "...",
+      "options_en": ["Correct answer", "Wrong A", "Wrong B", "Wrong C"],
+      "options_zh": ["...", "...", "...", "..."],
       "correct": 0,
       "keyword_tested": "keyword-1",
-      "explanation_en": "DETAILED explanation (50-80 words): Why the correct answer is right, why each wrong option is incorrect, and how this relates to the economic concept. Example: 'The correct answer is A because [keyword] means [definition]. Option B is wrong because it describes [different concept]. Option C is incorrect as it confuses [related term]. Understanding this helps students grasp how [broader application].'",
-      "explanation_zh": "详细解释：为什么正确答案是对的，为什么其他选项是错误的，以及这与经济概念的关系。"
+      "explanation_en": "50-80 words: why correct is right and why each wrong option is incorrect.",
+      "explanation_zh": "..."
     }
   ],
-
   "write_prompts": [
     {
-      "prompt_en": "Question about applying keyword concept",
-      "prompt_zh": "问题中文",
-      "sample_answer_en": "Model answer (50-80 words) that clearly demonstrates understanding: Start with the definition, give a specific real-world example, and explain how it connects to everyday life. For instance: '[Term] means [definition]. A real example is [specific scenario]. This matters because [practical implication].'",
-      "sample_answer_zh": "示例答案：首先定义术语，然后给出具体例子，最后解释实际意义。",
-      "explanation_en": "DETAILED grading guide (40-60 words): A good answer should include: 1) Clear definition of the term, 2) At least one specific real-world example, 3) Explanation of why this concept matters. Students should demonstrate they can apply the concept, not just memorize it.",
-      "explanation_zh": "评分指南：好的答案应包括：1）术语的清晰定义，2）至少一个具体的现实例子，3）解释为什么这个概念重要。",
+      "prompt_en": "...", "prompt_zh": "...",
+      "sample_answer_en": "50-80 word model answer with definition, real-world example, and practical implication.",
+      "sample_answer_zh": "...",
+      "explanation_en": "40-60 word grading guide: definition, specific example, concept application.",
+      "explanation_zh": "...",
       "keyword_focus": "keyword-1"
     }
   ],
-
-  "summary": [
-    {"title": "Key Learning 1", "title_zh": "要点1", "description": "Substantive takeaway", "description_zh": "描述"}
-  ]
+  "summary": [{"title": "...", "title_zh": "...", "description": "...", "description_zh": "..."}]
 }
 
-═══════════════════════════════════════════════════════════════
-   🔑 KEYWORDS = SINGLE SOURCE OF TRUTH
-═══════════════════════════════════════════════════════════════
-
-The "keywords" array is the MASTER DATA. All other sections REFERENCE it:
-
-keywords[] ──┬──► story.text (all terms appear naturally)
-             ├──► comic_panels[].speech_bubbles (dialogue uses terms)
-             ├──► logic_build[] (EXACT copy of gap_sentence/gap_blanks)
-             ├──► mcqs[] (tests keyword understanding)
-             └──► write_prompts[] (applies keyword concepts)
-
-RULE: If a term appears in logic_build, it MUST exist in keywords[].
-RULE: Every keyword MUST appear in story.text at least once.
-
-═══════════════════════════════════════════════════════════════
-   🎬 COMIC PANEL REQUIREMENTS (${C.panels} panels)
-═══════════════════════════════════════════════════════════════
-
+RULES:
+1. keywords[] is the single source of truth — all other sections reference it.
+2. logic_build[i] MUST exactly copy term/definition/gap_sentence/gap_blanks from keywords[i].
+3. logic_build[] MUST have exactly ${C.keywords} items, one per keyword.
+4. Every keyword term MUST appear in story.text at least once.
+5. mcqs[].keyword_tested and write_prompts[].keyword_focus MUST match a keyword id.
 ${comicMode ? `
-PANEL FLOW FOR ${C.duration}-MINUTE LESSON:
-${C.panelFlow.map((flow, i) => `Panel ${i + 1}: ${flow}`).join('\n')}
-
-KEYWORD DISTRIBUTION: ${C.keywordDistribution}
-
-EACH PANEL MUST HAVE:
-1. "visual_description": ACTION only (e.g., "pointing at chart", "shopping in store")
-   - Do NOT describe character appearance
-   - Focus on what they are DOING
-   
-2. "speech_bubbles": EXACTLY 2 speakers per panel
-   - Speaker 1: ${EMMA_STORY_NAME} (asks questions, makes observations)
-   - Speaker 2: Teacher/Friend/Shopkeeper (explains concepts)
-   - Each bubble: 15-30 words, complete sentences
-   - Keywords should appear naturally in dialogue
-
-VISUAL DESCRIPTION EXAMPLES:
-✅ GOOD: "looking at price tags in store"
-✅ GOOD: "pointing at supply-demand graph on board"
-✅ GOOD: "counting money at checkout counter"
-❌ BAD: "young girl with brown hair looking at prices" (no appearance!)
-❌ BAD: "classroom scene" (too vague)
-` : 'Comic mode disabled.'}
-
-═══════════════════════════════════════════════════════════════
-   📊 LOGIC BUILD = EXACT KEYWORD COPY
-═══════════════════════════════════════════════════════════════
-
-The logic_build array MUST have EXACTLY ${C.keywords} items.
-Each item MUST copy data from the corresponding keyword:
-
-keywords[0].term ──────────► logic_build[0].term
-keywords[0].definition ────► logic_build[0].definition  
-keywords[0].gap_sentence ──► logic_build[0].gap_sentence
-keywords[0].gap_blanks ────► logic_build[0].gap_blanks
-
-This ensures the Logic Build game uses the SAME definitions as the story.
-
-═══════════════════════════════════════════════════════════════
-   ✅ FINAL CHECKLIST (VERIFY BEFORE OUTPUT)
-═══════════════════════════════════════════════════════════════
-
-□ keywords[] has EXACTLY ${C.keywords} items
-□ story.text contains ALL ${C.keywords} keyword terms
-□ story.text is approximately ${C.storyWords} words
-□ story.text uses "${EMMA_STORY_NAME}" as character name (no appearance description)
-${comicMode ? `□ comic_panels[] has EXACTLY ${C.panels} panels
-□ Each panel has EXACTLY 2 speech_bubbles
-□ visual_description has NO character appearance details` : ''}
-□ logic_build[] has EXACTLY ${C.keywords} items (one per keyword)
-□ logic_build[].gap_sentence matches keywords[].gap_sentence
-□ mcqs[] has EXACTLY ${C.mcqs} items
-□ write_prompts[] has EXACTLY ${C.writePrompts} items
-□ All keyword_tested/keyword_focus references match actual keyword ids
+Comic mode rules:
+1. Each comic panel MUST have exactly 2 speech_bubbles.
+2. visual_description must describe ACTION only — never character appearance.
+3. Panel flow: ${C.panelFlow.map((flow, i) => `Panel ${i + 1}: ${flow}`).join(' | ')}` : ''}
 
 OUTPUT ONLY VALID JSON. Start with { end with }`;
         }
@@ -11763,37 +11656,27 @@ OUTPUT ONLY VALID JSON. Start with { end with }`;
             
             let prompt = `Create a ${C.duration}-minute economics lesson about "${topic}".
 
-═══════════════════════════════════════════════════════════════
-   ADAPTIVE CONSTRAINTS FOR ${C.duration}-MINUTE LESSON
-═══════════════════════════════════════════════════════════════
-• Keywords: EXACTLY ${C.keywords}
-• Story Length: ~${C.storyWords} words  
-• Comic Panels: ${comicMode ? C.panels : 'N/A'}
-• MCQs: ${C.mcqs}
-• Write Prompts: ${C.writePrompts}
-• Complexity: ${C.complexity}
+Constraints: ${C.keywords} keywords, ~${C.storyWords}-word story, ${comicMode ? C.panels + ' comic panels' : 'no comic panels'}, ${C.mcqs} MCQs, ${C.writePrompts} write prompts, complexity: ${C.complexity}.
 
 `;
             
             if (isPasteOnlyMode) {
-                prompt += `🚨 USE ONLY THE PASTED CONTENT BELOW 🚨
+                prompt += `USE ONLY THE PASTED CONTENT BELOW:
 
-========== TEACHER'S PASTED CONTENT ==========
 ${pasted}
-==============================================
 
 Extract EXACTLY ${C.keywords} key terms FROM this content.
 `;
             } else if ((truncated && truncated.length > 200) || pasted) {
-                prompt += `⚠️ USE THE FOLLOWING REFERENCE CONTENT ⚠️
+                prompt += `USE THE FOLLOWING REFERENCE CONTENT:
 
-${pasted ? `---------- TEACHER PASTED (PRIORITY) ----------
+${pasted ? `--- TEACHER PASTED (PRIORITY) ---
 ${pasted}
-------------------------------------------------
+---------------------------------
 ` : ''}
-${truncated ? `========== FILE CONTENT ==========
+${truncated ? `--- FILE CONTENT ---
 ${truncated}
-==================================
+--------------------
 ` : ''}
 
 Identify EXACTLY ${C.keywords} important economic terms from this content.
@@ -12386,7 +12269,9 @@ ${previousResponse.slice(0, 1500)}`;
             const numPanels = duration === 20 ? 3 : 5;
             const maxAttempts = AI_GENERATOR_CONFIG.MAX_LLM_RETRIES || 3;
             let lastRawResponse = '';
-            let useJsonMode = false; // FIX: Start without JSON mode - it's too strict and causes failures
+            // Enable JSON mode for Groq and OpenAI, which both support response_format: json_object.
+            // Falls back to plain-text mode if the provider returns a 400 validation error.
+            let useJsonMode = config.isGroq || config.isOpenAI;
 
             for (let attempt = 1; attempt <= maxAttempts; attempt++) {
                 console.log(`[AI GENERATOR] Attempt ${attempt}/${maxAttempts}, JSON mode: ${useJsonMode}`);
@@ -12433,9 +12318,8 @@ Output ONLY the JSON object now:`
                     stream: false
                 };
 
-                // FIX: Only use JSON mode on retry if first attempt got close but failed parsing
-                // JSON mode is very strict and often fails completely
-                if (config.isGroq && useJsonMode) {
+                // Apply JSON mode for providers that support it (Groq and OpenAI)
+                if ((config.isGroq || config.isOpenAI) && useJsonMode) {
                     requestBody.response_format = { type: 'json_object' };
                 }
 
