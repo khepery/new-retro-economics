@@ -4996,6 +4996,42 @@
             .le-small-field { max-width: 100%; }
         }
 
+        /* ── Image Style Picker (Task 11) ── */
+        .style-thumb {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            padding: 2px;
+            transition: border-color 0.15s, transform 0.15s;
+            background: rgba(0,0,0,0.4);
+        }
+        .style-thumb:hover {
+            border-color: #ffcc00;
+            transform: scale(1.06);
+        }
+        .style-thumb.selected {
+            border-color: #ff8800;
+            box-shadow: 0 0 6px #ff880088;
+        }
+        .style-thumb-img {
+            width: 52px;
+            height: 36px;
+            border-radius: 3px;
+        }
+        .style-thumb-label {
+            font-size: 9px;
+            color: #ffcc00;
+            margin-top: 2px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 54px;
+        }
+
     </style>
     <!-- HAL RANDOM SELECTOR V2 - CSS -->
     <style>
@@ -6799,19 +6835,52 @@
                         </div>
 
                         <!-- Quality & Style Options -->
-                        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: 10px;">
-                            <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid #ff8800; border-radius: 6px; background: rgba(255,136,0,0.15);">
-                                <span style="font-size: 11px; color:#ffaa44;">🎨 Style</span>
-                                <select id="aiImageStyle" onchange="updateImageStyle(this.value)" style="background:#1a1a00; color:#ffcc00; border:1px solid #ff8800; border-radius: 4px; padding:4px 8px; font-size: 12px; cursor: pointer;">
-                                    <option value="ghibli" selected>🌸 Ghibli 吉卜力</option>
-                                    <option value="popart">🎯 Pop Art 波普</option>
-                                    <option value="cyberpunk">🌃 Cyberpunk 赛博</option>
-                                    <option value="retro">📼 Retro 80s 复古</option>
-                                    <option value="twenties">🎭 1920s 装饰艺术</option>
-                                    <option value="disney">✨ Disney 迪士尼</option>
-                                    <option value="spongebob">🧽 SpongeBob 海绵宝宝</option>
+                        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: flex-start; margin-top: 10px;">
+                            <!-- Image Style Selector with Thumbnail Previews -->
+                            <div style="border: 1px solid #ff8800; border-radius: 6px; background: rgba(255,136,0,0.15); padding: 8px 10px;">
+                                <div style="font-size: 11px; color:#ffaa44; margin-bottom: 6px;">🎨 Style 风格</div>
+                                <!-- Hidden select for backward-compatibility -->
+                                <select id="aiImageStyle" style="display:none;" onchange="updateImageStyle(this.value)">
+                                    <option value="ghibli" selected>Ghibli</option>
+                                    <option value="popart">Pop Art</option>
+                                    <option value="cyberpunk">Cyberpunk</option>
+                                    <option value="retro">Retro 80s</option>
+                                    <option value="twenties">1920s</option>
+                                    <option value="disney">Disney</option>
+                                    <option value="spongebob">SpongeBob</option>
                                 </select>
-                            </label>
+                                <!-- Visual style picker grid -->
+                                <div id="stylePickerGrid" style="display:grid; grid-template-columns: repeat(4, 58px); gap: 5px;">
+                                    <div class="style-thumb" data-style="ghibli" onclick="selectImageStyle('ghibli')" title="Ghibli 吉卜力 — soft watercolor, warm golden tones">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#f7e4b3 0%,#7ebf8e 50%,#f0c96c 100%);"></div>
+                                        <div class="style-thumb-label">🌸 Ghibli</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="popart" onclick="selectImageStyle('popart')" title="Pop Art 波普 — bold primary colors, Ben-Day dots">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#ff0066 0%,#ffff00 50%,#0066ff 100%);"></div>
+                                        <div class="style-thumb-label">🎯 Pop Art</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="cyberpunk" onclick="selectImageStyle('cyberpunk')" title="Cyberpunk 赛博 — neon pink and blue, dark futuristic">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#0d0221 0%,#ff00ff 50%,#00ffff 100%);"></div>
+                                        <div class="style-thumb-label">🌃 Cyber</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="retro" onclick="selectImageStyle('retro')" title="Retro 80s 复古 — synthwave, vintage neon">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#1a0533 0%,#ff6ec7 50%,#a855f7 100%);"></div>
+                                        <div class="style-thumb-label">📼 Retro</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="twenties" onclick="selectImageStyle('twenties')" title="1920s Art Deco 装饰艺术 — gold and black, geometric">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#1a1000 0%,#c9a227 50%,#1a1000 100%);"></div>
+                                        <div class="style-thumb-label">🎭 1920s</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="disney" onclick="selectImageStyle('disney')" title="Disney 迪士尼 — magical, expressive, fairy tale">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#001f5b 0%,#ffd700 50%,#ff69b4 100%);"></div>
+                                        <div class="style-thumb-label">✨ Disney</div>
+                                    </div>
+                                    <div class="style-thumb" data-style="spongebob" onclick="selectImageStyle('spongebob')" title="SpongeBob 海绵宝宝 — bright saturated cartoon">
+                                        <div class="style-thumb-img" style="background: linear-gradient(135deg,#f7e04b 0%,#4fc3f7 50%,#ff5252 100%);"></div>
+                                        <div class="style-thumb-label">🧽 Sponge</div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
                                 <span style="font-size: 11px; color:#88ffbb;">Quality</span>
@@ -13105,6 +13174,23 @@ Output ONLY the JSON object now:`
                 }
             }
         };
+
+        // Visual style picker — called by thumbnail cards
+        window.selectImageStyle = function(style) {
+            // Update hidden select for backward-compatibility
+            const sel = document.getElementById('aiImageStyle');
+            if (sel) sel.value = style;
+            // Deselect currently active card, select new one
+            const grid = document.getElementById('stylePickerGrid');
+            if (grid) {
+                const prev = grid.querySelector('.style-thumb.selected');
+                if (prev) prev.classList.remove('selected');
+                const next = grid.querySelector('.style-thumb[data-style="' + style + '"]');
+                if (next) next.classList.add('selected');
+            }
+            // Delegate to existing handler
+            updateImageStyle(style);
+        };
         
         // Build image prompt with EXACT character description - SAME IN EVERY PANEL
         function buildConsistentImagePrompt(action, panelIndex, includeSecondary = true) {
@@ -19375,6 +19461,11 @@ Output ONLY the JSON object now:`
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
+
+            // Mark the default style card as selected in the visual picker
+            const defaultStyle = document.getElementById('aiImageStyle')?.value || 'ghibli';
+            const defaultCard = document.querySelector('#stylePickerGrid .style-thumb[data-style="' + defaultStyle + '"]');
+            if (defaultCard) defaultCard.classList.add('selected');
 
             // Update storage info
             setTimeout(updateStorageInfo, 100);
