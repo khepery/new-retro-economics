@@ -12773,24 +12773,15 @@ Output ONLY the JSON object now:`
                         // Clean any broken keyword spans
                         textEn = cleanBrokenKeywordSpans(textEn);
                         
-                        // Truncate long text (max 80 chars for regular view)
-                        if (textEn.replace(/<[^>]*>/g, '').length > 80) {
-                            // Strip HTML, truncate, then note truncation
-                            const plainLen = textEn.replace(/<[^>]*>/g, '').length;
-                            if (plainLen > 80) {
-                                // Find safe cut point
-                                let cutPoint = 70;
-                                const openTag = textEn.lastIndexOf('<', cutPoint);
-                                const closeTag = textEn.lastIndexOf('>', cutPoint);
-                                if (openTag > closeTag && openTag > 0) {
-                                    cutPoint = openTag;
-                                }
-                                const nextClose = textEn.indexOf('>', cutPoint);
-                                if (nextClose !== -1 && nextClose < cutPoint + 40) {
-                                    cutPoint = nextClose + 1;
-                                }
-                                textEn = textEn.substring(0, cutPoint) + '...';
-                            }
+                        // Truncate long text (max 80 plain-text chars) by stripping HTML,
+                        // truncating at a word boundary, then re-applying keyword spans.
+                        // This prevents truncation mid-HTML-tag producing broken markup.
+                        const _plainText = textEn.replace(/<[^>]*>/g, '');
+                        if (_plainText.length > 80) {
+                            let cut = 75;
+                            while (cut > 0 && _plainText[cut] !== ' ') cut--;
+                            const truncated = _plainText.substring(0, cut > 0 ? cut : 75);
+                            textEn = wrapStoryKeywordsSafe(truncated, story.keywords || {}) + '...';
                         }
                         
                         html += `<div class="comic-bubble ${isNarrator ? 'narrator' : ''}">`;
@@ -13353,16 +13344,28 @@ Output ONLY the JSON object now:`
                 return text;
             }
             
-            let result = text;
+            // Sort keywords longest-first so "aggregate demand" is matched before "demand"
+            const sortedKeywords = Object.entries(keywords)
+                .map(([key, data]) => ({ key, term: data.en || key }))
+                .sort((a, b) => b.term.length - a.term.length);
             
-            Object.entries(keywords).forEach(([key, data]) => {
-                const term = data.en || key;
-                // Create regex that matches the term but NOT if already in a span
-                const regex = new RegExp(`(?<!["'>])\\b(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})\\b(?![^<]*>)`, 'gi');
-                result = result.replace(regex, `<span class="keyword" data-term="${key}">$1</span>`);
+            // Split text into alternating [textNode, htmlTag, textNode, htmlTag, ...]
+            // using a capturing group so the tags are preserved in the result array.
+            // Odd-index entries are HTML tags — leave them untouched.
+            // Even-index entries are plain text nodes — apply keyword wrapping there only.
+            const parts = text.split(/(<[^>]+>)/);
+            const wrappedParts = parts.map((part, i) => {
+                if (i % 2 === 1) return part; // HTML tag — skip
+                let textPart = part;
+                sortedKeywords.forEach(({ key, term }) => {
+                    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+                    textPart = textPart.replace(regex, `<span class="keyword" data-term="${key}">$1</span>`);
+                });
+                return textPart;
             });
             
-            return result;
+            return wrappedParts.join('');
         }
 
         // ===== EMMA PROTOCOL FOR ALL IMAGES =====
@@ -15176,9 +15179,12 @@ Output ONLY the JSON object now:`
                 new ResizeObserver(setVH).observe(document.body);
             }
 
-            // Set default 20min button as active
-            document.getElementById('btn20min').style.borderColor = '#ffff00';
-            document.getElementById('btn20min').style.color = '#ffff00';
+            // Reflect actual templateType state in duration buttons
+            const _is20min = templateType === '20min';
+            document.getElementById('btn20min').style.borderColor = _is20min ? '#ffff00' : '#00aa00';
+            document.getElementById('btn20min').style.color     = _is20min ? '#ffff00' : '#00aa00';
+            document.getElementById('btn40min').style.borderColor = _is20min ? '#00aa00' : '#ffff00';
+            document.getElementById('btn40min').style.color     = _is20min ? '#00aa00' : '#ffff00';
             
             // Apply initial adaptation
             setTimeout(() => {
@@ -15383,22 +15389,14 @@ Output ONLY the JSON object now:`
                     textEn = wrapStoryKeywordsSafe(textEn, keywords);
                 }
                 
-                // Truncate for presentation (max 100 chars per bubble)
-                if (textEn.length > 150) {
-                    // Find a safe cut point (not inside a tag)
-                    let cutPoint = 100;
-                    const openTag = textEn.lastIndexOf('<', cutPoint);
-                    const closeTag = textEn.lastIndexOf('>', cutPoint);
-                    if (openTag > closeTag) {
-                        // We're inside a tag, cut before it
-                        cutPoint = openTag;
-                    }
-                    // Find next closing tag after cutPoint
-                    const nextClose = textEn.indexOf('>', cutPoint);
-                    if (nextClose !== -1 && nextClose < cutPoint + 50) {
-                        cutPoint = nextClose + 1;
-                    }
-                    textEn = textEn.substring(0, cutPoint) + '...';
+                // Truncate for presentation (max 100 plain-text chars) by stripping HTML,
+                // truncating at a word boundary, then re-applying keyword spans.
+                const _fsPlain = textEn.replace(/<[^>]*>/g, '');
+                if (_fsPlain.length > 100) {
+                    let fsCut = 95;
+                    while (fsCut > 0 && _fsPlain[fsCut] !== ' ') fsCut--;
+                    const fsTruncated = _fsPlain.substring(0, fsCut > 0 ? fsCut : 95);
+                    textEn = wrapStoryKeywordsSafe(fsTruncated, keywords) + '...';
                 }
                 
                 const isNarrator = speaker.toLowerCase() === 'narrator';
