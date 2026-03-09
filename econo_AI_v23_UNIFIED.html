@@ -3684,6 +3684,154 @@
             box-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
         }
 
+        /* ==========================================
+           AI LOADING STATE — CRT Progress Indicator
+           ========================================== */
+
+        .ai-loading-indicator {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4) 0;
+            width: 100%;
+        }
+
+        /* Mini HAL eye that spins and pulses during AI work */
+        .ai-hal-eye {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+            background:
+                radial-gradient(closest-side, #ff1b1b 0%, #b00202 30%, #330000 65%, #0a0a0a 100%),
+                radial-gradient(farthest-corner at 35% 35%, rgba(255,255,255,0.35), transparent 45%);
+            box-shadow:
+                inset 0 0 20px rgba(255,0,0,0.6),
+                0 0 30px rgba(255,0,0,0.5),
+                0 0 60px rgba(255,0,0,0.2);
+            animation: aiEyePulse 1.5s ease-in-out infinite;
+        }
+        .ai-hal-eye::before {
+            content: "";
+            position: absolute;
+            inset: 12%;
+            border-radius: 50%;
+            border: 2px solid rgba(15,15,15,0.85);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.95);
+        }
+        /* Green scan-ring rotates over the red eye */
+        .ai-hal-eye::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(0,255,80,0.55) 60deg,
+                transparent 120deg
+            );
+            animation: aiEyeScan 2s linear infinite;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes aiEyePulse {
+            0%, 100% {
+                filter: brightness(1);
+                box-shadow: inset 0 0 20px rgba(255,0,0,0.6), 0 0 30px rgba(255,0,0,0.5), 0 0 60px rgba(255,0,0,0.2);
+            }
+            50% {
+                filter: brightness(1.5);
+                box-shadow: inset 0 0 30px rgba(255,0,0,0.8), 0 0 50px rgba(255,0,0,0.7), 0 0 90px rgba(255,0,0,0.35);
+            }
+        }
+        @keyframes aiEyeScan {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* Animated progress bar */
+        .ai-progress-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(0,255,0,0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .ai-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary-bright), var(--primary-dark));
+            background-size: 200% 100%;
+            box-shadow: 0 0 8px var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            animation: aiProgressShimmer 2s linear infinite;
+        }
+        @keyframes aiProgressShimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Step-by-step list */
+        .ai-steps-list {
+            width: 100%;
+            text-align: left;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: var(--text-sm);
+        }
+        .ai-step-item {
+            padding: 3px 0;
+            color: var(--primary-dim);
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-step-item.step-active  { color: var(--primary-bright); text-shadow: 0 0 6px var(--primary-color); }
+        .ai-step-item.step-done    { color: var(--primary-color); }
+        .ai-step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ai-step-item.step-active .ai-step-dot {
+            background: var(--primary-bright);
+            box-shadow: 0 0 6px var(--primary-color);
+            animation: aiStepBlink 1s ease-in-out infinite;
+        }
+        .ai-step-item.step-done .ai-step-dot { background: var(--primary-color); }
+        @keyframes aiStepBlink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.3; }
+        }
+
+        /* Cancel button */
+        .ai-cancel-btn {
+            background: transparent;
+            color: var(--primary-dim);
+            border: 1px solid var(--border-color);
+            padding: var(--space-2) var(--space-5);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: var(--text-sm);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-2);
+        }
+        .ai-cancel-btn:hover {
+            color: #ff4444;
+            border-color: #ff4444;
+            text-shadow: 0 0 6px rgba(255,68,68,0.8);
+        }
+
         /* SCALE CONTROL PANEL */
         .scale-control {
             position: fixed;
@@ -6678,7 +6826,16 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-title" id="modalTitle"></div>
             <div class="modal-text" id="modalText"></div>
-            <button class="modal-close" onclick="closeModal()">CLOSE | 关闭</button>
+            <!-- AI Loading State: HAL eye + progress bar + steps + cancel -->
+            <div class="ai-loading-indicator" id="aiLoadingIndicator">
+                <div class="ai-hal-eye"></div>
+                <div class="ai-progress-track">
+                    <div class="ai-progress-fill" id="aiProgressFill"></div>
+                </div>
+                <div class="ai-steps-list" id="aiStepsList"></div>
+                <button class="ai-cancel-btn" id="aiCancelBtn" onclick="cancelAIOperation()">✕ CANCEL OPERATION | 取消操作</button>
+            </div>
+            <button class="modal-close" id="modalCloseBtn" onclick="closeModal()">CLOSE | 关闭</button>
         </div>
     </div>
 
@@ -10905,6 +11062,87 @@ IMPORTANT RULES:
             }
         }
 
+        // ============================================================
+        // AI LOADING STATE — animated HAL eye + progress + cancel
+        // ============================================================
+
+        let aiAbortController = null;
+
+        // Steps labels used by the main generation flow
+        const AI_GENERATION_STEPS = [
+            '📡 Connecting to AI provider | 连接AI服务',
+            '📄 Extracting content from file | 提取文件内容',
+            '🧱 Preparing lesson structure | 准备课程结构',
+            '🤖 AI generating lesson | AI生成课程内容',
+            '✅ Applying lesson | 应用课程'
+        ];
+
+        const AI_IMAGE_STEPS = AI_GENERATION_STEPS.concat(['🎨 Generating comic images | 生成漫画图片']);
+
+        /**
+         * Show the AI loading indicator inside the shared modal.
+         * @param {string[]} steps  Array of step-label strings to display.
+         */
+        window.showAILoadingState = function(steps) {
+            const indicator  = document.getElementById('aiLoadingIndicator');
+            const stepsList  = document.getElementById('aiStepsList');
+            const closeBtn   = document.getElementById('modalCloseBtn');
+            const fillEl     = document.getElementById('aiProgressFill');
+            if (!indicator || !stepsList) return;
+            stepsList.innerHTML = (steps || []).map((label, i) =>
+                `<div class="ai-step-item" id="ai-step-${i}">` +
+                    `<span class="ai-step-dot"></span><span>${label}</span>` +
+                `</div>`
+            ).join('');
+            if (fillEl) fillEl.style.width = '0%';
+            indicator.style.display = 'flex';
+            if (closeBtn) closeBtn.style.display = 'none';
+        };
+
+        /**
+         * Advance the visual step indicator and progress bar.
+         * @param {number} stepIndex   Zero-based index of the current step.
+         * @param {number} totalSteps  Total number of steps.
+         * @param {string} [message]   Optional text to show in the modal body.
+         */
+        window.updateAILoadingStep = function(stepIndex, totalSteps, message) {
+            document.querySelectorAll('.ai-step-item').forEach(function(item, i) {
+                item.classList.remove('step-active', 'step-done');
+                if (i < stepIndex)      item.classList.add('step-done');
+                else if (i === stepIndex) item.classList.add('step-active');
+            });
+            const fillEl = document.getElementById('aiProgressFill');
+            if (fillEl && totalSteps > 0) {
+                fillEl.style.width = Math.min(100, Math.round(((stepIndex + 1) / totalSteps) * 100)) + '%';
+            }
+            if (message) updateModalContent(message);
+        };
+
+        /**
+         * Hide the loading indicator and restore the Close button.
+         * Call this when the operation finishes (success or error).
+         */
+        window.hideAILoadingState = function() {
+            const indicator = document.getElementById('aiLoadingIndicator');
+            const closeBtn = document.getElementById('modalCloseBtn');
+            const fillEl = document.getElementById('aiProgressFill');
+            if (indicator) indicator.style.display = 'none';
+            if (closeBtn) closeBtn.style.display = '';
+            if (fillEl) fillEl.style.width = '100%';
+        };
+
+        /**
+         * Cancel the currently running AI operation via AbortController.
+         */
+        window.cancelAIOperation = function() {
+            if (aiAbortController) {
+                aiAbortController.abort();
+                aiAbortController = null;
+            }
+            hideAILoadingState();
+            updateModalContent('⚠️ Operation cancelled by user.<br>⚠️ 操作已被用户取消。');
+        };
+
         // AI Generator Configuration - Groq Cloud API
         const AI_GENERATOR_CONFIG = {
             // Groq Cloud API (fast & reliable)
@@ -12369,7 +12607,7 @@ ${previousResponse.slice(0, 1500)}`;
             return fallbacks;
         }
 
-        async function requestLessonFromAI({ topic, fileText, duration, pastedExcerpt, comicMode }) {
+        async function requestLessonFromAI({ topic, fileText, duration, pastedExcerpt, comicMode, signal }) {
             const config = getProviderConfig();
             const providerInfo = describeProvider(config);
             console.log('[AI GENERATOR] Sending request to:', providerInfo.long);
@@ -12445,7 +12683,8 @@ Output ONLY the JSON object now:`
                         mode: 'cors',
                         credentials: 'omit',
                         headers,
-                        body: JSON.stringify(requestBody)
+                        body: JSON.stringify(requestBody),
+                        signal: signal || null
                     });
 
                     if (!response.ok) {
@@ -14389,26 +14628,45 @@ Output ONLY the JSON object now:`
                 const providerInfo = describeProvider(config);
                 const providerName = providerInfo.long;
                 const statusTitle = 'AI GENERATION | AI生成';
-                showModal(statusTitle, formatModalContent(`📡 Step 1/5: Connecting to ${providerName}...\n正在连接AI服务...`));
+
+                // Determine step list based on whether images will be generated
+                const comicRequested = !!document.getElementById("aiComicMode")?.checked;
+                const generateImagesNowCheck = !!document.getElementById("aiGenerateImagesNow")?.checked;
+                const withImages = comicRequested && generateImagesNowCheck;
+                const steps = withImages ? AI_IMAGE_STEPS : AI_GENERATION_STEPS;
+                const totalSteps = steps.length;
+
+                // Create AbortController so the user can cancel the network request
+                aiAbortController = new AbortController();
+                const { signal } = aiAbortController;
+
+                // Show modal with animated HAL eye, progress bar, and step list
+                showModal(statusTitle, '');
+                showAILoadingState(steps);
+
+                // STEP 1 — Connect
+                updateAILoadingStep(0, totalSteps, formatModalContent(`📡 Step 1/${totalSteps}: Connecting to ${providerName}...\n正在连接AI服务...`));
 
                 const healthVerified = await ensureAIServiceAvailable();
                 if (!healthVerified && config.isLocal) {
                     updateModalContent(formatModalContent(
-                        `⚠️ Step 1/5: Could not verify local AI server.\n` +
+                        `⚠️ Step 1/${totalSteps}: Could not verify local AI server.\n` +
                         `If you see CORS errors, start llama.cpp with --host 0.0.0.0\nContinuing anyway...`
                     ));
                     await wait(1200);
                 }
 
+                // STEP 2 — Extract content
                 let fileText = '';
+                updateAILoadingStep(1, totalSteps, '');
                 
                 if (usePasteOnly) {
                     // PASTE-ONLY: Skip file extraction entirely
-                    updateModalContent(`📋 Step 2/5: Using pasted content...\n${pastedContent.length.toLocaleString()} characters`);
+                    updateModalContent(`📋 Step 2/${totalSteps}: Using pasted content...\n${pastedContent.length.toLocaleString()} characters`);
                     fileText = ''; // No file text - AI will use ONLY the pasted content
                 } else {
                     // FILE MODE: Extract from file with optional page range
-                    updateModalContent(`📄 Step 2/5: Extracting text from file...\n正在处理: ${safeFileName}${pageRangeStr ? `\nPages: ${pageRangeStr}` : ''}`);
+                    updateModalContent(`📄 Step 2/${totalSteps}: Extracting text from file...\n正在处理: ${safeFileName}${pageRangeStr ? `\nPages: ${pageRangeStr}` : ''}`);
                     fileText = await extractTextFromFile(file, pageRangeStr);
                     const minChars = AI_GENERATOR_CONFIG.MIN_PDF_CHARS || 200;
                     if (!fileText || fileText.length < minChars) {
@@ -14417,16 +14675,24 @@ Output ONLY the JSON object now:`
                     console.log('[AI GENERATOR] Extracted', fileText.length, 'characters from file');
                 }
 
-                updateModalContent(`🧱 Step 3/5: Preparing ${duration}-minute lesson...\nTopic | 主题: ${topic}`);
+                // STEP 3 — Prepare lesson
+                updateAILoadingStep(2, totalSteps, `🧱 Step 3/${totalSteps}: Preparing ${duration}-minute lesson...\nTopic | 主题: ${topic}`);
 
-                updateModalContent(`🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n${usePasteOnly ? '📋 Using ONLY pasted content' : '📄 Using file content'}\nThis may take 30-60 seconds. 请耐心等待...`);
+                // STEP 4 — AI generation (longest step)
+                updateAILoadingStep(3, totalSteps, formatModalContent(
+                    `🤖 Step 4/${totalSteps}: ${providerInfo.short} is creating your FUN lesson...\n` +
+                    `⏱️ Duration: ${duration} minutes\n` +
+                    `${usePasteOnly ? '📋 Using ONLY pasted content' : '📄 Using file content'}\n` +
+                    `This may take 30-60 seconds. 请耐心等待...`
+                ));
                 
                 let generatedLesson = await requestLessonFromAI({
                     topic,
                     fileText: usePasteOnly ? '' : fileText,  // Empty if paste-only mode
                     duration,
-                    pastedExcerpt: usePasteOnly ? pastedContent : pastedContent,  // Always pass pasted content
-                    comicMode
+                    pastedExcerpt: pastedContent,  // Always pass pasted content
+                    comicMode,
+                    signal
                 });
 
                 // Basic validation
@@ -14442,21 +14708,21 @@ Output ONLY the JSON object now:`
                 const keywordCount = Object.keys(generatedLesson.story?.keywords || generatedLesson.sections?.dataAnalysis?.keywords || {}).length;
                 console.log(`[AI GENERATOR] ✅ Final keyword count: ${keywordCount}`);
 
+                // STEP 5 — Apply lesson
+                updateAILoadingStep(4, totalSteps, `✅ Step 5/${totalSteps}: Applying lesson...\n正在应用课程...`);
                 applyGeneratedLesson(generatedLesson, topic);
 
-                // Step 6: Generate comic images if requested
-                const comicRequested = !!document.getElementById("aiComicMode")?.checked;
-                const generateImagesNowCheck = !!document.getElementById("aiGenerateImagesNow")?.checked;
+                // STEP 6 (optional) — Generate comic images
                 let imageGenerationFailed = false;
 
-                if (comicRequested && generateImagesNowCheck && lessonConfig?.story?.presentation === "comic") {
+                if (withImages && lessonConfig?.story?.presentation === "comic") {
                     try {
                         const selectedProvider = getSelectedImageProvider();
-                        const providerName = selectedProvider === 'pollinations' ? 'Pollinations (FREE)' : 'OpenAI DALL-E 3';
+                        const imgProviderName = selectedProvider === 'pollinations' ? 'Pollinations (FREE)' : 'OpenAI DALL-E 3';
                         
-                        updateModalContent(
-                            `🎨 Step 6/6: Generating comic panel images...\n` +
-                            `Using: ${providerName}\n` +
+                        updateAILoadingStep(5, totalSteps,
+                            `🎨 Step 6/${totalSteps}: Generating comic panel images...\n` +
+                            `Using: ${imgProviderName}\n` +
                             `This may take a moment...`
                         );
 
@@ -14469,8 +14735,8 @@ Output ONLY the JSON object now:`
                             quality,
                             onProgress: (done, total, fromCache) => {
                                 updateModalContent(
-                                    `🎨 Step 6/6: Generating comic panel images...\n` +
-                                    `Using: ${providerName}\n` +
+                                    `🎨 Step 6/${totalSteps}: Generating comic panel images...\n` +
+                                    `Using: ${imgProviderName}\n` +
                                     `Panels: ${done}/${total} ` +
                                     `${fromCache ? "📦 cached" : "🎨 generating..."}`
                                 );
@@ -14506,12 +14772,16 @@ Output ONLY the JSON object now:`
                     }
                 }
 
+                // Done — hide loading indicator, restore Close button
+                hideAILoadingState();
+                aiAbortController = null;
+
                 const durationLabel = generatedLesson.metadata?.duration || duration;
                 const finalKeywordCount = Object.keys(lessonConfig.story?.keywords || {}).length;
                 const panelCount = lessonConfig.story?.comic?.panels?.length || 0;
                 const imageWarning = imageGenerationFailed ? '\n⚠️ Note: Comic images failed. Use TEXT mode or click PRESENT to retry.' : '';
                 updateModalContent(
-                    `✅ Step ${comicRequested && generateImagesNowCheck ? '6/6' : '5/5'}: Lesson ready!${imageWarning}\n` +
+                    `✅ Step ${withImages ? '6/6' : '5/5'}: Lesson ready!${imageWarning}\n` +
                     `📚 ${lessonConfig.title || topic}\n` +
                     `⏱️ Duration: ${durationLabel} min\n` +
                     `📎 Source: ${safeFileName}\n` +
@@ -14523,6 +14793,15 @@ Output ONLY the JSON object now:`
 
                 fileInput.value = '';
             } catch (error) {
+                // Clean up abort controller and loading state on any error
+                hideAILoadingState();
+                aiAbortController = null;
+
+                // Ignore user-initiated cancellation — the cancel button already shows a message
+                if (error.name === 'AbortError') {
+                    return;
+                }
+
                 console.error('[AI GENERATOR] Error generating lesson:', error);
                 if (typeof playError === 'function') {
                     playError();
