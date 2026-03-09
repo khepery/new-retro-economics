@@ -12369,7 +12369,7 @@ ${previousResponse.slice(0, 1500)}`;
             return fallbacks;
         }
 
-        async function requestLessonFromAI({ topic, fileText, duration, pastedExcerpt, comicMode }) {
+        async function requestLessonFromAI({ topic, fileText, duration, pastedExcerpt, comicMode, onStatusUpdate }) {
             const config = getProviderConfig();
             const providerInfo = describeProvider(config);
             console.log('[AI GENERATOR] Sending request to:', providerInfo.long);
@@ -12390,6 +12390,7 @@ ${previousResponse.slice(0, 1500)}`;
 
             for (let attempt = 1; attempt <= maxAttempts; attempt++) {
                 console.log(`[AI GENERATOR] Attempt ${attempt}/${maxAttempts}, JSON mode: ${useJsonMode}`);
+                if (onStatusUpdate) onStatusUpdate({ attempt, maxAttempts, phase: 'connecting' });
                 
                 const messages = [
                     { role: 'system', content: buildSystemPrompt(topic, duration, { comicMode, numPanels }) },
@@ -12467,6 +12468,14 @@ Output ONLY the JSON object now:`
                         if (response.status === 401) {
                             throw new Error('Invalid API key. Please check your provider selection and key.');
                         } else if (response.status === 429) {
+                            if (attempt < maxAttempts) {
+                                const backoffMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+                                const backoffSec = backoffMs / 1000;
+                                console.warn(`[AI GENERATOR] Rate limited (429). Waiting ${backoffSec}s before retry ${attempt + 1}/${maxAttempts}...`);
+                                if (onStatusUpdate) onStatusUpdate({ attempt, maxAttempts, phase: 'rate_limited', waitSec: backoffSec });
+                                await wait(backoffMs);
+                                continue;
+                            }
                             throw new Error('Rate limit exceeded. Please wait a moment and try again.');
                         } else if (response.status === 400 && isJsonValidationError) {
                             // JSON validation failed - retry without JSON mode
@@ -12506,6 +12515,10 @@ Output ONLY the JSON object now:`
                     }
                     console.error(`[AI GENERATOR] Fetch error on attempt ${attempt}:`, fetchError);
                     if (attempt === maxAttempts) throw fetchError;
+                    const backoffMs = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+                    console.warn(`[AI GENERATOR] Network error. Waiting ${backoffMs / 1000}s before retry ${attempt + 1}/${maxAttempts}...`);
+                    if (onStatusUpdate) onStatusUpdate({ attempt, maxAttempts, phase: 'network_error', waitSec: backoffMs / 1000 });
+                    await wait(backoffMs);
                 }
             }
 
@@ -14419,15 +14432,38 @@ Output ONLY the JSON object now:`
 
                 updateModalContent(`🧱 Step 3/5: Preparing ${duration}-minute lesson...\nTopic | 主题: ${topic}`);
 
-                updateModalContent(`🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n${usePasteOnly ? '📋 Using ONLY pasted content' : '📄 Using file content'}\nThis may take 30-60 seconds. 请耐心等待...`);
-                
-                let generatedLesson = await requestLessonFromAI({
-                    topic,
-                    fileText: usePasteOnly ? '' : fileText,  // Empty if paste-only mode
-                    duration,
-                    pastedExcerpt: usePasteOnly ? pastedContent : pastedContent,  // Always pass pasted content
-                    comicMode
-                });
+                const step4Base = `🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n${usePasteOnly ? '📋 Using ONLY pasted content' : '📄 Using file content'}`;
+                updateModalContent(`${step4Base}\nThis may take 30-60 seconds. 请耐心等待...`);
+
+                let step4StatusMsg = step4Base;
+                const step4StartTime = Date.now();
+                const heartbeatInterval = setInterval(() => {
+                    const elapsed = Math.round((Date.now() - step4StartTime) / 1000);
+                    const dots = '.'.repeat((elapsed % 4) + 1);
+                    updateModalContent(`${step4StatusMsg}\n⏳ ${elapsed}s elapsed${dots} 请耐心等待...`);
+                }, 1000);
+
+                let generatedLesson;
+                try {
+                    generatedLesson = await requestLessonFromAI({
+                        topic,
+                        fileText: usePasteOnly ? '' : fileText,  // Empty if paste-only mode
+                        duration,
+                        pastedExcerpt: usePasteOnly ? pastedContent : pastedContent,  // Always pass pasted content
+                        comicMode,
+                        onStatusUpdate: ({ attempt, maxAttempts, phase, waitSec }) => {
+                            if (phase === 'rate_limited') {
+                                step4StatusMsg = `🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n⚠️ Rate limited — retrying in ${waitSec}s (attempt ${attempt + 1}/${maxAttempts})...`;
+                            } else if (phase === 'network_error') {
+                                step4StatusMsg = `🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n⚠️ Network error — retrying in ${waitSec}s (attempt ${attempt + 1}/${maxAttempts})...`;
+                            } else if (phase === 'connecting' && attempt > 1) {
+                                step4StatusMsg = `🤖 Step 4/5: ${providerInfo.short} is creating your FUN lesson...\n⏱️ Duration: ${duration} minutes\n🔄 Retry ${attempt}/${maxAttempts}...`;
+                            }
+                        }
+                    });
+                } finally {
+                    clearInterval(heartbeatInterval);
+                }
 
                 // Basic validation
                 if (!generatedLesson || typeof generatedLesson !== 'object') {
