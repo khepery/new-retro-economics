@@ -3533,14 +3533,57 @@
             z-index: 1999;
             transform: translateX(100%);
             transition: transform 0.3s ease;
-            width: 220px;
-            max-height: 400px;
+            width: 240px;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
 
         .settings-panel.open {
             transform: translateX(0);
+        }
+
+        /* Settings Tab Navigation */
+        .settings-tabs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        .settings-tab {
+            background: var(--background);
+            color: var(--primary-dim);
+            border: 1px solid var(--border-dim);
+            padding: 4px 2px;
+            font-size: 7px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            line-height: 1.3;
+        }
+
+        .settings-tab:hover {
+            background: var(--background-light);
+            color: var(--primary-bright);
+            border-color: var(--primary-bright);
+        }
+
+        .settings-tab.active {
+            background: rgba(0, 255, 0, 0.15);
+            color: var(--primary-bright);
+            border-color: var(--primary-bright);
+            font-weight: bold;
+        }
+
+        .settings-tab-content {
+            display: none;
+        }
+
+        .settings-tab-content.active {
+            display: block;
         }
 
         .settings-title {
@@ -6103,98 +6146,223 @@
     <button class="settings-toggle" onclick="toggleSettings()">⚙</button>
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-title">SYSTEM SETTINGS | 系统设置</div>
-        
-        <!-- Timer Settings -->
-        <div class="setting-group">
-            <div class="setting-label">TIMER DURATION | 计时器时长</div>
-            <div class="timer-buttons">
-                <button class="timer-btn" onclick="setTimer(5)">5M</button>
-                <button class="timer-btn" onclick="setTimer(10)">10M</button>
-                <button class="timer-btn" onclick="setTimer(15)">15M</button>
-                <button class="timer-btn" onclick="setTimer(20)">20M</button>
-                <button class="timer-btn" onclick="setTimer(30)">30M</button>
-                <button class="timer-btn" onclick="setTimer(45)">45M</button>
-            </div>
-            <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
-                <label for="customTimer">
-                    <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
-                </label>
-                <span style="color: var(--primary-dim); font-size: 9px;">min</span>
-                <button class="timer-btn" onclick="setCustomTimer()">SET</button>
-            </div>
+
+        <!-- Tab Navigation -->
+        <div class="settings-tabs" role="tablist">
+            <button class="settings-tab active" role="tab" aria-selected="true" aria-controls="tab-display" onclick="switchSettingsTab('display')" data-tab="display">🖥️<br>DISPLAY</button>
+            <button class="settings-tab" role="tab" aria-selected="false" aria-controls="tab-ai" onclick="switchSettingsTab('ai')" data-tab="ai">🤖<br>AI</button>
+            <button class="settings-tab" role="tab" aria-selected="false" aria-controls="tab-image" onclick="switchSettingsTab('image')" data-tab="image">🖼️<br>IMAGE</button>
+            <button class="settings-tab" role="tab" aria-selected="false" aria-controls="tab-lesson" onclick="switchSettingsTab('lesson')" data-tab="lesson">📚<br>LESSON</button>
+            <button class="settings-tab" role="tab" aria-selected="false" aria-controls="tab-storage" onclick="switchSettingsTab('storage')" data-tab="storage">💾<br>STORE</button>
         </div>
 
-        <!-- Theme Settings -->
-        <div class="setting-group">
-            <div class="setting-label">THEME | 主题</div>
-            <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
-            </div>
-            <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
-            <div style="margin-top: 8px;">
-                <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
-                    🧘 CALM MODE | 安静模式
-                </button>
-            </div>
-        </div>
+        <!-- ── DISPLAY TAB ─────────────────────────── -->
+        <div class="settings-tab-content active" id="tab-display" role="tabpanel">
 
-        <!-- Template Management -->
-        <div class="setting-group">
-            <div class="setting-label">TEMPLATES | 模板管理</div>
-            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
-                <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
-                <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
+            <!-- Timer Settings -->
+            <div class="setting-group">
+                <div class="setting-label">TIMER DURATION | 计时器时长</div>
+                <div class="timer-buttons">
+                    <button class="timer-btn" onclick="setTimer(5)">5M</button>
+                    <button class="timer-btn" onclick="setTimer(10)">10M</button>
+                    <button class="timer-btn" onclick="setTimer(15)">15M</button>
+                    <button class="timer-btn" onclick="setTimer(20)">20M</button>
+                    <button class="timer-btn" onclick="setTimer(30)">30M</button>
+                    <button class="timer-btn" onclick="setTimer(45)">45M</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
+                    <label for="customTimer">
+                        <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
+                    </label>
+                    <span style="color: var(--primary-dim); font-size: 9px;">min</span>
+                    <button class="timer-btn" onclick="setCustomTimer()">SET</button>
+                </div>
             </div>
-            
-            <!-- APP DIFFICULTY SELECTOR -->
-            <div class="setting-label" style="margin-top: 8px; font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
+
+            <!-- Theme Settings -->
+            <div class="setting-group">
+                <div class="setting-label">THEME | 主题</div>
+                <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
+                    <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
+                </div>
+                <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
+                <div style="margin-top: 8px;">
+                    <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
+                        🧘 CALM MODE | 安静模式
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- /tab-display -->
+
+        <!-- ── AI SETTINGS TAB ─────────────────────── -->
+        <div class="settings-tab-content" id="tab-ai" role="tabpanel">
+
             <!-- AI Source Indicator -->
             <div id="currentAISource" style="background: rgba(139,0,255,0.2); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; font-size: 10px; text-align: center; border: 1px solid #8B00FF;">
                 🤖 AI: <span id="aiSourceLabel" style="font-weight: bold; color: #8B00FF;">Groq</span>
             </div>
-            
-            <div style="display: flex; gap: 3px; margin-bottom: 8px;">
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
+
+            <!-- AI Provider & API Key -->
+            <div class="setting-group">
+                <div class="setting-label">🔑 PROVIDER &amp; API KEY</div>
+                <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px;">
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright); font-size: 10px;">
+                        <input type="radio" name="aiProvider" value="groq" id="providerGroq" onchange="toggleAPIKeyField()"> Groq
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright); font-size: 10px;">
+                        <input type="radio" name="aiProvider" value="openai" id="providerOpenAI" checked onchange="toggleAPIKeyField()"> OpenAI
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright); font-size: 10px;">
+                        <input type="radio" name="aiProvider" value="deepseek" id="providerDeepseek" onchange="toggleAPIKeyField()"> DeepSeek
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright); font-size: 10px;">
+                        <input type="radio" name="aiProvider" value="anthropic" id="providerAnthropic" onchange="toggleAPIKeyField()"> Claude
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright); font-size: 10px;">
+                        <input type="radio" name="aiProvider" value="local" id="providerLocal" onchange="toggleAPIKeyField()"> Local
+                    </label>
+                </div>
+                <input type="password" id="groqApiKey" placeholder="Enter API key"
+                       style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 11px; box-sizing: border-box;">
+                <div id="providerHelpText" style="font-size: 10px; color: #00ff00; margin-top: 6px; line-height: 1.4;"></div>
+                <div id="localLLMSection" style="display:none; margin-top: 8px;">
+                    <label style="font-size:10px; color:#00ff00;">Local endpoint:</label>
+                    <input type="text" id="localLLMUrl" value="http://127.0.0.1:8080"
+                           style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 11px; box-sizing: border-box;">
+                </div>
             </div>
-            
-            <!-- Quick Setup Button -->
-            <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; margin-bottom: 8px; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
-            
-            <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
-            <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
-            <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
-            <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
-            <button class="timer-btn" onclick="resetToDefault()" style="width: 100%;">RESET SYSTEM</button>
-        </div>
 
-        <!-- AI Generator -->
-        <div class="setting-group">
-            <div class="setting-label">AI GENERATOR | AI生成器</div>
-            <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
-            <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
-        </div>
+            <!-- AI Actions -->
+            <div class="setting-group">
+                <div class="setting-label">AI GENERATOR | AI生成器</div>
+                <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
+                <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
+            </div>
 
-        <!-- Storage Management -->
-        <div class="setting-group">
-            <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
-            <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
-            <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
-            <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
-            <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
-        </div>
+        </div><!-- /tab-ai -->
 
-        <!-- Emergency Controls -->
+        <!-- ── IMAGE SETTINGS TAB ──────────────────── -->
+        <div class="settings-tab-content" id="tab-image" role="tabpanel">
+
+            <div class="setting-group">
+                <div class="setting-label">🖼️ IMAGE PROVIDER | 图片生成源</div>
+
+                <label style="display:flex; align-items:center; gap:8px; padding:10px 12px; border: 2px solid #00ff88; border-radius: 8px; cursor:pointer; background: rgba(0,255,136,0.15); margin-bottom: 6px;" id="providerPollinationsLabel">
+                    <input type="radio" name="imageProvider" value="pollinations" id="providerPollinations" checked onchange="toggleImageProviderUI()" style="accent-color:#00FF88;">
+                    <div>
+                        <div style="font-weight: bold; color: #00ff88; font-size: 11px;">🆓 Pollinations (FREE)</div>
+                        <div style="font-size: 9px; color: #88ffbb;">No API key • Good quality</div>
+                    </div>
+                </label>
+
+                <label style="display:flex; align-items:center; gap:8px; padding:10px 12px; border: 2px solid #ff8800; border-radius: 8px; cursor:pointer; background: rgba(255,136,0,0.1); margin-bottom: 8px;" id="providerDalleLabel">
+                    <input type="radio" name="imageProvider" value="openai" id="providerDalle" onchange="toggleImageProviderUI()" style="accent-color:#ff8800;">
+                    <div>
+                        <div style="font-weight: bold; color: #ff8800; font-size: 11px;">💎 DALL-E 3 (Premium)</div>
+                        <div style="font-size: 9px; color: #ffaa66;">Best quality • API key needed</div>
+                    </div>
+                </label>
+
+                <!-- OpenAI Key for DALL-E -->
+                <div id="openaiKeySection" style="display: none; margin-bottom: 8px;">
+                    <label for="openaiImageKey" style="display:block; color: #ff8800; margin-bottom: 4px; font-size: 10px; font-weight: bold;">
+                        🔑 OpenAI API Key for Images:
+                    </label>
+                    <input type="password" id="openaiImageKey" placeholder="sk-proj-..."
+                           style="width:100%; padding: 8px; background:#000; border: 2px solid #ff8800; color:#ff8800; border-radius: 6px; font-family: inherit; box-sizing: border-box;">
+                    <div style="margin-top: 4px; font-size: 9px; color:#ffaa66;">
+                        platform.openai.com • Billing required • If empty, uses main AI key
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">🎨 STYLE &amp; QUALITY</div>
+
+                <label style="display: block; font-size: 9px; color: var(--primary-dim); margin-bottom: 3px;">Style | 风格</label>
+                <select id="aiImageStyle" onchange="updateImageStyle(this.value)"
+                        style="width: 100%; background: var(--background); color: var(--primary-bright); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 6px; font-size: 11px; margin-bottom: 8px; font-family: inherit;">
+                    <option value="ghibli" selected>🌸 Ghibli 吉卜力</option>
+                    <option value="popart">🎯 Pop Art 波普</option>
+                    <option value="cyberpunk">🌃 Cyberpunk 赛博</option>
+                    <option value="retro">📼 Retro 80s 复古</option>
+                    <option value="twenties">🎭 1920s 装饰艺术</option>
+                    <option value="disney">✨ Disney 迪士尼</option>
+                    <option value="spongebob">🧽 SpongeBob 海绵宝宝</option>
+                </select>
+
+                <label style="display: block; font-size: 9px; color: var(--primary-dim); margin-bottom: 3px;">Quality | 质量</label>
+                <select id="aiImageQuality"
+                        style="width: 100%; background: var(--background); color: var(--primary-bright); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 6px; font-size: 11px; margin-bottom: 8px; font-family: inherit;">
+                    <option value="low" selected>Fast 快速</option>
+                    <option value="medium">Good 良好</option>
+                    <option value="high">HD 高清</option>
+                </select>
+
+                <label style="display: block; font-size: 9px; color: var(--primary-dim); margin-bottom: 3px;">Aspect Ratio | 比例</label>
+                <select id="aiImageSize"
+                        style="width: 100%; background: var(--background); color: var(--primary-bright); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px 6px; font-size: 11px; font-family: inherit;">
+                    <option value="1024x1024">1:1 Square</option>
+                    <option value="1792x1024" selected>16:9 Wide</option>
+                    <option value="1024x1792">9:16 Tall</option>
+                </select>
+            </div>
+
+        </div><!-- /tab-image -->
+
+        <!-- ── LESSON MANAGEMENT TAB ───────────────── -->
+        <div class="settings-tab-content" id="tab-lesson" role="tabpanel">
+
+            <div class="setting-group">
+                <div class="setting-label">DURATION &amp; DIFFICULTY</div>
+                <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                    <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
+                    <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
+                </div>
+
+                <div class="setting-label" style="font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
+                <div style="display: flex; gap: 3px; margin-bottom: 8px;">
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
+                </div>
+
+                <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">TEMPLATES &amp; EXPORT</div>
+                <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
+                <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
+                <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
+                <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
+                <button class="timer-btn" onclick="resetToDefault()" style="width: 100%; margin-top: 4px; background: rgba(180,0,0,0.4); border-color: #cc0000; color: #ff6666;">RESET SYSTEM</button>
+            </div>
+
+        </div><!-- /tab-lesson -->
+
+        <!-- ── STORAGE TAB ─────────────────────────── -->
+        <div class="settings-tab-content" id="tab-storage" role="tabpanel">
+
+            <div class="setting-group">
+                <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
+                <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
+                <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
+                <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
+                <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
+            </div>
+
+        </div><!-- /tab-storage -->
 
     </div>
 
@@ -6696,38 +6864,16 @@
         <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
             <div class="modal-title">🤖 AI LESSON GENERATOR | AI课程生成器</div>
             <div style="text-align: left; margin-bottom: var(--space-5);">
-                
-                <!-- AI Provider & API Key -->
-                <div style="margin-bottom: var(--space-4); padding: var(--space-3); background: rgba(139,0,255,0.1); border: 1px solid rgba(139,0,255,0.3); border-radius: 5px;">
-                    <label style="display: block; color: #FFD700; margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: bold;">
-                        🔑 AI Provider & API Key
-                    </label>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: var(--space-2);">
-                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
-                            <input type="radio" name="aiProvider" value="groq" id="providerGroq" onchange="toggleAPIKeyField()"> Groq
-                        </label>
-                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
-                            <input type="radio" name="aiProvider" value="openai" id="providerOpenAI" checked onchange="toggleAPIKeyField()"> OpenAI
-                        </label>
-                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
-                            <input type="radio" name="aiProvider" value="deepseek" id="providerDeepseek" onchange="toggleAPIKeyField()"> DeepSeek
-                        </label>
-                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
-                            <input type="radio" name="aiProvider" value="anthropic" id="providerAnthropic" onchange="toggleAPIKeyField()"> Claude
-                        </label>
-                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
-                            <input type="radio" name="aiProvider" value="local" id="providerLocal" onchange="toggleAPIKeyField()"> Local
-                        </label>
-                    </div>
-                    <input type="password" id="groqApiKey" placeholder="Enter API key" 
-                           style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 12px;">
-                    <div id="providerHelpText" style="font-size: 11px; color: #00ff00; margin-top: 6px;">
-                        OpenAI: use <a href="https://platform.openai.com" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: underline;">platform.openai.com</a> API keys (starts with sk-). Billing applies.
-                    </div>
-                    <div id="localLLMSection" style="display:none; margin-top: 8px;">
-                        <label style="font-size:11px; color:#00ff00;">Local endpoint:</label>
-                        <input type="text" id="localLLMUrl" value="http://127.0.0.1:8080" 
-                               style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 12px;">
+
+                <!-- AI & Image Config Reminder (settings now live in Settings Panel ⚙) -->
+                <div style="margin-bottom: var(--space-4); padding: var(--space-3); background: rgba(139,0,255,0.1); border: 1px solid rgba(139,0,255,0.3); border-radius: 5px; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">⚙️</span>
+                    <div>
+                        <div style="color: #FFD700; font-weight: bold; font-size: 13px; margin-bottom: 4px;">AI &amp; Image settings are in the Settings Panel</div>
+                        <div style="font-size: 11px; color: var(--primary-dim);">
+                            Use the <strong>🤖 AI</strong> and <strong>🖼️ IMAGE</strong> tabs in the ⚙ settings panel (top-right) to configure your provider, API key, and image style.
+                        </div>
+                        <div id="modalAISourceDisplay" style="margin-top: 6px; font-size: 11px; color: #8B00FF; font-weight: bold;"></div>
                     </div>
                 </div>
 
@@ -6756,13 +6902,13 @@
                     </div>
                 </div>
 
-                <!-- Comic Story Options - ENHANCED v16 with FREE Pollinations.ai -->
+                <!-- Comic Story Options -->
                 <div style="margin-bottom: var(--space-4); padding: var(--space-3); border: 1px solid rgba(0,255,0,0.25); border-radius: 6px; background: rgba(0,255,0,0.03);">
                     <label style="display: block; color: var(--primary-bright); margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: bold;">
                         🎭 Comic Panel Settings | 漫画面板设置:
                     </label>
 
-                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center;">
+                    <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-bottom: 8px;">
                         <label style="display:flex; align-items:center; gap:10px; padding:10px 12px; border: 1px solid var(--border-color); border-radius: 6px;">
                             <input type="checkbox" id="aiComicMode" checked style="accent-color:#00FF00; width:18px; height:18px;">
                             <span>Comic panels | 漫画分镜</span>
@@ -6774,78 +6920,7 @@
                         </label>
                     </div>
 
-                    <!-- Image Provider Selection -->
-                    <div style="margin-top: var(--space-3); padding: 12px; border: 2px solid rgba(0,255,100,0.4); border-radius: 8px; background: rgba(0,50,20,0.3);">
-                        <label style="display: block; color: #00ff88; margin-bottom: 8px; font-size: 13px; font-weight: bold;">
-                            🖼️ Image Provider | 图片生成源:
-                        </label>
-                        
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #00ff88; border-radius: 8px; cursor:pointer; background: rgba(0,255,136,0.15); flex:1; min-width: 180px;" id="providerPollinationsLabel">
-                                <input type="radio" name="imageProvider" value="pollinations" id="providerPollinations" checked onchange="toggleImageProviderUI()" style="accent-color:#00FF88; width:18px; height:18px;">
-                                <div>
-                                    <div style="font-weight: bold; color: #00ff88;">🆓 Pollinations (FREE)</div>
-                                    <div style="font-size: 10px; color: #88ffbb;">No API key • Good quality</div>
-                                </div>
-                            </label>
-                            
-                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #ff8800; border-radius: 8px; cursor:pointer; background: rgba(255,136,0,0.1); flex:1; min-width: 180px;" id="providerDalleLabel">
-                                <input type="radio" name="imageProvider" value="openai" id="providerDalle" onchange="toggleImageProviderUI()" style="accent-color:#ff8800; width:18px; height:18px;">
-                                <div>
-                                    <div style="font-weight: bold; color: #ff8800;">💎 DALL-E 3 (Premium)</div>
-                                    <div style="font-size: 10px; color: #ffaa66;">Best quality • API key needed</div>
-                                </div>
-                            </label>
-                        </div>
-
-                        <!-- Quality & Style Options -->
-                        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: 10px;">
-                            <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid #ff8800; border-radius: 6px; background: rgba(255,136,0,0.15);">
-                                <span style="font-size: 11px; color:#ffaa44;">🎨 Style</span>
-                                <select id="aiImageStyle" onchange="updateImageStyle(this.value)" style="background:#1a1a00; color:#ffcc00; border:1px solid #ff8800; border-radius: 4px; padding:4px 8px; font-size: 12px; cursor: pointer;">
-                                    <option value="ghibli" selected>🌸 Ghibli 吉卜力</option>
-                                    <option value="popart">🎯 Pop Art 波普</option>
-                                    <option value="cyberpunk">🌃 Cyberpunk 赛博</option>
-                                    <option value="retro">📼 Retro 80s 复古</option>
-                                    <option value="twenties">🎭 1920s 装饰艺术</option>
-                                    <option value="disney">✨ Disney 迪士尼</option>
-                                    <option value="spongebob">🧽 SpongeBob 海绵宝宝</option>
-                                </select>
-                            </label>
-
-                            <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
-                                <span style="font-size: 11px; color:#88ffbb;">Quality</span>
-                                <select id="aiImageQuality" style="background:#000; color:#00FF00; border:1px solid #00FF00; border-radius: 4px; padding:4px 8px; font-size: 12px;">
-                                    <option value="low" selected>Fast 快速</option>
-                                    <option value="medium">Good 良好</option>
-                                    <option value="high">HD 高清</option>
-                                </select>
-                            </label>
-
-                            <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
-                                <span style="font-size: 11px; color:#88ffbb;">Size</span>
-                                <select id="aiImageSize" style="background:#000; color:#00FF00; border:1px solid #00FF00; border-radius: 4px; padding:4px 8px; font-size: 12px;">
-                                    <option value="1024x1024">1:1</option>
-                                    <option value="1792x1024" selected>16:9</option>
-                                    <option value="1024x1792">9:16</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- OpenAI Key Section (hidden by default) -->
-                    <div id="openaiKeySection" style="margin-top: var(--space-3); display: none;">
-                        <label for="openaiImageKey" style="display:block; color: #ff8800; margin-bottom: 6px; font-size: 12px; font-weight: bold;">
-                            🔑 OpenAI API Key:
-                        </label>
-                        <input type="password" id="openaiImageKey" placeholder="sk-proj-..." style="width:100%; padding: 10px 12px; background:#000; border: 2px solid #ff8800; color:#ff8800; border-radius: 6px; font-family: inherit;">
-                        <div style="margin-top: 4px; font-size: 10px; color:#ffaa66;">
-                            Get from platform.openai.com • Requires billing • If empty uses main key
-                        </div>
-                    </div>
-
-                    <!-- Panel Count Info -->
-                    <div style="margin-top: var(--space-2); padding: 8px; background: rgba(0,100,255,0.1); border: 1px solid rgba(0,150,255,0.3); border-radius: 6px;">
+                    <div style="padding: 8px; background: rgba(0,100,255,0.1); border: 1px solid rgba(0,150,255,0.3); border-radius: 6px;">
                         <div style="font-size: 11px; color: #88ccff;">
                             📊 <b>Panels:</b> 20min = 3 panels | 40min = 5 panels<br>
                             💡 <b>Tip:</b> Click <kbd style="background:#333; padding:1px 5px; border-radius:3px; font-size:10px;">🖼️ PRESENT</kbd> to show fullscreen!
@@ -9427,10 +9502,29 @@ Chapter 5: Money and Banking
             playBeep();
         }
         window.toggleSettings = toggleSettings;
-        
+
         // ============================================
-        // HAL AI ASSISTANT FUNCTIONS - SMART with Groq API
+        // SETTINGS PANEL TAB NAVIGATION
         // ============================================
+        function switchSettingsTab(tab) {
+            document.querySelectorAll('.settings-tab').forEach(function(t) {
+                const isActive = t.dataset.tab === tab;
+                t.classList.toggle('active', isActive);
+                t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+            document.querySelectorAll('.settings-tab-content').forEach(function(c) {
+                c.classList.toggle('active', c.id === 'tab-' + tab);
+            });
+            // Initialize image provider UI when switching to image tab
+            if (tab === 'image' && typeof toggleImageProviderUI === 'function') {
+                toggleImageProviderUI();
+            }
+            // Initialize AI key field when switching to AI tab
+            if (tab === 'ai' && typeof toggleAPIKeyField === 'function') {
+                toggleAPIKeyField();
+            }
+        }
+        window.switchSettingsTab = switchSettingsTab;
         
         let halConversationHistory = [];
         let halCurrentSource = localStorage.getItem('hal_source') || 'groq';
@@ -10237,6 +10331,28 @@ IMPORTANT RULES:
             // Update calm mode button state
             if (typeof updateCalmModeButton === 'function') {
                 updateCalmModeButton();
+            }
+
+            // Initialize settings panel: load saved AI provider/key and image settings
+            if (typeof loadSavedAPIKey === 'function') {
+                loadSavedAPIKey();
+            }
+            if (typeof toggleAPIKeyField === 'function') {
+                toggleAPIKeyField();
+            }
+            // Pre-fill OpenAI image key if saved
+            const openaiImageKeyInput = document.getElementById('openaiImageKey');
+            if (openaiImageKeyInput) {
+                const savedImgKey = localStorage.getItem('openaiImageKey');
+                if (savedImgKey) {
+                    openaiImageKeyInput.value = savedImgKey;
+                } else if (typeof DEFAULT_OPENAI_IMAGE_KEY !== 'undefined' && DEFAULT_OPENAI_IMAGE_KEY) {
+                    openaiImageKeyInput.value = DEFAULT_OPENAI_IMAGE_KEY;
+                    localStorage.setItem('openaiImageKey', DEFAULT_OPENAI_IMAGE_KEY);
+                }
+            }
+            if (typeof toggleImageProviderUI === 'function') {
+                toggleImageProviderUI();
             }
             
             // Always show startup modal on app launch (after intro animation)
@@ -11076,7 +11192,7 @@ IMPORTANT RULES:
             const modal = document.getElementById('aiGeneratorModal');
             if (modal) {
                 modal.style.display = 'flex';
-                // Clear previous inputs - FIX: Added null checks and corrected element ID
+                // Clear previous lesson-specific inputs
                 const topicInput = document.getElementById('aiTopicInput');
                 const fileInput = document.getElementById('aiFileInput');
                 const pageRangeInput = document.getElementById('aiPageRange');
@@ -11089,34 +11205,17 @@ IMPORTANT RULES:
                 if (pasteInput) pasteInput.value = '';
                 if (pasteToggle) pasteToggle.checked = false; // Default to unchecked (file mode)
                 
-                // DEFAULT TO OPENAI PROVIDER
-                const openaiRadio = document.getElementById('providerOpenAI');
-                if (openaiRadio) {
-                    openaiRadio.checked = true;
-                }
-                
-                // Load saved API key and provider
-                loadSavedAPIKey();
-                toggleAPIKeyField();
                 togglePasteOnlyMode(); // Initialize paste-only mode state
-                
-                // PRE-FILL OPENAI IMAGE KEY (for DALL-E 3)
-                const openaiImageKeyInput = document.getElementById('openaiImageKey');
-                if (openaiImageKeyInput) {
-                    const savedKey = localStorage.getItem('openaiImageKey');
-                    if (savedKey) {
-                        openaiImageKeyInput.value = savedKey;
-                    } else if (typeof DEFAULT_OPENAI_IMAGE_KEY !== 'undefined' && DEFAULT_OPENAI_IMAGE_KEY) {
-                        openaiImageKeyInput.value = DEFAULT_OPENAI_IMAGE_KEY;
-                        localStorage.setItem('openaiImageKey', DEFAULT_OPENAI_IMAGE_KEY);
-                    }
+
+                // Show current AI provider in the modal reminder banner
+                const provider = document.querySelector('input[name="aiProvider"]:checked')?.value || 'openai';
+                const providerNames = { groq: 'Groq', openai: 'OpenAI', deepseek: 'DeepSeek', anthropic: 'Claude', local: 'Local' };
+                const imgProvider = document.getElementById('providerPollinations')?.checked ? '🆓 Pollinations' : '💎 DALL-E 3';
+                const modalDisplay = document.getElementById('modalAISourceDisplay');
+                if (modalDisplay) {
+                    modalDisplay.textContent = '🤖 ' + (providerNames[provider] || provider) + ' · ' + imgProvider;
                 }
-                
-                // Initialize image provider UI (v16 enhancement)
-                if (typeof toggleImageProviderUI === 'function') {
-                    toggleImageProviderUI();
-                }
-                
+
                 /* Use HAL click sound for consistency */
                 if (typeof audio === 'object' && typeof audio.ensureContext === 'function') {
                     audio.ensureContext();
