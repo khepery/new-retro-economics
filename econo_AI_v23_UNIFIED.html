@@ -6788,8 +6788,32 @@
                                     <div style="font-size: 10px; color: #88ffbb;">No API key • Good quality</div>
                                 </div>
                             </label>
+
+                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #444; border-radius: 8px; cursor:pointer; background: transparent; flex:1; min-width: 180px;" id="providerFalaiLabel">
+                                <input type="radio" name="imageProvider" value="falai" id="providerFalai" onchange="toggleImageProviderUI()" style="accent-color:#00ccff; width:18px; height:18px;">
+                                <div>
+                                    <div style="font-weight: bold; color: #00ccff;">⚡ fal.ai FLUX (FREE tier)</div>
+                                    <div style="font-size: 10px; color: #88ddff;">True seed consistency • API key needed</div>
+                                </div>
+                            </label>
+
+                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #444; border-radius: 8px; cursor:pointer; background: transparent; flex:1; min-width: 180px;" id="providerTogetherLabel">
+                                <input type="radio" name="imageProvider" value="together" id="providerTogether" onchange="toggleImageProviderUI()" style="accent-color:#aa44ff; width:18px; height:18px;">
+                                <div>
+                                    <div style="font-weight: bold; color: #aa44ff;">🌐 Together.ai FLUX (FREE)</div>
+                                    <div style="font-size: 10px; color: #cc99ff;">50 req/day free • API key needed</div>
+                                </div>
+                            </label>
+
+                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #444; border-radius: 8px; cursor:pointer; background: transparent; flex:1; min-width: 180px;" id="providerReplicateLabel">
+                                <input type="radio" name="imageProvider" value="replicate" id="providerReplicate" onchange="toggleImageProviderUI()" style="accent-color:#ff44aa; width:18px; height:18px;">
+                                <div>
+                                    <div style="font-weight: bold; color: #ff44aa;">🔁 Replicate FLUX (~$0.003)</div>
+                                    <div style="font-size: 10px; color: #ff99cc;">Best quality/cost • True seed • API token needed</div>
+                                </div>
+                            </label>
                             
-                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #ff8800; border-radius: 8px; cursor:pointer; background: rgba(255,136,0,0.1); flex:1; min-width: 180px;" id="providerDalleLabel">
+                            <label style="display:flex; align-items:center; gap:8px; padding:12px 16px; border: 2px solid #444; border-radius: 8px; cursor:pointer; background: transparent; flex:1; min-width: 180px;" id="providerDalleLabel">
                                 <input type="radio" name="imageProvider" value="openai" id="providerDalle" onchange="toggleImageProviderUI()" style="accent-color:#ff8800; width:18px; height:18px;">
                                 <div>
                                     <div style="font-weight: bold; color: #ff8800;">💎 DALL-E 3 (Premium)</div>
@@ -6841,6 +6865,39 @@
                         <input type="password" id="openaiImageKey" placeholder="sk-proj-..." style="width:100%; padding: 10px 12px; background:#000; border: 2px solid #ff8800; color:#ff8800; border-radius: 6px; font-family: inherit;">
                         <div style="margin-top: 4px; font-size: 10px; color:#ffaa66;">
                             Get from platform.openai.com • Requires billing • If empty uses main key
+                        </div>
+                    </div>
+
+                    <!-- fal.ai Key Section (hidden by default) -->
+                    <div id="falaiKeySection" style="margin-top: var(--space-3); display: none;">
+                        <label for="falaiImageKey" style="display:block; color: #00ccff; margin-bottom: 6px; font-size: 12px; font-weight: bold;">
+                            🔑 fal.ai API Key:
+                        </label>
+                        <input type="password" id="falaiImageKey" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx:xxxx..." style="width:100%; padding: 10px 12px; background:#000; border: 2px solid #00ccff; color:#00ccff; border-radius: 6px; font-family: inherit;">
+                        <div style="margin-top: 4px; font-size: 10px; color:#88ddff;">
+                            Get from fal.ai/dashboard • Free tier available • True seed consistency
+                        </div>
+                    </div>
+
+                    <!-- Together.ai Key Section (hidden by default) -->
+                    <div id="togetherKeySection" style="margin-top: var(--space-3); display: none;">
+                        <label for="togetherImageKey" style="display:block; color: #aa44ff; margin-bottom: 6px; font-size: 12px; font-weight: bold;">
+                            🔑 Together.ai API Key:
+                        </label>
+                        <input type="password" id="togetherImageKey" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%; padding: 10px 12px; background:#000; border: 2px solid #aa44ff; color:#aa44ff; border-radius: 6px; font-family: inherit;">
+                        <div style="margin-top: 4px; font-size: 10px; color:#cc99ff;">
+                            Get from api.together.ai • 50 free images/day • FLUX Schnell model
+                        </div>
+                    </div>
+
+                    <!-- Replicate Key Section (hidden by default) -->
+                    <div id="replicateKeySection" style="margin-top: var(--space-3); display: none;">
+                        <label for="replicateImageKey" style="display:block; color: #ff44aa; margin-bottom: 6px; font-size: 12px; font-weight: bold;">
+                            🔑 Replicate API Token:
+                        </label>
+                        <input type="password" id="replicateImageKey" placeholder="r8_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" style="width:100%; padding: 10px 12px; background:#000; border: 2px solid #ff44aa; color:#ff44aa; border-radius: 6px; font-family: inherit;">
+                        <div style="margin-top: 4px; font-size: 10px; color:#ff99cc;">
+                            Get from replicate.com/account • ~$0.003/image • FLUX-schnell with true seed
                         </div>
                     </div>
 
@@ -11111,6 +11168,27 @@ IMPORTANT RULES:
                         localStorage.setItem('openaiImageKey', DEFAULT_OPENAI_IMAGE_KEY);
                     }
                 }
+
+                // PRE-FILL fal.ai IMAGE KEY
+                const falaiImageKeyInput = document.getElementById('falaiImageKey');
+                if (falaiImageKeyInput) {
+                    const savedKey = localStorage.getItem('falaiImageKey');
+                    if (savedKey) falaiImageKeyInput.value = savedKey;
+                }
+
+                // PRE-FILL Together.ai IMAGE KEY
+                const togetherImageKeyInput = document.getElementById('togetherImageKey');
+                if (togetherImageKeyInput) {
+                    const savedKey = localStorage.getItem('togetherImageKey');
+                    if (savedKey) togetherImageKeyInput.value = savedKey;
+                }
+
+                // PRE-FILL Replicate IMAGE KEY
+                const replicateImageKeyInput = document.getElementById('replicateImageKey');
+                if (replicateImageKeyInput) {
+                    const savedKey = localStorage.getItem('replicateImageKey');
+                    if (savedKey) replicateImageKeyInput.value = savedKey;
+                }
                 
                 // Initialize image provider UI (v16 enhancement)
                 if (typeof toggleImageProviderUI === 'function') {
@@ -12882,34 +12960,57 @@ Output ONLY the JSON object now:`
         
         // Toggle UI based on selected image provider
         function toggleImageProviderUI() {
-            const isPollinations = document.getElementById('providerPollinations')?.checked;
+            const provider = getSelectedImageProvider();
+            const isPollinations = provider === 'pollinations';
+            const isFalai = provider === 'falai';
+            const isTogether = provider === 'together';
+            const isReplicate = provider === 'replicate';
+            const isOpenai = provider === 'openai';
+
+            // Show/hide key sections
             const openaiSection = document.getElementById('openaiKeySection');
-            const pollinationsLabel = document.getElementById('providerPollinationsLabel');
-            const dalleLabel = document.getElementById('providerDalleLabel');
-            
-            if (openaiSection) {
-                openaiSection.style.display = isPollinations ? 'none' : 'block';
+            const falaiSection = document.getElementById('falaiKeySection');
+            const togetherSection = document.getElementById('togetherKeySection');
+            const replicateSection = document.getElementById('replicateKeySection');
+            if (openaiSection) openaiSection.style.display = isOpenai ? 'block' : 'none';
+            if (falaiSection) falaiSection.style.display = isFalai ? 'block' : 'none';
+            if (togetherSection) togetherSection.style.display = isTogether ? 'block' : 'none';
+            if (replicateSection) replicateSection.style.display = isReplicate ? 'block' : 'none';
+
+            // Provider label active colors
+            const providerColors = {
+                pollinations: { active: '#00ff88', activeBg: 'rgba(0,255,136,0.15)' },
+                falai:        { active: '#00ccff', activeBg: 'rgba(0,204,255,0.15)' },
+                together:     { active: '#aa44ff', activeBg: 'rgba(170,68,255,0.15)' },
+                replicate:    { active: '#ff44aa', activeBg: 'rgba(255,68,170,0.15)' },
+                openai:       { active: '#ff8800', activeBg: 'rgba(255,136,0,0.15)' }
+            };
+            const labelIds = {
+                pollinations: 'providerPollinationsLabel',
+                falai: 'providerFalaiLabel',
+                together: 'providerTogetherLabel',
+                replicate: 'providerReplicateLabel',
+                openai: 'providerDalleLabel'
+            };
+            for (const [p, labelId] of Object.entries(labelIds)) {
+                const label = document.getElementById(labelId);
+                if (!label) continue;
+                if (p === provider) {
+                    label.style.borderColor = providerColors[p].active;
+                    label.style.background = providerColors[p].activeBg;
+                } else {
+                    label.style.borderColor = '#444';
+                    label.style.background = 'transparent';
+                }
             }
-            
-            // Update visual selection
-            if (pollinationsLabel) {
-                pollinationsLabel.style.borderColor = isPollinations ? '#00ff88' : '#444';
-                pollinationsLabel.style.background = isPollinations ? 'rgba(0,255,136,0.15)' : 'transparent';
-            }
-            if (dalleLabel) {
-                dalleLabel.style.borderColor = isPollinations ? '#444' : '#ff8800';
-                dalleLabel.style.background = isPollinations ? 'transparent' : 'rgba(255,136,0,0.15)';
-            }
-            
+
             // If DALL-E selected, check for valid key and warn if missing
-            if (!isPollinations) {
+            if (isOpenai) {
                 const existingKey = localStorage.getItem('openaiImageKey') || '';
                 const inputKey = document.getElementById('openaiImageKey')?.value || '';
                 const hasValidKey = (existingKey.startsWith('sk-') || inputKey.startsWith('sk-'));
-                
                 if (!hasValidKey) {
                     console.warn('[Image Provider] DALL-E selected but no valid OpenAI key found');
-                    // Add visual warning to the key input
                     const keyInput = document.getElementById('openaiImageKey');
                     if (keyInput) {
                         keyInput.placeholder = '⚠️ Required! Enter sk-... key';
@@ -12917,8 +13018,15 @@ Output ONLY the JSON object now:`
                     }
                 }
             }
-            
-            console.log('[Image Provider] Selected:', isPollinations ? 'Pollinations (FREE)' : 'OpenAI DALL-E 3');
+
+            const providerNames = {
+                pollinations: 'Pollinations (FREE)',
+                falai: 'fal.ai FLUX',
+                together: 'Together.ai FLUX',
+                replicate: 'Replicate FLUX',
+                openai: 'OpenAI DALL-E 3'
+            };
+            console.log('[Image Provider] Selected:', providerNames[provider] || provider);
         }
         
         // ===== COMPREHENSIVE COMIC GUIDE SYSTEM =====
@@ -13388,9 +13496,56 @@ Output ONLY the JSON object now:`
         }
         
         function getSelectedImageProvider() {
-            return document.getElementById('providerPollinations')?.checked ? 'pollinations' : 'openai';
+            if (document.getElementById('providerPollinations')?.checked) return 'pollinations';
+            if (document.getElementById('providerFalai')?.checked) return 'falai';
+            if (document.getElementById('providerTogether')?.checked) return 'together';
+            if (document.getElementById('providerReplicate')?.checked) return 'replicate';
+            return 'openai';
         }
-        
+
+        // FIXED SEED - SAME FOR ALL PANELS = SAME CHARACTER APPEARANCE
+        const COMIC_GENERATION_SEED = 42424242;
+
+        // Shared helper: extract action verb and secondary-character info from panel data
+        function extractActionAndSecondaryCharacter(prompt, panelData, panelIndex, guide) {
+            let action = 'standing and talking';
+            if (panelData?.story_segment) {
+                const segment = panelData.story_segment.toLowerCase();
+                if (segment.includes('look')) action = 'looking at something';
+                else if (segment.includes('think')) action = 'thinking deeply';
+                else if (segment.includes('talk') || segment.includes('said') || segment.includes('ask')) action = 'talking and gesturing';
+                else if (segment.includes('point')) action = 'pointing at something';
+                else if (segment.includes('shop') || segment.includes('buy') || segment.includes('store')) action = 'shopping in store';
+                else if (segment.includes('choose') || segment.includes('decide')) action = 'making a decision';
+                else if (segment.includes('learn') || segment.includes('study')) action = 'studying at desk';
+                else if (segment.includes('walk') || segment.includes('enter')) action = 'walking together';
+            } else {
+                action = (prompt || 'standing')
+                    .replace(/[^\w\s]/g, ' ')
+                    .trim()
+                    .split(' ')
+                    .filter(w => w.length > 2)
+                    .slice(0, 4)
+                    .join(' ') || 'standing and talking';
+            }
+
+            let includeSecondary = false;
+            let secondaryType = guide?.secondaryType || 'teacher';
+            if (panelData?.bubbles && panelData.bubbles.length >= 2) {
+                const speakers = [...new Set(panelData.bubbles.map(b => (b.speaker || '').toLowerCase()))];
+                includeSecondary = speakers.some(s => s !== 'emma' && s !== 'narrator' && s !== '');
+                const secondSpeaker = speakers.find(s => s !== 'emma' && s !== 'narrator' && s !== '');
+                if (secondSpeaker) {
+                    if (secondSpeaker.includes('alex') || secondSpeaker.includes('friend')) secondaryType = 'friend';
+                    else if (secondSpeaker.includes('shop')) secondaryType = 'shopkeeper';
+                }
+            } else {
+                includeSecondary = panelIndex > 0;
+            }
+
+            return { action, includeSecondary, secondaryType };
+        }
+
         // ===== POLLINATIONS.AI FREE IMAGE GENERATION =====
         // THE EMMA PROTOCOL: Emma's identity is ALWAYS first in the prompt
         
@@ -13400,7 +13555,7 @@ Output ONLY the JSON object now:`
             const guide = getComicGuide();
             
             // FIXED SEED - SAME FOR ALL PANELS = SAME CHARACTER
-            const FIXED_SEED = 42424242;
+            const FIXED_SEED = COMIC_GENERATION_SEED;
             
             // Extract action from prompt or panel data
             let action = 'standing and talking';
@@ -13484,7 +13639,239 @@ Output ONLY the JSON object now:`
                 throw new Error(`Pollinations image generation failed: ${error.message}`);
             }
         }
-        
+
+        // ===== FAL.AI FLUX IMAGE GENERATION =====
+        // fal.ai supports true seed consistency and better quality than Pollinations
+
+        function getFalaiImageKey() {
+            let key = localStorage.getItem('falaiImageKey');
+            if (key && key.trim()) return key.trim();
+            const inputKey = document.getElementById('falaiImageKey')?.value;
+            if (inputKey && inputKey.trim()) return inputKey.trim();
+            return null;
+        }
+
+        async function falaiGenerateImage(prompt, width, height, character, panelIndex, panelData = null) {
+            const apiKey = getFalaiImageKey();
+            if (!apiKey) {
+                throw new Error('No fal.ai API key provided. Get one free at fal.ai/dashboard.');
+            }
+
+            const guide = getComicGuide();
+            const { action, includeSecondary, secondaryType } = extractActionAndSecondaryCharacter(prompt, panelData, panelIndex, guide);
+            const finalPrompt = buildImagePrompt(action, currentImageStyle, includeSecondary, secondaryType);
+
+            console.log('[FAL.AI] ========================================');
+            console.log('[FAL.AI] Emma Identity: FIRST in prompt ✓');
+            console.log('[FAL.AI] Style:', currentImageStyle);
+            console.log('[FAL.AI] Action:', action);
+            console.log('[FAL.AI] Secondary:', includeSecondary ? secondaryType : 'None');
+            console.log('[FAL.AI] Seed:', COMIC_GENERATION_SEED);
+            console.log('[FAL.AI] ========================================');
+
+            const body = {
+                prompt: finalPrompt,
+                image_size: { width, height },
+                num_inference_steps: 4,
+                seed: COMIC_GENERATION_SEED,
+                num_images: 1,
+                enable_safety_checker: false
+            };
+
+            const response = await fetch('https://fal.run/fal-ai/flux/schnell', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Key ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                let errText = '';
+                try { errText = await response.text(); } catch (e) {}
+                throw new Error(`fal.ai error (${response.status}): ${errText.substring(0, 120)}`);
+            }
+
+            const data = await response.json();
+            if (!data.images?.[0]?.url) {
+                throw new Error('Invalid response from fal.ai: no image URL returned');
+            }
+
+            // Fetch the returned image URL and convert to data URL
+            const imgResponse = await fetch(data.images[0].url);
+            if (!imgResponse.ok) throw new Error(`fal.ai image fetch failed: ${imgResponse.status}`);
+            const blob = await imgResponse.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to convert fal.ai image to data URL'));
+                reader.readAsDataURL(blob);
+            });
+        }
+
+        // ===== TOGETHER.AI FLUX IMAGE GENERATION =====
+        // Together.ai offers 50 free images/day using the FLUX Schnell Free model
+
+        function getTogetheraiImageKey() {
+            let key = localStorage.getItem('togetherImageKey');
+            if (key && key.trim()) return key.trim();
+            const inputKey = document.getElementById('togetherImageKey')?.value;
+            if (inputKey && inputKey.trim()) return inputKey.trim();
+            return null;
+        }
+
+        async function togetheraiGenerateImage(prompt, width, height, character, panelIndex, panelData = null) {
+            const apiKey = getTogetheraiImageKey();
+            if (!apiKey) {
+                throw new Error('No Together.ai API key provided. Get one free at api.together.ai.');
+            }
+
+            const guide = getComicGuide();
+            const { action, includeSecondary, secondaryType } = extractActionAndSecondaryCharacter(prompt, panelData, panelIndex, guide);
+            const finalPrompt = buildImagePrompt(action, currentImageStyle, includeSecondary, secondaryType);
+
+            console.log('[TOGETHER.AI] ========================================');
+            console.log('[TOGETHER.AI] Emma Identity: FIRST in prompt ✓');
+            console.log('[TOGETHER.AI] Style:', currentImageStyle);
+            console.log('[TOGETHER.AI] Action:', action);
+            console.log('[TOGETHER.AI] Secondary:', includeSecondary ? secondaryType : 'None');
+            console.log('[TOGETHER.AI] Seed:', COMIC_GENERATION_SEED);
+            console.log('[TOGETHER.AI] ========================================');
+
+            const body = {
+                model: 'black-forest-labs/FLUX.1-schnell-Free',
+                prompt: finalPrompt,
+                width,
+                height,
+                steps: 4,
+                seed: COMIC_GENERATION_SEED,
+                n: 1,
+                response_format: 'b64_json'
+            };
+
+            const response = await fetch('https://api.together.xyz/v1/images/generations', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                let errText = '';
+                try { errText = await response.text(); } catch (e) {}
+                let msg = `Together.ai error (${response.status})`;
+                if (response.status === 429) msg += ': Rate limit — free tier allows 50 images/day.';
+                else if (response.status === 401) msg += ': Invalid API key.';
+                else msg += ': ' + errText.substring(0, 100);
+                throw new Error(msg);
+            }
+
+            const data = await response.json();
+            if (!data.data?.[0]?.b64_json) {
+                throw new Error('Invalid response from Together.ai: no image data returned');
+            }
+
+            return `data:image/png;base64,${data.data[0].b64_json}`;
+        }
+
+        // ===== REPLICATE FLUX-SCHNELL IMAGE GENERATION =====
+        // Replicate provides true seed support at ~$0.003/image
+
+        function getReplicateImageKey() {
+            let key = localStorage.getItem('replicateImageKey');
+            if (key && key.trim()) return key.trim();
+            const inputKey = document.getElementById('replicateImageKey')?.value;
+            if (inputKey && inputKey.trim()) return inputKey.trim();
+            return null;
+        }
+
+        async function replicateGenerateImage(prompt, width, height, character, panelIndex, panelData = null) {
+            const apiKey = getReplicateImageKey();
+            if (!apiKey) {
+                throw new Error('No Replicate API token provided. Get one at replicate.com/account.');
+            }
+
+            const guide = getComicGuide();
+            const { action, includeSecondary, secondaryType } = extractActionAndSecondaryCharacter(prompt, panelData, panelIndex, guide);
+            const finalPrompt = buildImagePrompt(action, currentImageStyle, includeSecondary, secondaryType);
+
+            console.log('[REPLICATE] ========================================');
+            console.log('[REPLICATE] Emma Identity: FIRST in prompt ✓');
+            console.log('[REPLICATE] Style:', currentImageStyle);
+            console.log('[REPLICATE] Action:', action);
+            console.log('[REPLICATE] Secondary:', includeSecondary ? secondaryType : 'None');
+            console.log('[REPLICATE] Seed:', COMIC_GENERATION_SEED);
+            console.log('[REPLICATE] ========================================');
+
+            const createResponse = await fetch('https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'wait'
+                },
+                body: JSON.stringify({
+                    input: {
+                        prompt: finalPrompt,
+                        width,
+                        height,
+                        seed: COMIC_GENERATION_SEED,
+                        go_fast: true,
+                        num_outputs: 1,
+                        output_format: 'webp',
+                        num_inference_steps: 4
+                    }
+                })
+            });
+
+            if (!createResponse.ok) {
+                let errText = '';
+                try { errText = await createResponse.text(); } catch (e) {}
+                let msg = `Replicate error (${createResponse.status})`;
+                if (createResponse.status === 401) msg += ': Invalid API token.';
+                else if (createResponse.status === 402) msg += ': Payment required — add billing at replicate.com.';
+                else if (createResponse.status === 429) msg += ': Rate limit exceeded. Try again shortly.';
+                else msg += ': ' + errText.substring(0, 100);
+                throw new Error(msg);
+            }
+
+            let prediction = await createResponse.json();
+
+            // Poll until succeeded or failed (max 60 seconds)
+            const maxWait = 60000;
+            const pollInterval = 1000;
+            const startTime = Date.now();
+            while (prediction.status !== 'succeeded' && prediction.status !== 'failed' && prediction.status !== 'canceled') {
+                if (Date.now() - startTime > maxWait) {
+                    throw new Error('Replicate timeout: prediction took too long.');
+                }
+                await new Promise(r => setTimeout(r, pollInterval));
+                const pollResponse = await fetch(prediction.urls.get, {
+                    headers: { 'Authorization': `Bearer ${apiKey}` }
+                });
+                if (!pollResponse.ok) throw new Error(`Replicate poll error: ${pollResponse.status}`);
+                prediction = await pollResponse.json();
+            }
+
+            if (prediction.status !== 'succeeded' || !prediction.output?.[0]) {
+                throw new Error(`Replicate generation failed: ${prediction.error || prediction.status}`);
+            }
+
+            // Fetch the output image URL and convert to data URL
+            const imgResponse = await fetch(prediction.output[0]);
+            if (!imgResponse.ok) throw new Error(`Replicate image fetch failed: ${imgResponse.status}`);
+            const blob = await imgResponse.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Failed to convert Replicate image to data URL'));
+                reader.readAsDataURL(blob);
+            });
+        }
+
         // ===== UNIFIED IMAGE GENERATION FUNCTION =====
         
         async function generateComicImage(prompt, size, quality, character, panelIndex, panelData = null) {
@@ -13514,6 +13901,33 @@ Output ONLY the JSON object now:`
                 const scaledWidth = Math.round(width * scaleFactor);
                 const scaledHeight = Math.round(height * scaleFactor);
                 return await pollinationsGenerateImage(prompt, scaledWidth, scaledHeight, character, panelIndex, panelData);
+            } else if (provider === 'falai') {
+                try {
+                    return await falaiGenerateImage(prompt, width, height, character, panelIndex, panelData);
+                } catch (err) {
+                    console.warn('[Comic Image] fal.ai failed, falling back to Pollinations:', err.message);
+                    const scaledWidth = Math.round(width * 0.75);
+                    const scaledHeight = Math.round(height * 0.75);
+                    return await pollinationsGenerateImage(prompt, scaledWidth, scaledHeight, character, panelIndex, panelData);
+                }
+            } else if (provider === 'together') {
+                try {
+                    return await togetheraiGenerateImage(prompt, width, height, character, panelIndex, panelData);
+                } catch (err) {
+                    console.warn('[Comic Image] Together.ai failed, falling back to Pollinations:', err.message);
+                    const scaledWidth = Math.round(width * 0.75);
+                    const scaledHeight = Math.round(height * 0.75);
+                    return await pollinationsGenerateImage(prompt, scaledWidth, scaledHeight, character, panelIndex, panelData);
+                }
+            } else if (provider === 'replicate') {
+                try {
+                    return await replicateGenerateImage(prompt, width, height, character, panelIndex, panelData);
+                } catch (err) {
+                    console.warn('[Comic Image] Replicate failed, falling back to Pollinations:', err.message);
+                    const scaledWidth = Math.round(width * 0.75);
+                    const scaledHeight = Math.round(height * 0.75);
+                    return await pollinationsGenerateImage(prompt, scaledWidth, scaledHeight, character, panelIndex, panelData);
+                }
             } else {
                 // Try OpenAI DALL-E 3, fallback to Pollinations if no valid key
                 try {
@@ -14382,6 +14796,24 @@ Output ONLY the JSON object now:`
                 localStorage.setItem('openaiImageKey', openaiImageKey);
             }
 
+            // Save fal.ai image key if provided
+            const falaiImageKey = document.getElementById('falaiImageKey')?.value;
+            if (falaiImageKey) {
+                localStorage.setItem('falaiImageKey', falaiImageKey);
+            }
+
+            // Save Together.ai image key if provided
+            const togetherImageKey = document.getElementById('togetherImageKey')?.value;
+            if (togetherImageKey) {
+                localStorage.setItem('togetherImageKey', togetherImageKey);
+            }
+
+            // Save Replicate image key if provided
+            const replicateImageKey = document.getElementById('replicateImageKey')?.value;
+            if (replicateImageKey) {
+                localStorage.setItem('replicateImageKey', replicateImageKey);
+            }
+
             try {
                 closeAIGeneratorModal();
 
@@ -14452,7 +14884,14 @@ Output ONLY the JSON object now:`
                 if (comicRequested && generateImagesNowCheck && lessonConfig?.story?.presentation === "comic") {
                     try {
                         const selectedProvider = getSelectedImageProvider();
-                        const providerName = selectedProvider === 'pollinations' ? 'Pollinations (FREE)' : 'OpenAI DALL-E 3';
+                        const imageProviderNames = {
+                            pollinations: 'Pollinations (FREE)',
+                            falai: 'fal.ai FLUX',
+                            together: 'Together.ai FLUX',
+                            replicate: 'Replicate FLUX',
+                            openai: 'OpenAI DALL-E 3'
+                        };
+                        const providerName = imageProviderNames[selectedProvider] || selectedProvider;
                         
                         updateModalContent(
                             `🎨 Step 6/6: Generating comic panel images...\n` +
@@ -14483,9 +14922,14 @@ Output ONLY the JSON object now:`
                         imageGenerationFailed = true;
                         
                         const selectedProvider = getSelectedImageProvider();
-                        const troubleshoot = selectedProvider === 'pollinations' 
-                            ? 'Try again later or check your internet connection'
-                            : 'Check your OpenAI API key and billing';
+                        const troubleshootMap = {
+                            pollinations: 'Try again later or check your internet connection',
+                            falai: 'Check your fal.ai API key at fal.ai/dashboard',
+                            together: 'Check your Together.ai API key and free-tier quota (50/day)',
+                            replicate: 'Check your Replicate API token and billing at replicate.com',
+                            openai: 'Check your OpenAI API key and billing'
+                        };
+                        const troubleshoot = troubleshootMap[selectedProvider] || 'Check your API key and internet connection';
                         
                         // Show warning but continue with lesson
                         updateModalContent(
