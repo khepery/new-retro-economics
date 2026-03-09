@@ -6639,6 +6639,54 @@
         #halAssistantPanel.hal-expanded #halChatMessages {
             max-height: calc(80vh - 280px) !important;
         }
+
+        /* ── Task 11: Image Style Selector UX ── */
+        .style-preview-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 76px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+            background: #0a0a00;
+        }
+
+        .style-preview-card:hover {
+            border-color: #ff8800;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.4);
+        }
+
+        .style-preview-card.style-preview-selected {
+            border-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+        }
+
+        .style-preview-thumb {
+            width: 100%;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .style-preview-label {
+            width: 100%;
+            padding: 3px 2px;
+            text-align: center;
+            font-size: 9px;
+            color: #ffcc00;
+            font-family: 'Share Tech Mono', monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: rgba(0,0,0,0.6);
+        }
     </style>
 
     <!-- Scale Control Panel -->
@@ -6799,19 +6847,52 @@
                         </div>
 
                         <!-- Quality & Style Options -->
-                        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center; margin-top: 10px;">
-                            <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid #ff8800; border-radius: 6px; background: rgba(255,136,0,0.15);">
-                                <span style="font-size: 11px; color:#ffaa44;">🎨 Style</span>
-                                <select id="aiImageStyle" onchange="updateImageStyle(this.value)" style="background:#1a1a00; color:#ffcc00; border:1px solid #ff8800; border-radius: 4px; padding:4px 8px; font-size: 12px; cursor: pointer;">
-                                    <option value="ghibli" selected>🌸 Ghibli 吉卜力</option>
-                                    <option value="popart">🎯 Pop Art 波普</option>
-                                    <option value="cyberpunk">🌃 Cyberpunk 赛博</option>
-                                    <option value="retro">📼 Retro 80s 复古</option>
-                                    <option value="twenties">🎭 1920s 装饰艺术</option>
-                                    <option value="disney">✨ Disney 迪士尼</option>
-                                    <option value="spongebob">🧽 SpongeBob 海绵宝宝</option>
+                        <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: flex-start; margin-top: 10px;">
+
+                            <!-- Task 11: Image Style Selector with Thumbnail Previews -->
+                            <div style="width: 100%; margin-bottom: 8px;">
+                                <div style="font-size: 11px; color:#ffaa44; margin-bottom: 6px;">🎨 Image Style 图片风格:</div>
+                                <div id="styleCardPicker" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <div class="style-preview-card style-preview-selected" data-style="ghibli" onclick="selectStyleCard('ghibli')" title="Studio Ghibli: soft watercolor, warm golden lighting, hand-painted illustration">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #a8e063 0%, #f9e4a0 60%, #c8f7a0 100%);">🌸</div>
+                                        <div class="style-preview-label">Ghibli 吉卜力</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="popart" onclick="selectStyleCard('popart')" title="Pop Art: bold primary colors, Ben-Day dots, Roy Lichtenstein inspired">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #ff4444 0%, #ffdd00 50%, #4466ff 100%);">🎯</div>
+                                        <div class="style-preview-label">Pop Art 波普</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="cyberpunk" onclick="selectStyleCard('cyberpunk')" title="Cyberpunk: dark futuristic city, neon pink and blue lights, Blade Runner aesthetic">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #0a0015 0%, #7b00ff 40%, #00ffff 100%);">🌃</div>
+                                        <div class="style-preview-label">Cyberpunk 赛博</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="retro" onclick="selectStyleCard('retro')" title="Retro 80s: synthwave aesthetic, vintage neon colors, nostalgic retro futurism">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #1a0030 0%, #ff006e 50%, #fb5ab3 100%);">📼</div>
+                                        <div class="style-preview-label">Retro 80s 复古</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="twenties" onclick="selectStyleCard('twenties')" title="1920s Art Deco: Great Gatsby aesthetic, gold and black, geometric vintage glamour">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #1a1200 0%, #c9a227 50%, #1a1200 100%);">🎭</div>
+                                        <div class="style-preview-label">1920s 装饰艺术</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="disney" onclick="selectStyleCard('disney')" title="Disney Classic: soft rounded features, expressive eyes, magical fairy tale atmosphere">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #1b1464 0%, #ff6b9d 50%, #ffd700 100%);">✨</div>
+                                        <div class="style-preview-label">Disney 迪士尼</div>
+                                    </div>
+                                    <div class="style-preview-card" data-style="spongebob" onclick="selectStyleCard('spongebob')" title="SpongeBob: bright saturated colors, simple bold outlines, exaggerated cartoon expressions">
+                                        <div class="style-preview-thumb" style="background: linear-gradient(135deg, #87ceeb 0%, #ffdd00 60%, #87ceeb 100%);">🧽</div>
+                                        <div class="style-preview-label">SpongeBob 海绵宝宝</div>
+                                    </div>
+                                </div>
+                                <!-- Hidden select kept for JS backward-compatibility (read at line ~13770) -->
+                                <select id="aiImageStyle" style="display:none;" aria-hidden="true">
+                                    <option value="ghibli" selected>Ghibli</option>
+                                    <option value="popart">Pop Art</option>
+                                    <option value="cyberpunk">Cyberpunk</option>
+                                    <option value="retro">Retro 80s</option>
+                                    <option value="twenties">1920s Art Deco</option>
+                                    <option value="disney">Disney</option>
+                                    <option value="spongebob">SpongeBob</option>
                                 </select>
-                            </label>
+                            </div>
 
                             <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
                                 <span style="font-size: 11px; color:#88ffbb;">Quality</span>
@@ -13104,6 +13185,28 @@ Output ONLY the JSON object now:`
                     comicGuide.settingVisual = getSetting(comicGuide.settingType);
                 }
             }
+        };
+
+        // Task 11: Visual style card picker — handles click on a thumbnail card
+        window.selectStyleCard = function(style) {
+            if (!STYLE_LIBRARY[style]) return;
+
+            // Update hidden select for backward compatibility
+            const hiddenSelect = document.getElementById('aiImageStyle');
+            if (hiddenSelect) hiddenSelect.value = style;
+
+            // Update visual selection state
+            const cards = document.querySelectorAll('#styleCardPicker .style-preview-card');
+            cards.forEach(function(card) {
+                if (card.dataset.style === style) {
+                    card.classList.add('style-preview-selected');
+                } else {
+                    card.classList.remove('style-preview-selected');
+                }
+            });
+
+            // Delegate to existing style handler
+            updateImageStyle(style);
         };
         
         // Build image prompt with EXACT character description - SAME IN EVERY PANEL
