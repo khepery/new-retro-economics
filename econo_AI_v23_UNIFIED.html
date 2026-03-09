@@ -3051,6 +3051,16 @@
             }
         }
 
+        /* Fallback media query for devices narrower than 400px (supplements container queries) */
+        @media (max-width: 400px) {
+            .keywords-grid, .words-grid {
+                grid-template-columns: 1fr;
+            }
+            .mcq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* BULLETPROOF CARDS */
         .terminal-card {
             background: linear-gradient(135deg, #000, #001100);
@@ -3325,6 +3335,24 @@
         .mcq-option-zh {
             font-size: var(--text-base);
             color: var(--primary-dim);
+        }
+
+        /* Result badges for non-color-only feedback */
+        .mcq-result-badge {
+            font-size: var(--text-sm);
+            font-weight: bold;
+            margin-top: var(--space-2);
+            padding: 2px var(--space-2);
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .mcq-correct-badge {
+            color: var(--background);
+            background: var(--primary-bright);
+        }
+        .mcq-wrong-badge {
+            color: var(--background);
+            background: #ff4444;
         }
 
         /* BULLETPROOF CONTROLS */
@@ -6693,7 +6721,7 @@
 
     <!-- AI Generator Modal -->
     <div class="modal-overlay" id="aiGeneratorModal" onclick="closeAIGeneratorModal()">
-        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px; width: 95vw; max-height: 90vh; overflow-y: auto;">
             <div class="modal-title">🤖 AI LESSON GENERATOR | AI课程生成器</div>
             <div style="text-align: left; margin-bottom: var(--space-5);">
                 
@@ -7133,6 +7161,10 @@ Chapter 5: Money and Banking
                     <div id="currentMCQ">
                         <!-- MCQ content -->
                     </div>
+
+                    <!-- Visually-hidden live region for screen reader timer announcements -->
+                    <div id="mcqTimerAnnounce" aria-live="polite" aria-atomic="true"
+                         style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
 
                     <div class="controls">
                         <button class="btn secondary" id="thinkButton" onclick="startThinking()">ANALYSIS MODE [10s] | 分析模式</button>
@@ -7808,7 +7840,7 @@ Chapter 5: Money and Banking
             const prompts = lessonConfig.writePrompts || [];
             
             writePrompts.innerHTML = `
-                <h3 style="color:#00ff00;margin-bottom:var(--space-5);font-size:var(--text-lg);">
+                <h3 style="color:var(--primary-bright);margin-bottom:var(--space-5);font-size:var(--text-lg);">
                     ✅ SAMPLE SOLUTIONS | 参考答案:
                 </h3>
                 ${prompts.map((prompt, index) => `
@@ -17694,13 +17726,16 @@ Output ONLY the JSON object now:`
 
             const html = `
                 <div class="content-box">
-                    <div class="mcq-question">
+                    <div class="mcq-question" id="mcqQuestionLabel">
                         <div>${mcq.question_en}</div>
                         <div class="mcq-question-zh">${mcq.question_zh}</div>
                     </div>
-                    <div class="grid-container mcq-grid" id="mcqOptions">
+                    <div class="grid-container mcq-grid" id="mcqOptions" role="radiogroup" aria-labelledby="mcqQuestionLabel">
                         ${mcq.options_en.map((option, i) => `
-                            <div class="mcq-option" data-option="${i}" onclick="selectMCQOption(${i})">
+                            <div class="mcq-option" data-option="${i}" role="radio" aria-checked="false" tabindex="0"
+                                 aria-label="Option ${String.fromCharCode(65 + i)}: ${escapeHtml(option)}"
+                                 onclick="selectMCQOption(${i})"
+                                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMCQOption(${i});}">
                                 <div class="mcq-option-en"><strong>[${String.fromCharCode(65 + i)}]</strong> ${option}</div>
                                 <div class="mcq-option-zh">${mcq.options_zh[i]}</div>
                             </div>
@@ -17734,11 +17769,13 @@ Output ONLY the JSON object now:`
             // Clear previous selections
             document.querySelectorAll('.mcq-option').forEach(option => {
                 option.classList.remove('selected');
+                option.setAttribute('aria-checked', 'false');
             });
             
             // Mark selected option
             const selectedOption = document.querySelector(`[data-option="${optionIndex}"]`);
             selectedOption.classList.add('selected');
+            selectedOption.setAttribute('aria-checked', 'true');
             selectedMCQOption = optionIndex;
             
             playBeep();
@@ -17763,10 +17800,14 @@ Output ONLY the JSON object now:`
                 if (countdown < 0) {
                     clearInterval(thinkingTimer);
                     revealButton.textContent = 'EXECUTE RESPONSE | 执行响应';
+                    const announcer = document.getElementById('mcqTimerAnnounce');
+                    if (announcer) announcer.textContent = 'Timer complete. Ready to reveal answer.';
                 }
                 
                 if (countdown <= 3 && countdown >= 0) {
                     playBeep();
+                    const announcer = document.getElementById('mcqTimerAnnounce');
+                    if (announcer) announcer.textContent = `${countdown + 1} second${countdown + 1 !== 1 ? 's' : ''} remaining`;
                 }
             }, 1000);
         };
@@ -17779,12 +17820,40 @@ Output ONLY the JSON object now:`
             
             // Show correct/incorrect feedback
             options.forEach((option, index) => {
+                option.setAttribute('aria-checked', index === selectedMCQOption ? 'true' : 'false');
                 if (index === mcq.correct) {
                     option.classList.add('correct');
+                    option.setAttribute('aria-label', (option.getAttribute('aria-label') || `Option ${String.fromCharCode(65 + index)}`) + ' — CORRECT');
+                    // Add text badge so feedback is not color-only
+                    if (!option.querySelector('.mcq-result-badge')) {
+                        const badge = document.createElement('div');
+                        badge.className = 'mcq-result-badge mcq-correct-badge';
+                        badge.setAttribute('aria-hidden', 'true');
+                        badge.textContent = '✓ CORRECT | 正确';
+                        option.appendChild(badge);
+                    }
                 } else if (index === selectedMCQOption && index !== mcq.correct) {
                     option.classList.add('wrong');
+                    option.setAttribute('aria-label', (option.getAttribute('aria-label') || `Option ${String.fromCharCode(65 + index)}`) + ' — INCORRECT');
+                    // Add text badge so feedback is not color-only
+                    if (!option.querySelector('.mcq-result-badge')) {
+                        const badge = document.createElement('div');
+                        badge.className = 'mcq-result-badge mcq-wrong-badge';
+                        badge.setAttribute('aria-hidden', 'true');
+                        badge.textContent = '✗ INCORRECT | 错误';
+                        option.appendChild(badge);
+                    }
                 }
             });
+            
+            // Announce result to screen readers
+            const isCorrect = selectedMCQOption === mcq.correct;
+            const announcer = document.getElementById('mcqTimerAnnounce');
+            if (announcer) {
+                announcer.textContent = isCorrect
+                    ? 'Correct! Well done.'
+                    : `Incorrect. The correct answer was option ${String.fromCharCode(65 + mcq.correct)}.`;
+            }
             
             // Record answer
             mcqAnswers.push({
@@ -23865,7 +23934,7 @@ console.log('[UPGRADE] Hints system disabled');
 
 <!-- Save/Load Lessons Modal -->
 <div class="modal-overlay" id="savedLessonsModal" onclick="closeSavedLessonsModal()">
-    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 650px; max-height: 85vh; overflow-y: auto;">
+    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 650px; width: 95vw; max-height: 85vh; overflow-y: auto;">
         <div class="modal-title">💾 SAVED LESSONS | 已保存的课程</div>
         
         <!-- DOWNLOAD FULL LESSON - NEW! -->
