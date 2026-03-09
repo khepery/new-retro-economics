@@ -2523,7 +2523,7 @@
         }
 
         .keyword {
-            background: #00ff00;
+            background: var(--primary-color);
             color: #000;
             padding: 2px 4px;
             border-radius: 2px;
@@ -3726,14 +3726,14 @@
 
         .modal-content {
             background: linear-gradient(135deg, #000a00, #001800, #000a00);
-            border: 3px solid #00ff00;
+            border: 3px solid var(--primary-color);
             border-radius: 8px;
             padding: var(--space-8);
             max-width: 700px;
             width: 90vw;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 0 40px rgba(0, 255, 0, 0.6), 0 0 80px rgba(0, 255, 0, 0.3), inset 0 0 60px rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 40px var(--shadow-color), 0 0 80px var(--shadow-color), inset 0 0 60px var(--primary-glow);
             text-align: center;
         }
         
@@ -3752,7 +3752,7 @@
             font-family: 'Orbitron', monospace;
             font-size: var(--text-lg);
             color: var(--primary-bright);
-            text-shadow: 0 0 8px #00ff00;
+            text-shadow: 0 0 8px var(--primary-glow);
             margin-bottom: var(--space-4);
             font-weight: bold;
         }
@@ -3899,10 +3899,10 @@
         }
 
         .scale-preset-btn.active {
-            background: #00ff00;
+            background: var(--primary-color);
             color: #000;
             border-color: var(--primary-bright);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px var(--shadow-color);
         }
 
         .scale-slider-container {
@@ -3934,22 +3934,22 @@
             appearance: none;
             width: 18px;
             height: 18px;
-            background: #00ff00;
+            background: var(--primary-color);
             border: 2px solid #000;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px var(--shadow-color);
             transition: all 0.2s ease;
         }
 
         .scale-slider::-moz-range-thumb {
             width: 18px;
             height: 18px;
-            background: #00ff00;
+            background: var(--primary-color);
             border: 2px solid #000;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px var(--shadow-color);
             transition: all 0.2s ease;
         }
 
@@ -4106,10 +4106,10 @@
         @keyframes neonPulse {
             0%, 100% {
                 box-shadow:
-                    0 0 5px #00ff00,
-                    0 0 10px #00ff00,
-                    0 0 15px #00ff00,
-                    0 0 20px #00ff00;
+                    0 0 5px var(--primary-color),
+                    0 0 10px var(--primary-color),
+                    0 0 15px var(--primary-color),
+                    0 0 20px var(--primary-color);
             }
             50% {
                 box-shadow:
@@ -4247,9 +4247,9 @@
         .image-modal-img {
             max-width: 100%;
             max-height: 80vh;
-            border: 3px solid #00ff00;
+            border: 3px solid var(--primary-color);
             border-radius: 5px;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+            box-shadow: 0 0 30px var(--shadow-color);
             cursor: zoom-in;
         }
 
@@ -5655,9 +5655,9 @@
         transform: translateY(-50%);
         width: 280px;
         background: linear-gradient(135deg, #001100, #000800);
-        border: 3px solid #00ff00;
+        border: 3px solid var(--primary-color);
         border-radius: 12px;
-        box-shadow: 0 0 30px rgba(0, 255, 0, 0.4);
+        box-shadow: 0 0 30px var(--shadow-color);
         z-index: 15000;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: move;
@@ -5699,7 +5699,7 @@
 
     .score-panel-header {
         background: var(--background);
-        border-bottom: 2px solid #00ff00;
+        border-bottom: 2px solid var(--primary-color);
         padding: 12px;
         border-radius: 9px 9px 0 0;
         cursor: pointer;
@@ -5729,7 +5729,7 @@
     .score-icon svg {
         width: 24px;
         height: 24px;
-        filter: drop-shadow(0 0 6px #00ff00);
+        filter: drop-shadow(0 0 6px var(--primary-color));
     }
 
     @keyframes scoreIconPulse {
@@ -5748,7 +5748,7 @@
         font-family: 'Orbitron', monospace;
         font-weight: bold;
         color: var(--primary-bright);
-        text-shadow: 0 0 8px #00ff00;
+        text-shadow: 0 0 8px var(--primary-glow);
         letter-spacing: 1px;
     }
 
@@ -5959,10 +5959,10 @@
         font-weight: 900;
         background: linear-gradient(
             45deg,
-            #00ff00,
-            #00ffff,
-            #00ff00,
-            #00ffff
+            var(--primary-color),
+            var(--primary-bright),
+            var(--primary-color),
+            var(--primary-bright)
         );
         background-size: 200% 200%;
         -webkit-background-clip: text;
@@ -6162,7 +6162,7 @@
     <div id="bootSequence" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--background); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: 'Orbitron', monospace;">
         <div style="color: var(--primary-bright); font-size: 24px; margin-bottom: 20px; text-shadow: 0 0 10px var(--primary-bright);">INITIALIZING SYSTEM...</div>
         <div style="width: 300px; height: 30px; border: 2px solid var(--border-color); position: relative;">
-            <div id="bootProgress" style="position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, #00ff00, #00ffff); width: 0%; transition: width 0.1s;"></div>
+            <div id="bootProgress" style="position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--primary-bright)); width: 0%; transition: width 0.1s;"></div>
         </div>
         <div id="bootPercent" style="color: var(--primary-bright); margin-top: 10px; font-size: 18px;">0%</div>
         <div id="bootStatus" style="color: var(--primary-dim); margin-top: 10px; font-size: 12px; text-align: center;">Loading modules...</div>
@@ -6470,8 +6470,8 @@
         
         .hal-message.user {
             background: rgba(0,255,0,0.1);
-            border: 1px solid #00ff00;
-            color: #00ff00;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
             text-align: right;
         }
         
@@ -6854,11 +6854,11 @@
                     </div>
                     <input type="password" id="groqApiKey" placeholder="Enter API key" 
                            style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 12px;">
-                    <div id="providerHelpText" style="font-size: 11px; color: #00ff00; margin-top: 6px;">
+                    <div id="providerHelpText" style="font-size: 11px; color: var(--primary-color); margin-top: 6px;">
                         OpenAI: use <a href="https://platform.openai.com" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: underline;">platform.openai.com</a> API keys (starts with sk-). Billing applies.
                     </div>
                     <div id="localLLMSection" style="display:none; margin-top: 8px;">
-                        <label style="font-size:11px; color:#00ff00;">Local endpoint:</label>
+                        <label style="font-size:11px; color:var(--primary-color);">Local endpoint:</label>
                         <input type="text" id="localLLMUrl" value="http://127.0.0.1:8080" 
                                style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 12px;">
                     </div>
@@ -6866,19 +6866,19 @@
 
                 <!-- Lesson Duration Selection -->
                 <div style="margin-bottom: var(--space-4); padding: var(--space-3); background: rgba(0,255,0,0.05); border: 1px solid rgba(0,255,0,0.2); border-radius: 5px;">
-                    <label style="display: block; color: #00FF00; margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: bold;">
+                    <label style="display: block; color: var(--primary-color); margin-bottom: var(--space-2); font-size: var(--text-sm); font-weight: bold;">
                         ⏱️ Lesson Duration | 课程时长:
                     </label>
                     <div style="display: flex; gap: var(--space-4);">
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--primary-bright); padding: 8px 16px; border: 2px solid var(--border-color); border-radius: 5px; transition: all 0.2s;">
                             <input type="radio" name="lessonDuration" value="20" id="duration20" 
-                                   style="accent-color: #00FF00; width: 18px; height: 18px;">
+                                   style="accent-color: var(--primary-color); width: 18px; height: 18px;">
                             <span style="font-size: 16px;">20 min</span>
                             <span style="font-size: 12px; color: #888;">(Quick)</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--primary-bright); padding: 8px 16px; border: 2px solid var(--border-color); border-radius: 5px; transition: all 0.2s;">
                             <input type="radio" name="lessonDuration" value="40" id="duration40" checked
-                                   style="accent-color: #00FF00; width: 18px; height: 18px;">
+                                   style="accent-color: var(--primary-color); width: 18px; height: 18px;">
                             <span style="font-size: 16px;">40 min</span>
                             <span style="font-size: 12px; color: #888;">(Full)</span>
                         </label>
@@ -6897,12 +6897,12 @@
 
                     <div style="display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center;">
                         <label style="display:flex; align-items:center; gap:10px; padding:10px 12px; border: 1px solid var(--border-color); border-radius: 6px;">
-                            <input type="checkbox" id="aiComicMode" checked style="accent-color:#00FF00; width:18px; height:18px;">
+                            <input type="checkbox" id="aiComicMode" checked style="accent-color:var(--primary-color); width:18px; height:18px;">
                             <span>Comic panels | 漫画分镜</span>
                         </label>
 
                         <label style="display:flex; align-items:center; gap:10px; padding:10px 12px; border: 1px solid var(--border-color); border-radius: 6px;">
-                            <input type="checkbox" id="aiGenerateImagesNow" checked style="accent-color:#00FF00; width:18px; height:18px;">
+                            <input type="checkbox" id="aiGenerateImagesNow" checked style="accent-color:var(--primary-color); width:18px; height:18px;">
                             <span>Generate images | 生成图片</span>
                         </label>
                     </div>
@@ -6948,7 +6948,7 @@
 
                             <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
                                 <span style="font-size: 11px; color:#88ffbb;">Quality</span>
-                                <select id="aiImageQuality" style="background:#000; color:#00FF00; border:1px solid #00FF00; border-radius: 4px; padding:4px 8px; font-size: 12px;">
+                                <select id="aiImageQuality" style="background:#000; color:var(--primary-color); border:1px solid var(--primary-color); border-radius: 4px; padding:4px 8px; font-size: 12px;">
                                     <option value="low" selected>Fast 快速</option>
                                     <option value="medium">Good 良好</option>
                                     <option value="high">HD 高清</option>
@@ -6957,7 +6957,7 @@
 
                             <label style="display:flex; align-items:center; gap:6px; padding:6px 10px; border: 1px solid var(--border-color); border-radius: 6px;">
                                 <span style="font-size: 11px; color:#88ffbb;">Size</span>
-                                <select id="aiImageSize" style="background:#000; color:#00FF00; border:1px solid #00FF00; border-radius: 4px; padding:4px 8px; font-size: 12px;">
+                                <select id="aiImageSize" style="background:#000; color:var(--primary-color); border:1px solid var(--primary-color); border-radius: 4px; padding:4px 8px; font-size: 12px;">
                                     <option value="1024x1024">1:1</option>
                                     <option value="1792x1024" selected>16:9</option>
                                     <option value="1024x1792">9:16</option>
@@ -7015,7 +7015,7 @@
                         </div>
                     </div>
                     
-                    <div style="font-size: 10px; color: #00FF00; margin-top: 4px;">
+                    <div style="font-size: 10px; color: var(--primary-color); margin-top: 4px;">
                         ✅ Supports: PDF, PowerPoint (.ppt, .pptx), Word (.doc, .docx)
                     </div>
                 </div>
@@ -7091,7 +7091,7 @@ Chapter 5: Money and Banking
                         <div class="start-subtitle-zh">初始化学习协议</div>
                         
                         <div class="content-box">
-                            <h3 style="color: #00ff00; margin-bottom: var(--space-4); text-align: center; font-size: var(--text-md);">FORM TEAMS [3 MEMBERS] | 组队 [3人]</h3>
+                            <h3 style="color: var(--primary-bright); margin-bottom: var(--space-4); text-align: center; font-size: var(--text-md);">FORM TEAMS [3 MEMBERS] | 组队 [3人]</h3>
                             <div class="grid-container roles-grid">
                                 <div class="role-card">
                                     <div class="role-name">CAPTAIN</div>
@@ -7147,7 +7147,7 @@ Chapter 5: Money and Banking
                     </div>
 
                     <div class="content-box">
-                        <h3 style="color: #00ff00; margin-bottom: var(--space-4); text-align: center; font-size: var(--text-base);">CLICK TERMS TO LEARN | 点击术语学习</h3>
+                        <h3 style="color: var(--primary-bright); margin-bottom: var(--space-4); text-align: center; font-size: var(--text-base);">CLICK TERMS TO LEARN | 点击术语学习</h3>
                         <div class="grid-container keywords-grid" id="keywordsContainer">
                             <!-- Keywords -->
                         </div>
@@ -7587,7 +7587,7 @@ Chapter 5: Money and Banking
             hackerMsg.style.cssText = `
                 font-size: 48px;
                 color: var(--primary-bright);
-                text-shadow: 0 0 30px #00ff00;
+                text-shadow: 0 0 30px var(--primary-color);
                 font-family: 'Orbitron', monospace;
                 animation: glitch 0.5s infinite, holographic 2s infinite;
                 text-align: center;
@@ -7682,7 +7682,7 @@ Chapter 5: Money and Banking
 
                 .retro-mode * {
                     color: var(--primary-bright) !important;
-                    text-shadow: 0 0 3px #00ff00 !important;
+                    text-shadow: 0 0 3px var(--primary-color) !important;
                     font-family: 'Courier New', monospace !important;
                 }
 
@@ -7941,7 +7941,7 @@ Chapter 5: Money and Banking
             const prompts = lessonConfig.writePrompts || [];
             
             writePrompts.innerHTML = `
-                <h3 style="color:#00ff00;margin-bottom:var(--space-5);font-size:var(--text-lg);">
+                <h3 style="color:var(--primary-bright);margin-bottom:var(--space-5);font-size:var(--text-lg);">
                     ✅ SAMPLE SOLUTIONS | 参考答案:
                 </h3>
                 ${prompts.map((prompt, index) => `
@@ -10732,7 +10732,7 @@ IMPORTANT RULES:
                     <div style="text-align: left; padding: 0 var(--space-4);">
                         <!-- Term Header -->
                         <div style="text-align: center; margin-bottom: var(--space-5); padding-bottom: var(--space-4); border-bottom: 2px solid #00aa00;">
-                            <div style="font-size: var(--text-2xl); color: #00ff00; font-weight: bold; text-shadow: 0 0 10px #00ff00; margin-bottom: var(--space-2);">
+                            <div style="font-size: var(--text-2xl); color: var(--primary-color); font-weight: bold; text-shadow: 0 0 10px var(--primary-glow); margin-bottom: var(--space-2);">
                                 ${termEn.toUpperCase()}
                             </div>
                             <div style="font-size: var(--text-lg); color: #88ff88;">
@@ -10741,11 +10741,11 @@ IMPORTANT RULES:
                         </div>
                         
                         <!-- Definition Section -->
-                        <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; margin-bottom: var(--space-5); border-left: 4px solid #00ff00;">
+                        <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; margin-bottom: var(--space-5); border-left: 4px solid var(--primary-color);">
                             <div style="color: #ffff00; font-weight: bold; margin-bottom: var(--space-3); font-size: var(--text-md);">
                                 📖 DEFINITION | 定义
                             </div>
-                            <div style="color: #00ff00; font-size: var(--text-md); line-height: 1.6; margin-bottom: var(--space-3);">
+                            <div style="color: var(--primary-color); font-size: var(--text-md); line-height: 1.6; margin-bottom: var(--space-3);">
                                 <strong>EN:</strong> ${definition_en}
                             </div>
                             <div style="color: #88ff88; font-size: var(--text-md); line-height: 1.6;">
@@ -10788,7 +10788,7 @@ IMPORTANT RULES:
                     content += `
                         <div style="background: rgba(0,100,0,0.3); padding: var(--space-3); border-radius: 5px; margin-bottom: var(--space-2); border: 1px solid #00aa00;">
                             <span style="color: #ffff00; font-weight: bold;">EN ${i+1}:</span>
-                            <span style="color: #00ff00; font-size: var(--text-md);"> ${examples_en[i]}</span>
+                            <span style="color: var(--primary-color); font-size: var(--text-md);"> ${examples_en[i]}</span>
                         </div>
                     `;
                 }
@@ -10820,8 +10820,8 @@ IMPORTANT RULES:
                     const title = `📚 ${keywordKey.toUpperCase()}`;
                     const definition = `
                         <div style="text-align: left; padding: var(--space-4);">
-                            <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; border-left: 4px solid #00ff00;">
-                                <div style="color: #00ff00; font-size: var(--text-md); margin-bottom: var(--space-3);">
+                            <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                                <div style="color: var(--primary-color); font-size: var(--text-md); margin-bottom: var(--space-3);">
                                     <strong>English:</strong> ${dictDef.en}
                                 </div>
                                 <div style="color: #88ff88; font-size: var(--text-md);">
@@ -10932,13 +10932,13 @@ IMPORTANT RULES:
                 showModal(`📚 ${word.toUpperCase()}`, `
                     <div style="text-align: left; padding: var(--space-4);">
                         <div style="text-align: center; margin-bottom: var(--space-4);">
-                            <span style="font-size: var(--text-2xl); color: #00ff00; font-weight: bold; text-shadow: 0 0 10px #00ff00;">
+                            <span style="font-size: var(--text-2xl); color: var(--primary-color); font-weight: bold; text-shadow: 0 0 10px var(--primary-glow);">
                                 ${word.toUpperCase()}
                             </span>
                         </div>
-                        <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; border-left: 4px solid #00ff00; margin-bottom: var(--space-4);">
+                        <div style="background: rgba(0,50,0,0.5); padding: var(--space-5); border-radius: 8px; border-left: 4px solid var(--primary-color); margin-bottom: var(--space-4);">
                             <div style="color: #ffff00; font-weight: bold; margin-bottom: var(--space-3);">📖 DEFINITION | 定义</div>
-                            <div style="color: #00ff00; font-size: var(--text-md); margin-bottom: var(--space-3); line-height: 1.6;">
+                            <div style="color: var(--primary-color); font-size: var(--text-md); margin-bottom: var(--space-3); line-height: 1.6;">
                                 <strong>EN:</strong> ${def_en}
                             </div>
                             <div style="color: #88ff88; font-size: var(--text-md); line-height: 1.6;">
@@ -14746,7 +14746,7 @@ Output ONLY the JSON object now:`
                 } else if (parseFloat(usedPercent) > 60) {
                     info.style.color = '#ffaa00';
                 } else {
-                    info.style.color = '#00ff00';
+                    info.style.color = 'var(--primary-color)';
                 }
             } catch (e) {
                 info.textContent = 'Storage: Error reading';
@@ -17674,11 +17674,11 @@ Output ONLY the JSON object now:`
             // Now rebuild the display with validation results
             const frameContainer = document.getElementById('frameContainer');
             let validationTitle = '';
-            let titleColor = '#00ff00';
+            let titleColor = 'var(--primary-color)';
 
             if (allCompleted && allCorrect) {
                 validationTitle = '✓ ALL DEFINITIONS CORRECT | 所有定义正确';
-                titleColor = '#00ff00';
+                titleColor = 'var(--primary-color)';
             } else if (allCompleted && !allCorrect) {
                 validationTitle = '⚠ SOME ANSWERS INCORRECT | 部分答案错误';
                 titleColor = '#ff4444';
@@ -17698,8 +17698,8 @@ Output ONLY the JSON object now:`
 
                 let frameText = frame.text;
                 let definitionStatus = '✓ COMPLETE';
-                let statusColor = '#00ff00';
-                let borderColor = '#00ff00';
+                let statusColor = 'var(--primary-color)';
+                let borderColor = 'var(--primary-color)';
                 let hasErrors = false;
 
                 // Replace blanks with validation feedback
@@ -17710,7 +17710,7 @@ Output ONLY the JSON object now:`
                     frame.blanks.forEach(blank => {
                         const userValue = filledValues[index][blank];
                         let displayContent = '';
-                        let blankColor = '#00ff00';
+                        let blankColor = 'var(--primary-color)';
 
                         if (userValue === null) {
                             // Not filled
@@ -17720,7 +17720,7 @@ Output ONLY the JSON object now:`
                         } else if (userValue.toLowerCase() === blank.toLowerCase()) {
                             // Correct
                             displayContent = `✓ ${userValue}`;
-                            blankColor = '#00ff00';
+                            blankColor = 'var(--primary-color)';
                         } else {
                             // Incorrect
                             displayContent = `✗ ${userValue} → ${blank.toUpperCase()}`;
@@ -19280,7 +19280,7 @@ Output ONLY the JSON object now:`
             if (Array.isArray(summary) && summary.length > 0) {
                 reviewHTML += `
                     <div style="margin-bottom: 15px;">
-                        <div style="font-size: var(--text-sm); color: #00FF00; font-weight: bold; margin-bottom: 8px;">📝 KEY TAKEAWAYS | 重要收获:</div>
+                        <div style="font-size: var(--text-sm); color: var(--primary-color); font-weight: bold; margin-bottom: 8px;">📝 KEY TAKEAWAYS | 重要收获:</div>
                         ${summary.map(item => `
                             <div style="margin: 8px 0; padding: 8px 12px; background: rgba(0,255,0,0.05); border-left: 3px solid var(--primary-bright); font-size: var(--text-sm);">
                                 <strong>${item.title || item.title_zh}:</strong> ${item.description || item.description_zh}
@@ -19628,18 +19628,18 @@ Output ONLY the JSON object now:`
    * unused entries before repeating if necessary.
    */
   const PLAYER_ICONS = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,8 37,24 54,24 40,36 46,52 32,42 18,52 24,36 10,24 27,24" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L48 32 L32 56 L16 32 Z" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" fill="none" stroke="#00ff00" stroke-width="2"/><circle cx="32" cy="32" r="10" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="14" y="14" width="36" height="36" rx="8" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,10 50,22 50,42 32,54 14,42 14,22" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><line x1="8" y1="32" x2="56" y2="32" stroke="#00ff00" stroke-width="2"/><line x1="32" y1="8" x2="32" y2="56" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L40 32 L56 32 L44 44 L48 56 L32 48 L16 56 L20 44 L8 32 L24 32 Z" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M16 32 a16 16 0 1 0 32 0 a16 16 0 1 0 -32 0" fill="none" stroke="#00ff00" stroke-width="2"/><path d="M32 16 v12 l10 -6" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,8 42,22 58,24 46,36 50,52 32,44 14,52 18,36 6,24 22,22" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L52 20 L44 44 L20 44 L12 20 Z" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,12 48,32 32,52 16,32" fill="none" stroke="#00ff00" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="#00ff00"/></svg>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="#00ff00" stroke-width="2"/><path d="M10 32 L22 20 L42 44 L54 32" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,8 37,24 54,24 40,36 46,52 32,42 18,52 24,36 10,24 27,24" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L48 32 L32 56 L16 32 Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="10" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="14" y="14" width="36" height="36" rx="8" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,10 50,22 50,42 32,54 14,42 14,22" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><line x1="8" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="2"/><line x1="32" y1="8" x2="32" y2="56" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L40 32 L56 32 L44 44 L48 56 L32 48 L16 56 L20 44 L8 32 L24 32 Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M16 32 a16 16 0 1 0 32 0 a16 16 0 1 0 -32 0" fill="none" stroke="currentColor" stroke-width="2"/><path d="M32 16 v12 l10 -6" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,8 42,22 58,24 46,36 50,52 32,44 14,52 18,36 6,24 22,22" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32 8 L52 20 L44 44 L20 44 L12 20 Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><polygon points="32,12 48,32 32,52 16,32" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 32 L22 20 L42 44 L54 32" fill="none" stroke="currentColor" stroke-width="2"/></svg>`
   ];
 
   /**
@@ -19702,14 +19702,14 @@ Output ONLY the JSON object now:`
     'Orbit Outlaws'
   ];
           const ICONS = {
-            random: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" fill="none" stroke="#00ff00" stroke-width="2"/><circle cx="32" cy="32" r="12" fill="none" stroke="#00ff00" stroke-width="1.5"/><circle cx="32" cy="32" r="4" fill="#00ff00" opacity="0.6"/><line x1="8" y1="32" x2="24" y2="32" stroke="#00ff00" stroke-width="2"/><line x1="40" y1="32" x2="56" y2="32" stroke="#00ff00" stroke-width="2"/><line x1="32" y1="8" x2="32" y2="24" stroke="#00ff00" stroke-width="2"/><line x1="32" y1="40" x2="32" y2="56" stroke="#00ff00" stroke-width="2"/></svg>`,
-            team: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(32,20)"><circle cx="0" cy="0" r="6" fill="none" stroke="#00ff00" stroke-width="2"/><text x="0" y="2" font-size="8" fill="#00ff00" text-anchor="middle" font-weight="bold">C</text></g><g transform="translate(18,44)"><circle cx="0" cy="0" r="5" fill="none" stroke="#00ff00" stroke-width="1.5"/><text x="0" y="2" font-size="7" fill="#00ff00" text-anchor="middle">W</text></g><g transform="translate(46,44)"><circle cx="0" cy="0" r="5" fill="none" stroke="#00ff00" stroke-width="1.5"/><text x="0" y="2" font-size="7" fill="#00ff00" text-anchor="middle">C</text></g><line x1="32" y1="26" x2="18" y2="39" stroke="#00ff00" stroke-width="1" opacity="0.4"/><line x1="32" y1="26" x2="46" y2="39" stroke="#00ff00" stroke-width="1" opacity="0.4"/></svg>`,
-            audio: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="12" fill="none" stroke="#00ff00" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="#00ff00" opacity="0.6"/><path d="M 20 28 Q 20 36, 20 36" fill="none" stroke="#00ff00" stroke-width="2"/><path d="M 44 28 Q 44 36, 44 36" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`,
-            captain: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><linearGradient id="blade1"><stop offset="0%" stop-color="#00ff00"/><stop offset="100%" stop-color="#00ffff" stop-opacity="0.8"/></linearGradient></defs><rect x="20" y="42" width="50" height="6" fill="url(#blade1)" rx="3" transform="rotate(-45 48 48)"/><rect x="26" y="48" width="50" height="6" fill="url(#blade1)" rx="3" transform="rotate(45 48 48)"/><circle cx="26" cy="70" r="4" fill="#666"/><circle cx="70" cy="26" r="4" fill="#666"/></svg>`,
-            writer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect x="28" y="20" width="40" height="56" rx="2" fill="#001100" stroke="#00ff00" stroke-width="2"/><rect x="32" y="28" width="32" height="2" fill="#00ff00" opacity="0.8"/><rect x="32" y="34" width="28" height="2" fill="#00ff00" opacity="0.6"/><rect x="32" y="40" width="32" height="2" fill="#00ff00" opacity="0.8"/><circle cx="48" cy="68" r="4" fill="#00ff00" opacity="0.4"/></svg>`,
-            coach: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><circle cx="48" cy="32" r="12" fill="none" stroke="#00ff00" stroke-width="2"/><path d="M 36 40 L 48 48 L 60 40" fill="none" stroke="#00ff00" stroke-width="2"/><path d="M 48 48 L 48 64" stroke="#00ff00" stroke-width="2"/><path d="M 36 56 L 48 64 L 60 56" fill="none" stroke="#00ff00" stroke-width="2"/><circle cx="48" cy="64" r="4" fill="#00ff00" opacity="0.6"/></svg>`,
+            random: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="32" cy="32" r="4" fill="currentColor" opacity="0.6"/><line x1="8" y1="32" x2="24" y2="32" stroke="currentColor" stroke-width="2"/><line x1="40" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="2"/><line x1="32" y1="8" x2="32" y2="24" stroke="currentColor" stroke-width="2"/><line x1="32" y1="40" x2="32" y2="56" stroke="currentColor" stroke-width="2"/></svg>`,
+            team: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(32,20)"><circle cx="0" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2"/><text x="0" y="2" font-size="8" fill="currentColor" text-anchor="middle" font-weight="bold">C</text></g><g transform="translate(18,44)"><circle cx="0" cy="0" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="0" y="2" font-size="7" fill="currentColor" text-anchor="middle">W</text></g><g transform="translate(46,44)"><circle cx="0" cy="0" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="0" y="2" font-size="7" fill="currentColor" text-anchor="middle">C</text></g><line x1="32" y1="26" x2="18" y2="39" stroke="currentColor" stroke-width="1" opacity="0.4"/><line x1="32" y1="26" x2="46" y2="39" stroke="currentColor" stroke-width="1" opacity="0.4"/></svg>`,
+            audio: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="currentColor" opacity="0.6"/><path d="M 20 28 Q 20 36, 20 36" fill="none" stroke="currentColor" stroke-width="2"/><path d="M 44 28 Q 44 36, 44 36" fill="none" stroke="currentColor" stroke-width="2"/></svg>`,
+            captain: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><linearGradient id="blade1"><stop offset="0%" style="stop-color: var(--primary-color)"/><stop offset="100%" style="stop-color: var(--primary-bright); stop-opacity: 0.8"/></linearGradient></defs><rect x="20" y="42" width="50" height="6" fill="url(#blade1)" rx="3" transform="rotate(-45 48 48)"/><rect x="26" y="48" width="50" height="6" fill="url(#blade1)" rx="3" transform="rotate(45 48 48)"/><circle cx="26" cy="70" r="4" fill="#666"/><circle cx="70" cy="26" r="4" fill="#666"/></svg>`,
+            writer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect x="28" y="20" width="40" height="56" rx="2" fill="#001100" stroke="currentColor" stroke-width="2"/><rect x="32" y="28" width="32" height="2" fill="currentColor" opacity="0.8"/><rect x="32" y="34" width="28" height="2" fill="currentColor" opacity="0.6"/><rect x="32" y="40" width="32" height="2" fill="currentColor" opacity="0.8"/><circle cx="48" cy="68" r="4" fill="currentColor" opacity="0.4"/></svg>`,
+            coach: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><circle cx="48" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M 36 40 L 48 48 L 60 40" fill="none" stroke="currentColor" stroke-width="2"/><path d="M 48 48 L 48 64" stroke="currentColor" stroke-width="2"/><path d="M 36 56 L 48 64 L 60 56" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="48" cy="64" r="4" fill="currentColor" opacity="0.6"/></svg>`,
             // Icon for the unique/repeat toggle button
-            repeat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M20 24h20c5.523 0 10 4.477 10 10s-4.477 10-10 10H12" fill="none" stroke="#00ff00" stroke-width="2"/><polyline points="24 28 20 24 24 20" fill="none" stroke="#00ff00" stroke-width="2"/><polyline points="40 44 44 48 40 52" fill="none" stroke="#00ff00" stroke-width="2"/></svg>`
+            repeat: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M20 24h20c5.523 0 10 4.477 10 10s-4.477 10-10 10H12" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="24 28 20 24 24 20" fill="none" stroke="currentColor" stroke-width="2"/><polyline points="40 44 44 48 40 52" fill="none" stroke="currentColor" stroke-width="2"/></svg>`
           };
           const STATE = {
             audioCtx: null,
@@ -20246,7 +20246,7 @@ Output ONLY the JSON object now:`
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <h3 style="margin: 0;"><span class="od-icon">${teamIconSvg}</span>${team.name}</h3>
                             <div style="display: flex; align-items: center; gap: 6px;">
-                                <span style="font-size: 18px; font-weight: bold; color: ${score >= 0 ? '#00ff00' : '#ff4444'};">${score}</span>
+                                <span style="font-size: 18px; font-weight: bold; color: ${score >= 0 ? 'var(--primary-color)' : '#ff4444'};">${score}</span>
                                 <button class="od-btn" style="padding: 2px 4px;" onclick="adjustTeamScore(${idx}, 1)" title="Add point">
                                     <span style="font-size: 12px;">➕</span>
                                 </button>
@@ -20633,7 +20633,7 @@ Output ONLY the JSON object now:`
                       <h3 style="color: var(--primary-bright); margin-bottom: var(--space-3);">SCORE UPDATE | 分数更新</h3>
                       <p style="margin-bottom: var(--space-2);"><strong>Student:</strong> ${pick.student}</p>
                       <p style="margin-bottom: var(--space-2);"><strong>Team:</strong> ${pick.team}</p>
-                      <p style="margin-bottom: var(--space-4); font-size: 24px; color: ${currentScore >= 0 ? '#00ff00' : '#ff4444'};">
+                      <p style="margin-bottom: var(--space-4); font-size: 24px; color: ${currentScore >= 0 ? 'var(--primary-color)' : '#ff4444'};">
                           Current Score: ${currentScore}
                       </p>
                       <div style="display: flex; gap: var(--space-3); justify-content: center; margin-bottom: var(--space-4);">
@@ -20698,7 +20698,7 @@ Output ONLY the JSON object now:`
               // Update panel content
               document.querySelector('.score-student').textContent = `Student: ${pick.student}`;
               document.querySelector('.score-team').textContent = `Team: ${pick.team}`;
-              document.querySelector('.score-current').innerHTML = `Score: <span style="color: ${currentScore >= 0 ? '#00ff00' : '#ff4444'}">${currentScore}</span>`;
+              document.querySelector('.score-current').innerHTML = `Score: <span style="color: ${currentScore >= 0 ? 'var(--primary-color)' : '#ff4444'}">${currentScore}</span>`;
               
               // Show panel (collapsed by default)
               panel.style.display = 'block';
@@ -20717,7 +20717,7 @@ Output ONLY the JSON object now:`
                   // Update display
                   const team = STATE.teams[teamIndex];
                   const currentScore = team.score || 0;
-                  document.querySelector('.score-current').innerHTML = `Score: <span style="color: ${currentScore >= 0 ? '#00ff00' : '#ff4444'}">${currentScore}</span>`;
+                  document.querySelector('.score-current').innerHTML = `Score: <span style="color: ${currentScore >= 0 ? 'var(--primary-color)' : '#ff4444'}">${currentScore}</span>`;
                   
                   if (points > 0) {
                       playSuccess();
@@ -22267,7 +22267,7 @@ COACH: Iris Wang
                 </div>
                 <div class="le-section-content" id="le-story-content">
                     <div style="background: linear-gradient(135deg, #002200 0%, #003300 100%); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #00aa00;">
-                        <div style="font-size: 14px; color: #00ff00; margin-bottom: 10px;">✨ <strong>EASY EDITING - NO CODE NEEDED!</strong></div>
+                        <div style="font-size: 14px; color: var(--primary-color); margin-bottom: 10px;">✨ <strong>EASY EDITING - NO CODE NEEDED!</strong></div>
                         <div style="font-size: 12px; color: #88ff88; line-height: 1.6;">
                             1️⃣ Write your story in the box below (plain text)<br>
                             2️⃣ List any words you want students to click on in the "Clickable Keywords" box<br>
@@ -22366,7 +22366,7 @@ COACH: Iris Wang
                 </div>
                 <div class="le-section-content" id="le-frames-content">
                     <div style="background: linear-gradient(135deg, #002200 0%, #003300 100%); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #00aa00;">
-                        <div style="font-size: 14px; color: #00ff00; margin-bottom: 10px;">✨ <strong>EASY EDITING - NO CODE NEEDED!</strong></div>
+                        <div style="font-size: 14px; color: var(--primary-color); margin-bottom: 10px;">✨ <strong>EASY EDITING - NO CODE NEEDED!</strong></div>
                         <div style="font-size: 12px; color: #88ff88; line-height: 1.6;">
                             1️⃣ Write your sentence with blanks shown as underscores: ______<br>
                             2️⃣ List the answers (in order) in the "Answers" box below each frame<br>
@@ -23945,19 +23945,19 @@ console.log('[UPGRADE] Hints system disabled');
         <span class="score-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="24" height="24">
                 <!-- Targeting crosshair inspired by Star Wars/Space Odyssey -->
-                <circle cx="32" cy="32" r="24" fill="none" stroke="#00ff00" stroke-width="2"/>
-                <circle cx="32" cy="32" r="16" fill="none" stroke="#00ff00" stroke-width="1.5"/>
-                <circle cx="32" cy="32" r="4" fill="#00ff00" opacity="0.6"/>
+                <circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="32" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="32" cy="32" r="4" fill="currentColor" opacity="0.6"/>
                 <!-- Crosshair lines -->
-                <line x1="8" y1="32" x2="22" y2="32" stroke="#00ff00" stroke-width="2"/>
-                <line x1="42" y1="32" x2="56" y2="32" stroke="#00ff00" stroke-width="2"/>
-                <line x1="32" y1="8" x2="32" y2="22" stroke="#00ff00" stroke-width="2"/>
-                <line x1="32" y1="42" x2="32" y2="56" stroke="#00ff00" stroke-width="2"/>
+                <line x1="8" y1="32" x2="22" y2="32" stroke="currentColor" stroke-width="2"/>
+                <line x1="42" y1="32" x2="56" y2="32" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="8" x2="32" y2="22" stroke="currentColor" stroke-width="2"/>
+                <line x1="32" y1="42" x2="32" y2="56" stroke="currentColor" stroke-width="2"/>
                 <!-- Corner brackets -->
-                <path d="M12,12 L12,20 M12,12 L20,12" stroke="#00ff00" stroke-width="1.5" fill="none"/>
-                <path d="M52,12 L52,20 M52,12 L44,12" stroke="#00ff00" stroke-width="1.5" fill="none"/>
-                <path d="M12,52 L12,44 M12,52 L20,52" stroke="#00ff00" stroke-width="1.5" fill="none"/>
-                <path d="M52,52 L52,44 M52,52 L44,52" stroke="#00ff00" stroke-width="1.5" fill="none"/>
+                <path d="M12,12 L12,20 M12,12 L20,12" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M52,12 L52,20 M52,12 L44,12" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M12,52 L12,44 M12,52 L20,52" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M52,52 L52,44 M52,52 L44,52" stroke="currentColor" stroke-width="1.5" fill="none"/>
             </svg>
         </span>
         <span class="score-title">SCORE</span>
