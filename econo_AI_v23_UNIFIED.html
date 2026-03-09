@@ -10720,7 +10720,7 @@ IMPORTANT RULES:
                 const correctAnswer = selectedBlank.dataset.answer;
                 const defIndex = parseInt(selectedBlank.dataset.defIndex);
                 
-                if (word.toLowerCase() === correctAnswer.toLowerCase()) {
+                if (word.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
                     selectedBlank.textContent = word.toUpperCase();
                     selectedBlank.classList.add('filled', 'correct');
                     selectedBlank.classList.remove('selected');
@@ -15704,21 +15704,14 @@ Output ONLY the JSON object now:`
             };
             frameContainer.addEventListener('click', frameContainerClickHandler);
 
-            // Word bank delegation to ensure clicks always fill blanks
+            // Each word card already has an inline onclick="handleWordBankClick(...)"
+            // which calls event.stopPropagation(). A separate delegation listener on
+            // wordBank is therefore redundant and can cause double-fire on some
+            // browsers. Remove any previously registered delegation handler.
             if (wordBankClickHandler && wordBank) {
                 wordBank.removeEventListener('click', wordBankClickHandler);
             }
-            wordBankClickHandler = function(e) {
-                const card = e.target.closest('.terminal-card[data-word]');
-                if (!card) return;
-                handleWordClick({ target: card, currentTarget: card }, card.dataset.word);
-            };
-            if (wordBank) {
-                wordBank.addEventListener('click', wordBankClickHandler);
-            }
-
-            // Word bank click handler is now managed by handleWordClick function
-            // No need for delegation here as each card has its own onclick
+            wordBankClickHandler = null;
         }
 
         // Basic validator for the frame blanks. This provides a safe, minimal
@@ -17139,22 +17132,17 @@ Output ONLY the JSON object now:`
             selectedBlank = null;
             frameComplete = false;
 
-            // Clear storage when resetting
-            initializeFilledBlanksStorage();
+            // Do NOT reset filledBlanksStorage here — students lose their work if
+            // they navigate away and return. Storage is only cleared when a new
+            // lesson is loaded (via renderFrameScene / renderAllScenes).
 
             document.getElementById('checkFrames').disabled = true;
             document.getElementById('checkFrames').style.display = 'inline-block';
             document.getElementById('nextFromFrames').style.display = 'none';
 
-            document.querySelectorAll('.frame-blank').forEach(blank => {
-                blank.classList.remove('filled', 'wrong', 'selected', 'correct');
-                blank.textContent = '_____';
-            });
-
-            document.querySelectorAll('.terminal-card').forEach(card => {
-                card.style.opacity = '1';
-                card.style.pointerEvents = 'auto';
-            });
+            // Re-render the current definition, restoring any previously filled blanks
+            // from storage instead of resetting every blank to '_____'.
+            renderCurrentDefinition();
         }
 
         window.selectBlank = function(blank) {
@@ -17203,7 +17191,7 @@ Output ONLY the JSON object now:`
                 const correctAnswer = selectedBlank.dataset.answer;
                 const defIndex = parseInt(selectedBlank.dataset.defIndex);
 
-                if (word === correctAnswer) {
+                if (word.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
                     selectedBlank.textContent = word.toUpperCase();
                     selectedBlank.classList.add('filled', 'correct');
                     selectedBlank.classList.remove('selected');
