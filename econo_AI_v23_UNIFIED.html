@@ -1044,6 +1044,26 @@
         
         body.theme-sunrise .settings-title {
             color: #c92a2a !important;
+            border-bottom-color: #ffc9c9 !important;
+        }
+        
+        body.theme-sunrise .settings-tabs-nav {
+            border-bottom-color: #ffc9c9 !important;
+        }
+
+        body.theme-sunrise .settings-tab-btn {
+            color: #e03131 !important;
+            border-right-color: #ffc9c9 !important;
+        }
+
+        body.theme-sunrise .settings-tab-btn:hover,
+        body.theme-sunrise .settings-tab-btn.active {
+            background: #fff5f5 !important;
+            color: #c92a2a !important;
+        }
+
+        body.theme-sunrise .settings-tab-btn.active {
+            border-bottom-color: #c92a2a !important;
         }
         
         body.theme-sunrise .setting-group {
@@ -1239,6 +1259,26 @@
         
         body.theme-electric .settings-title {
             color: #5f3dc4 !important;
+            border-bottom-color: #eebefa !important;
+        }
+        
+        body.theme-electric .settings-tabs-nav {
+            border-bottom-color: #eebefa !important;
+        }
+
+        body.theme-electric .settings-tab-btn {
+            color: #6741d9 !important;
+            border-right-color: #eebefa !important;
+        }
+
+        body.theme-electric .settings-tab-btn:hover,
+        body.theme-electric .settings-tab-btn.active {
+            background: #f8f0fc !important;
+            color: #5f3dc4 !important;
+        }
+
+        body.theme-electric .settings-tab-btn.active {
+            border-bottom-color: #5f3dc4 !important;
         }
         
         body.theme-electric .setting-group {
@@ -3528,14 +3568,16 @@
             right: var(--space-4);
             background: var(--background);
             border: 2px solid var(--border-color);
-            padding: var(--space-5);
+            padding: 0;
             border-radius: 3px;
             z-index: 1999;
             transform: translateX(100%);
             transition: transform 0.3s ease;
-            width: 220px;
-            max-height: 400px;
-            overflow-y: auto;
+            width: 250px;
+            max-height: 500px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
 
@@ -3545,14 +3587,68 @@
 
         .settings-title {
             color: var(--primary-bright);
-            margin-bottom: var(--space-4);
-            font-size: 12px;
+            padding: var(--space-3) var(--space-4);
+            font-size: 11px;
             font-weight: bold;
             text-align: center;
+            border-bottom: 1px solid var(--border-dim);
+            flex-shrink: 0;
+        }
+
+        /* Tab Navigation */
+        .settings-tabs-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 1px solid var(--border-dim);
+            flex-shrink: 0;
+        }
+
+        .settings-tab-btn {
+            background: transparent;
+            color: var(--primary-dim);
+            border: none;
+            border-right: 1px solid var(--border-dim);
+            padding: 5px 2px;
+            font-size: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            line-height: 1.3;
+        }
+
+        .settings-tab-btn:last-child {
+            border-right: none;
+        }
+
+        .settings-tab-btn:hover {
+            background: var(--background-light);
+            color: var(--primary-bright);
+        }
+
+        .settings-tab-btn.active {
+            background: var(--background-light);
+            color: var(--primary-bright);
+            border-bottom: 2px solid var(--primary-bright);
+        }
+
+        /* Tab Panes */
+        .settings-tabs-body {
+            overflow-y: auto;
+            flex: 1;
+            padding: var(--space-3);
+        }
+
+        .settings-tab-pane {
+            display: none;
+        }
+
+        .settings-tab-pane.active {
+            display: block;
         }
 
         .setting-group {
-            margin: var(--space-4) 0;
+            margin: var(--space-3) 0;
             padding: var(--space-3);
             background: var(--background-light);
             border: 1px solid var(--border-dim);
@@ -6103,98 +6199,135 @@
     <button class="settings-toggle" onclick="toggleSettings()">⚙</button>
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-title">SYSTEM SETTINGS | 系统设置</div>
-        
-        <!-- Timer Settings -->
-        <div class="setting-group">
-            <div class="setting-label">TIMER DURATION | 计时器时长</div>
-            <div class="timer-buttons">
-                <button class="timer-btn" onclick="setTimer(5)">5M</button>
-                <button class="timer-btn" onclick="setTimer(10)">10M</button>
-                <button class="timer-btn" onclick="setTimer(15)">15M</button>
-                <button class="timer-btn" onclick="setTimer(20)">20M</button>
-                <button class="timer-btn" onclick="setTimer(30)">30M</button>
-                <button class="timer-btn" onclick="setTimer(45)">45M</button>
-            </div>
-            <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
-                <label for="customTimer">
-                    <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
-                </label>
-                <span style="color: var(--primary-dim); font-size: 9px;">min</span>
-                <button class="timer-btn" onclick="setCustomTimer()">SET</button>
-            </div>
+
+        <!-- Tab Navigation -->
+        <div class="settings-tabs-nav" role="tablist" aria-label="Settings categories">
+            <button class="settings-tab-btn active" role="tab" aria-selected="true" aria-controls="stab-display" tabindex="0" onclick="switchSettingsTab('display')">🖥️<br>DISPLAY</button>
+            <button class="settings-tab-btn" role="tab" aria-selected="false" aria-controls="stab-ai" tabindex="-1" onclick="switchSettingsTab('ai')">🤖<br>AI</button>
+            <button class="settings-tab-btn" role="tab" aria-selected="false" aria-controls="stab-lesson" tabindex="-1" onclick="switchSettingsTab('lesson')">📚<br>LESSON</button>
+            <button class="settings-tab-btn" role="tab" aria-selected="false" aria-controls="stab-storage" tabindex="-1" onclick="switchSettingsTab('storage')">💾<br>DATA</button>
         </div>
 
-        <!-- Theme Settings -->
-        <div class="setting-group">
-            <div class="setting-label">THEME | 主题</div>
-            <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
-            </div>
-            <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
-            <div style="margin-top: 8px;">
-                <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
-                    🧘 CALM MODE | 安静模式
-                </button>
-            </div>
-        </div>
+        <!-- Tab Body -->
+        <div class="settings-tabs-body">
 
-        <!-- Template Management -->
-        <div class="setting-group">
-            <div class="setting-label">TEMPLATES | 模板管理</div>
-            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
-                <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
-                <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
-            </div>
-            
-            <!-- APP DIFFICULTY SELECTOR -->
-            <div class="setting-label" style="margin-top: 8px; font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
-            <!-- AI Source Indicator -->
-            <div id="currentAISource" style="background: rgba(139,0,255,0.2); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; font-size: 10px; text-align: center; border: 1px solid #8B00FF;">
-                🤖 AI: <span id="aiSourceLabel" style="font-weight: bold; color: #8B00FF;">Groq</span>
-            </div>
-            
-            <div style="display: flex; gap: 3px; margin-bottom: 8px;">
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
-            </div>
-            
-            <!-- Quick Setup Button -->
-            <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; margin-bottom: 8px; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
-            
-            <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
-            <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
-            <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
-            <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
-            <button class="timer-btn" onclick="resetToDefault()" style="width: 100%;">RESET SYSTEM</button>
-        </div>
+            <!-- === DISPLAY TAB === -->
+            <div class="settings-tab-pane active" id="stab-display" role="tabpanel" aria-hidden="false">
 
-        <!-- AI Generator -->
-        <div class="setting-group">
-            <div class="setting-label">AI GENERATOR | AI生成器</div>
-            <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
-            <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
-        </div>
+                <!-- Timer Settings -->
+                <div class="setting-group">
+                    <div class="setting-label">TIMER DURATION | 计时器时长</div>
+                    <div class="timer-buttons">
+                        <button class="timer-btn" onclick="setTimer(5)">5M</button>
+                        <button class="timer-btn" onclick="setTimer(10)">10M</button>
+                        <button class="timer-btn" onclick="setTimer(15)">15M</button>
+                        <button class="timer-btn" onclick="setTimer(20)">20M</button>
+                        <button class="timer-btn" onclick="setTimer(30)">30M</button>
+                        <button class="timer-btn" onclick="setTimer(45)">45M</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
+                        <label for="customTimer">
+                            <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
+                        </label>
+                        <span style="color: var(--primary-dim); font-size: 9px;">min</span>
+                        <button class="timer-btn" onclick="setCustomTimer()">SET</button>
+                    </div>
+                </div>
 
-        <!-- Storage Management -->
-        <div class="setting-group">
-            <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
-            <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
-            <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
-            <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
-            <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
-        </div>
+                <!-- Theme Settings -->
+                <div class="setting-group">
+                    <div class="setting-label">THEME | 主题</div>
+                    <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
+                        <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
+                        <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
+                    </div>
+                    <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
+                    <div style="margin-top: 8px;">
+                        <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
+                            🧘 CALM MODE | 安静模式
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Emergency Controls -->
+            </div><!-- /stab-display -->
+
+            <!-- === AI TAB === -->
+            <div class="settings-tab-pane" id="stab-ai" role="tabpanel" aria-hidden="true">
+
+                <!-- Current AI Source Indicator -->
+                <div class="setting-group">
+                    <div class="setting-label">AI STATUS | AI状态</div>
+                    <div id="currentAISource" style="background: rgba(139,0,255,0.2); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; font-size: 10px; text-align: center; border: 1px solid #8B00FF;">
+                        🤖 AI: <span id="aiSourceLabel" style="font-weight: bold; color: #8B00FF;">Groq</span>
+                    </div>
+                </div>
+
+                <!-- AI Generator -->
+                <div class="setting-group">
+                    <div class="setting-label">AI GENERATOR | AI生成器</div>
+                    <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
+                    <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
+                </div>
+
+            </div><!-- /stab-ai -->
+
+            <!-- === LESSON TAB === -->
+            <div class="settings-tab-pane" id="stab-lesson" role="tabpanel" aria-hidden="true">
+
+                <!-- Duration & Difficulty -->
+                <div class="setting-group">
+                    <div class="setting-label">DURATION | 课时长度</div>
+                    <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                        <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
+                        <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
+                    </div>
+
+                    <div class="setting-label" style="margin-top: 8px; font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
+                    <div style="display: flex; gap: 3px; margin-bottom: 8px;">
+                        <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
+                        <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
+                        <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
+                    </div>
+
+                    <!-- Quick Setup Button -->
+                    <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
+                </div>
+
+                <!-- Template Management -->
+                <div class="setting-group">
+                    <div class="setting-label">TEMPLATES | 模板管理</div>
+                    <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
+                    <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
+                    <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
+                    <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
+                    <button class="timer-btn" onclick="resetToDefault()" style="width: 100%;">RESET SYSTEM</button>
+                </div>
+
+            </div><!-- /stab-lesson -->
+
+            <!-- === STORAGE TAB === -->
+            <div class="settings-tab-pane" id="stab-storage" role="tabpanel" aria-hidden="true">
+
+                <!-- Storage Management -->
+                <div class="setting-group">
+                    <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
+                    <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
+                    <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
+                    <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
+                    <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
+                </div>
+
+            </div><!-- /stab-storage -->
+
+        </div><!-- /settings-tabs-body -->
 
     </div>
 
@@ -9427,6 +9560,33 @@ Chapter 5: Money and Banking
             playBeep();
         }
         window.toggleSettings = toggleSettings;
+
+        function switchSettingsTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+                btn.setAttribute('tabindex', '-1');
+            });
+            // Update tab panes
+            document.querySelectorAll('.settings-tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+                pane.setAttribute('aria-hidden', 'true');
+            });
+            // Activate selected tab
+            const activeBtn = document.querySelector(`.settings-tab-btn[aria-controls="stab-${tabName}"]`);
+            const activePane = document.getElementById(`stab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.setAttribute('aria-selected', 'true');
+                activeBtn.setAttribute('tabindex', '0');
+            }
+            if (activePane) {
+                activePane.classList.add('active');
+                activePane.setAttribute('aria-hidden', 'false');
+            }
+        }
+        window.switchSettingsTab = switchSettingsTab;
         
         // ============================================
         // HAL AI ASSISTANT FUNCTIONS - SMART with Groq API
