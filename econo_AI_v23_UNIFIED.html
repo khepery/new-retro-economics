@@ -8932,6 +8932,35 @@ Chapter 5: Money and Banking
             playMultiTone(freqs, dur);
         }
 
+        // Distinct escalating tones for the MCQ thinking-timer countdown (3, 2, 1, 0)
+        function playCountdownWarning(count) {
+            const theme = getCurrentTheme();
+            const baseFreq = themeSounds[theme].beep[0];
+            switch (count) {
+                case 3:
+                    // Mild alert: single lower-pitched tone
+                    playTone(Math.round(baseFreq * 0.75), 150);
+                    break;
+                case 2:
+                    // Moderate alert: two rapid tones
+                    playTone(baseFreq, 150);
+                    setTimeout(() => playTone(baseFreq, 150), 180);
+                    break;
+                case 1:
+                    // Urgent alert: three ascending tones
+                    playTone(baseFreq, 120);
+                    setTimeout(() => playTone(Math.round(baseFreq * 1.25), 120), 140);
+                    setTimeout(() => playTone(Math.round(baseFreq * 1.5), 180), 280);
+                    break;
+                case 0:
+                    // Final second: full warning sound
+                    playWarning();
+                    break;
+                default:
+                    playBeep();
+            }
+        }
+
         function playVictory() {
             const theme = getCurrentTheme();
             const [freqs, dur] = themeSounds[theme].victory;
@@ -17766,7 +17795,7 @@ Output ONLY the JSON object now:`
                 }
                 
                 if (countdown <= 3 && countdown >= 0) {
-                    playBeep();
+                    playCountdownWarning(countdown);
                 }
             }, 1000);
         };
