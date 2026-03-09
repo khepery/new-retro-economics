@@ -2546,6 +2546,26 @@
             }
         }
 
+        /* Mobile: tighten comic grid padding and stack bubbles vertically */
+        @media (max-width: 480px) {
+            .comic-grid {
+                gap: 16px;
+                padding: 8px;
+            }
+
+            .comic-bubble {
+                flex: 1 1 100%;
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .comic-bubble::before,
+            .comic-bubble:nth-child(2)::before {
+                left: 20px;
+                right: auto;
+            }
+        }
+
         .comic-panel {
             border: 4px solid var(--border-color);
             border-radius: 12px;
@@ -3043,6 +3063,16 @@
         }
 
         @container (width < 500px) {
+            .keywords-grid, .words-grid {
+                grid-template-columns: 1fr;
+            }
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fallback for browsers without container query support */
+        @media (max-width: 400px) {
             .keywords-grid, .words-grid {
                 grid-template-columns: 1fr;
             }
@@ -6501,6 +6531,32 @@
             height: 16px;
         }
         
+        /* MOBILE - small screens (phones up to 480px) */
+        @media (max-width: 480px) {
+            #halAssistantPanel {
+                width: calc(100vw - 16px) !important;
+                max-width: 100vw !important;
+                right: 8px !important;
+                left: 8px !important;
+                bottom: 70px !important;
+                border-radius: 10px !important;
+            }
+
+            #halChatMessages {
+                max-height: 220px !important;
+            }
+
+            .hal-difficulty-btn {
+                font-size: 9px !important;
+                padding: 6px 4px !important;
+            }
+
+            #halAssistantBtn {
+                right: 12px !important;
+                bottom: 12px !important;
+            }
+        }
+
         /* BIG SCREEN OPTIMIZATIONS - 1200px+ displays */
         @media (min-width: 1200px) {
             #halAssistantPanel {
@@ -23865,7 +23921,7 @@ console.log('[UPGRADE] Hints system disabled');
 
 <!-- Save/Load Lessons Modal -->
 <div class="modal-overlay" id="savedLessonsModal" onclick="closeSavedLessonsModal()">
-    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 650px; max-height: 85vh; overflow-y: auto;">
+    <div class="modal-content" onclick="event.stopPropagation()" style="width: 95vw; max-width: 650px; max-height: 85vh; overflow-y: auto;">
         <div class="modal-title">💾 SAVED LESSONS | 已保存的课程</div>
         
         <!-- DOWNLOAD FULL LESSON - NEW! -->
