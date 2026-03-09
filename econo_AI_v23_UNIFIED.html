@@ -10931,7 +10931,7 @@ IMPORTANT RULES:
             
             // Settings optimized for comprehensive content extraction
             MAX_TOKENS: 16000,  // Large to prevent truncation
-            TEMPERATURE: 0.6,   // Balanced creativity and accuracy
+            TEMPERATURE: 0.3,   // Low temperature for reliable JSON schema adherence (reduced from 0.6 per deep audit Task 5)
             MAX_PDF_PAGES: 100, // Smart sampling will handle large docs
             MAX_PDF_CHARS: 15000, // More content for AI context
             MIN_PDF_CHARS: 100,
@@ -12433,9 +12433,8 @@ Output ONLY the JSON object now:`
                     stream: false
                 };
 
-                // FIX: Only use JSON mode on retry if first attempt got close but failed parsing
-                // JSON mode is very strict and often fails completely
-                if (config.isGroq && useJsonMode) {
+                // Use JSON mode on retry for Groq and OpenAI — both support response_format and it improves schema compliance
+                if ((config.isGroq || config.isOpenAI) && useJsonMode) {
                     requestBody.response_format = { type: 'json_object' };
                 }
 
