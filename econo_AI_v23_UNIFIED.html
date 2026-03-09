@@ -6257,6 +6257,7 @@
             <button class="hal-source-btn" data-source="openai" onclick="setHALSource('openai')">OpenAI</button>
             <button class="hal-source-btn" data-source="deepseek" onclick="setHALSource('deepseek')">DeepSeek</button>
             <button class="hal-source-btn" data-source="anthropic" onclick="setHALSource('anthropic')">Claude</button>
+            <button class="hal-source-btn" data-source="gemini" onclick="setHALSource('gemini')">Gemini</button>
         </div>
         
         <!-- Difficulty Level Selector for Student Differentiation -->
@@ -6716,8 +6717,26 @@
                             <input type="radio" name="aiProvider" value="anthropic" id="providerAnthropic" onchange="toggleAPIKeyField()"> Claude
                         </label>
                         <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
+                            <input type="radio" name="aiProvider" value="gemini" id="providerGemini" onchange="toggleAPIKeyField()"> Gemini ✨
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color: var(--primary-bright);">
                             <input type="radio" name="aiProvider" value="local" id="providerLocal" onchange="toggleAPIKeyField()"> Local
                         </label>
+                    </div>
+                    <!-- Model selector — shown for OpenAI and DeepSeek -->
+                    <div id="openaiModelSection" style="display:none; margin-bottom: 6px;">
+                        <label style="font-size:11px; color:#FFD700;">OpenAI Model:</label>
+                        <select id="openaiModelSelect" style="width:100%; padding:4px 6px; background:var(--background); border:2px solid var(--border-color); color:var(--primary-bright); font-family:monospace; border-radius:3px; font-size:12px;">
+                            <option value="gpt-4o-mini">gpt-4o-mini (fast, economical)</option>
+                            <option value="gpt-4o">gpt-4o (premium, better JSON)</option>
+                        </select>
+                    </div>
+                    <div id="deepseekModelSection" style="display:none; margin-bottom: 6px;">
+                        <label style="font-size:11px; color:#FFD700;">DeepSeek Model:</label>
+                        <select id="deepseekModelSelect" style="width:100%; padding:4px 6px; background:var(--background); border:2px solid var(--border-color); color:var(--primary-bright); font-family:monospace; border-radius:3px; font-size:12px;">
+                            <option value="deepseek-chat">deepseek-chat (standard)</option>
+                            <option value="deepseek-reasoner">deepseek-reasoner (reasoning model)</option>
+                        </select>
                     </div>
                     <input type="password" id="groqApiKey" placeholder="Enter API key" 
                            style="width: 100%; padding: var(--space-2); background: var(--background); border: 2px solid var(--border-color); color: var(--primary-bright); font-family: monospace; border-radius: 3px; font-size: 12px;">
@@ -9499,7 +9518,8 @@ Chapter 5: Money and Banking
                 'groq': 'providerGroq',
                 'openai': 'providerOpenAI',
                 'deepseek': 'providerDeepseek',
-                'anthropic': 'providerAnthropic'
+                'anthropic': 'providerAnthropic',
+                'gemini': 'providerGemini'
             };
             
             const radioId = providerMap[source];
@@ -9731,12 +9751,12 @@ COMMUNICATION STYLE:
             try {
                 const cfg = getProviderConfig();
                 if (cfg.isLocal) {
-                    throw new Error('HAL helper requires a hosted provider (Groq/OpenAI/DeepSeek/Claude).');
+                    throw new Error('HAL helper requires a hosted provider (Groq/OpenAI/DeepSeek/Claude/Gemini).');
                 }
                 const apiKey = cfg.apiKey || localStorage.getItem('ai_api_key') || '';
                 if (!apiKey) {
                     document.getElementById(typingId)?.remove();
-                    addHALMessage('⚠️ Please enter your API key in AI GENERATE settings (Groq/OpenAI/DeepSeek/Claude) to enable smart responses.', 'assistant');
+                    addHALMessage('⚠️ Please enter your API key in AI GENERATE settings (Groq/OpenAI/DeepSeek/Claude/Gemini) to enable smart responses.', 'assistant');
                     return;
                 }
                 
@@ -9789,6 +9809,31 @@ IMPORTANT RULES:
                     
                     data = await response.json();
                     aiResponse = data.content?.[0]?.text || 'Sorry, I could not generate a response.';
+                } else if (cfg.isGemini) {
+                    // Google Gemini API — different URL structure and request/response format
+                    const geminiUrl = `${cfg.url}/${cfg.model}:generateContent?key=${apiKey}`;
+                    const geminiMessages = halConversationHistory.slice(-6).map(m => ({
+                        role: m.role === 'assistant' ? 'model' : 'user',
+                        parts: [{ text: m.content }]
+                    }));
+                    geminiMessages.push({ role: 'user', parts: [{ text: question }] });
+
+                    response = await fetch(geminiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            systemInstruction: { parts: [{ text: systemPrompt }] },
+                            contents: geminiMessages,
+                            generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Gemini API error: ${response.status}`);
+                    }
+
+                    data = await response.json();
+                    aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not generate a response.';
                 } else {
                     // Standard OpenAI-compatible API format (Groq, OpenAI, DeepSeek)
                     const messages = [
@@ -10281,7 +10326,8 @@ IMPORTANT RULES:
                     'groq': 'Groq',
                     'openai': 'OpenAI',
                     'deepseek': 'DeepSeek',
-                    'anthropic': 'Claude'
+                    'anthropic': 'Claude',
+                    'gemini': 'Gemini'
                 };
                 label.textContent = sourceNames[source] || source;
             }
@@ -10429,6 +10475,19 @@ IMPORTANT RULES:
                                     font-size: 11px;
                                     ${savedSource === 'anthropic' ? 'box-shadow: 0 0 10px #ff3333;' : ''}
                                 ">Claude</button>
+                                <button onclick="selectStartupAISource('gemini')" id="setupGemini" class="setup-ai-btn" style="
+                                    flex: 1;
+                                    min-width: 70px;
+                                    padding: 10px;
+                                    background: ${savedSource === 'gemini' ? '#ff3333' : 'rgba(255,51,51,0.2)'};
+                                    border: 2px solid #ff3333;
+                                    color: ${savedSource === 'gemini' ? '#000' : '#ff6666'};
+                                    border-radius: 20px;
+                                    cursor: pointer;
+                                    font-family: 'Share Tech Mono', monospace;
+                                    font-size: 11px;
+                                    ${savedSource === 'gemini' ? 'box-shadow: 0 0 10px #ff3333;' : ''}
+                                ">Gemini ✨</button>
                             </div>
                             <div style="font-size: 10px; color: #888; margin-top: 8px; text-align: center;">
                                 💡 You can change these anytime in Settings or HAL panel
@@ -10479,7 +10538,7 @@ IMPORTANT RULES:
             updateAISourceLabel();
             
             // Update modal buttons visually
-            const sourceMap = {'groq': 'setupGroq', 'openai': 'setupOpenAI', 'deepseek': 'setupDeepSeek', 'anthropic': 'setupClaude'};
+            const sourceMap = {'groq': 'setupGroq', 'openai': 'setupOpenAI', 'deepseek': 'setupDeepSeek', 'anthropic': 'setupClaude', 'gemini': 'setupGemini'};
             Object.entries(sourceMap).forEach(([src, id]) => {
                 const btn = document.getElementById(id);
                 if (btn) {
@@ -10912,13 +10971,18 @@ IMPORTANT RULES:
             GROQ_MODEL: 'llama-3.3-70b-versatile', // Best for structured output
             // OpenAI
             OPENAI_API_URL: 'https://api.openai.com/v1/chat/completions',
-            OPENAI_MODEL: 'gpt-4o-mini',
+            OPENAI_MODEL: 'gpt-4o-mini',        // default; user can choose gpt-4o
+            OPENAI_MODEL_PREMIUM: 'gpt-4o',     // premium option
             // DeepSeek
             DEEPSEEK_API_URL: 'https://api.deepseek.com/v1/chat/completions',
-            DEEPSEEK_MODEL: 'deepseek-chat',
+            DEEPSEEK_MODEL: 'deepseek-chat',             // default
+            DEEPSEEK_MODEL_REASONER: 'deepseek-reasoner', // reasoning model option
             // Anthropic/Claude
             ANTHROPIC_API_URL: 'https://api.anthropic.com/v1/messages',
             ANTHROPIC_MODEL: 'claude-sonnet-4-20250514',
+            // Google Gemini (free tier, no VPN needed in China)
+            GEMINI_API_URL: 'https://generativelanguage.googleapis.com/v1beta/models',
+            GEMINI_MODEL: 'gemini-2.0-flash', // free tier, fast, excellent JSON
             
             // OpenAI Image API for comic panels
             OPENAI_IMAGE_API_URL: 'https://api.openai.com/v1/images/generations',
@@ -10944,12 +11008,15 @@ IMPORTANT RULES:
             const help = document.getElementById('providerHelpText');
             const keyInput = document.getElementById('groqApiKey');
             const localSection = document.getElementById('localLLMSection');
+            const openaiModelSection = document.getElementById('openaiModelSection');
+            const deepseekModelSection = document.getElementById('deepseekModelSection');
 
             const helpTexts = {
                 groq: "Groq: get a free key at console.groq.com. Key is stored in your browser.",
                 openai: "OpenAI: use https://platform.openai.com API keys (starts with sk-). Billing applies.",
                 deepseek: "DeepSeek: use https://platform.deepseek.com API keys (sk-).", 
                 anthropic: "Anthropic: use https://console.anthropic.com API keys (sk-ant-). Billing applies.",
+                gemini: "Gemini: get a free key at aistudio.google.com. Free tier available, no VPN needed in China.",
                 local: "Local: no key needed. Make sure your local server exposes /v1/chat/completions."
             };
 
@@ -10958,6 +11025,7 @@ IMPORTANT RULES:
                 openai: 'sk-xxxxxxxxxxxxxxxx',
                 deepseek: 'sk-xxxxxxxxxxxxxxxx',
                 anthropic: 'sk-ant-xxxxxxxxxxxxxxxx',
+                gemini: 'AIza-xxxxxxxxxxxxxxxx',
                 local: 'Not required for local'
             };
 
@@ -10969,6 +11037,8 @@ IMPORTANT RULES:
                 keyInput.value = loadProviderAPIKey(provider);
             }
             if (localSection) localSection.style.display = provider === 'local' ? 'block' : 'none';
+            if (openaiModelSection) openaiModelSection.style.display = provider === 'openai' ? 'block' : 'none';
+            if (deepseekModelSection) deepseekModelSection.style.display = provider === 'deepseek' ? 'block' : 'none';
             
             // Save the selected provider
             saveSelectedProvider(provider);
@@ -11187,11 +11257,16 @@ IMPORTANT RULES:
             const apiKey = document.getElementById('groqApiKey')?.value || '';
             const localUrl = document.getElementById('localLLMUrl')?.value || AI_GENERATOR_CONFIG.LOCAL_LLM_URL;
 
+            // Respect user-selected models for OpenAI and DeepSeek
+            const openaiModel = document.getElementById('openaiModelSelect')?.value || AI_GENERATOR_CONFIG.OPENAI_MODEL;
+            const deepseekModel = document.getElementById('deepseekModelSelect')?.value || AI_GENERATOR_CONFIG.DEEPSEEK_MODEL;
+
             const map = {
                 groq: { url: AI_GENERATOR_CONFIG.GROQ_API_URL, model: AI_GENERATOR_CONFIG.GROQ_MODEL },
-                openai: { url: AI_GENERATOR_CONFIG.OPENAI_API_URL, model: AI_GENERATOR_CONFIG.OPENAI_MODEL },
-                deepseek: { url: AI_GENERATOR_CONFIG.DEEPSEEK_API_URL, model: AI_GENERATOR_CONFIG.DEEPSEEK_MODEL },
+                openai: { url: AI_GENERATOR_CONFIG.OPENAI_API_URL, model: openaiModel },
+                deepseek: { url: AI_GENERATOR_CONFIG.DEEPSEEK_API_URL, model: deepseekModel },
                 anthropic: { url: AI_GENERATOR_CONFIG.ANTHROPIC_API_URL, model: AI_GENERATOR_CONFIG.ANTHROPIC_MODEL },
+                gemini: { url: AI_GENERATOR_CONFIG.GEMINI_API_URL, model: AI_GENERATOR_CONFIG.GEMINI_MODEL },
                 local: { url: `${localUrl}${AI_GENERATOR_CONFIG.LOCAL_COMPLETIONS_ENDPOINT}` , model: AI_GENERATOR_CONFIG.LOCAL_MODEL_NAME }
             };
 
@@ -11203,6 +11278,7 @@ IMPORTANT RULES:
                 isOpenAI: provider === 'openai',
                 isDeepseek: provider === 'deepseek',
                 isAnthropic: provider === 'anthropic',
+                isGemini: provider === 'gemini',
                 isLocal: provider === 'local',
                 apiKey,
                 localUrl,
@@ -11218,6 +11294,7 @@ IMPORTANT RULES:
             if (config.isOpenAI) return { short: 'OpenAI', long: 'OpenAI API' };
             if (config.isDeepseek) return { short: 'DeepSeek', long: 'DeepSeek API' };
             if (config.isAnthropic) return { short: 'Claude', long: 'Anthropic Claude API' };
+            if (config.isGemini) return { short: 'Gemini', long: 'Google Gemini API' };
             if (config.isLocal) return { short: 'Local LLM', long: 'Local LLM (llama.cpp)' };
             return { short: 'AI provider', long: 'AI provider' };
         }
@@ -12419,8 +12496,8 @@ Output ONLY the JSON object now:`
                     'Content-Type': 'application/json'
                 };
                 
-                // Add Authorization header for hosted providers
-                if (!config.isLocal && config.apiKey) {
+                // Add Authorization header for hosted providers (not Gemini — it uses query param)
+                if (!config.isLocal && !config.isGemini && config.apiKey) {
                     headers['Authorization'] = `Bearer ${config.apiKey}`;
                 }
 
@@ -12440,7 +12517,47 @@ Output ONLY the JSON object now:`
                 }
 
                 try {
-                    const response = await fetch(config.url, {
+                    let response, data, content;
+
+                    if (config.isGemini) {
+                        // Gemini uses a completely different API format
+                        const geminiUrl = `${config.url}/${config.model}:generateContent?key=${config.apiKey}`;
+                        // Convert OpenAI-style messages to Gemini format
+                        const systemMsg = messages.find(m => m.role === 'system');
+                        const userMessages = messages.filter(m => m.role !== 'system');
+                        const geminiBody = {
+                            contents: userMessages.map(m => ({
+                                role: m.role === 'assistant' ? 'model' : 'user',
+                                parts: [{ text: m.content }]
+                            })),
+                            generationConfig: {
+                                temperature: AI_GENERATOR_CONFIG.TEMPERATURE,
+                                maxOutputTokens: AI_GENERATOR_CONFIG.MAX_TOKENS
+                            }
+                        };
+                        if (systemMsg) {
+                            geminiBody.systemInstruction = { parts: [{ text: systemMsg.content }] };
+                        }
+                        response = await fetch(geminiUrl, {
+                            method: 'POST',
+                            mode: 'cors',
+                            credentials: 'omit',
+                            headers,
+                            body: JSON.stringify(geminiBody)
+                        });
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            console.error('[AI GENERATOR] Gemini API Error:', errorText);
+                            let errorMessage = `Server returned ${response.status}`;
+                            try { errorMessage = JSON.parse(errorText)?.error?.message || errorMessage; } catch(e) {}
+                            if (response.status === 400) throw new Error(`Invalid API key or request: ${errorMessage}`);
+                            if (response.status === 429) throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+                            throw new Error(`Gemini API Error: ${errorMessage}`);
+                        }
+                        data = await response.json();
+                        content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                    } else {
+                    response = await fetch(config.url, {
                         method: 'POST',
                         mode: 'cors',
                         credentials: 'omit',
@@ -12479,11 +12596,12 @@ Output ONLY the JSON object now:`
                         throw new Error(`API Error: ${errorMessage}`);
                     }
 
-                    const data = await response.json();
-                    const content = data.choices?.[0]?.message?.content ||
+                        data = await response.json();
+                        content = data.choices?.[0]?.message?.content ||
                         data.choices?.[0]?.text ||
                         data.text ||
                         '';
+                    } // end non-Gemini
 
                     lastRawResponse = content || '';
                     console.log('[AI GENERATOR] Raw response:', lastRawResponse.slice(0, 500) + '...');
@@ -14538,6 +14656,8 @@ Output ONLY the JSON object now:`
                     helpText = 'OpenAI: If you see rate limits (429), wait 30–60s before retrying, reduce request frequency/size, or try a lighter model such as gpt-4o-mini. Check billing/usage at platform.openai.com.';
                 } else if (config.isDeepseek) {
                     helpText = 'DeepSeek: Rate limits can occur during busy periods. Wait a moment, retry, or switch to a less busy model. Confirm your API key and balance.';
+                } else if (config.isGemini) {
+                    helpText = 'Gemini: Get a free API key at aistudio.google.com. No VPN needed in China. Check your quota at console.cloud.google.com.';
                 } else if (config.isLocal) {
                     helpText = `Make sure llama.cpp is running at ${config.localUrl}`;
                 } else {
