@@ -3534,7 +3534,7 @@
             transform: translateX(100%);
             transition: transform 0.3s ease;
             width: 220px;
-            max-height: 400px;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
         }
@@ -3611,6 +3611,48 @@
             margin: 4px 0;
             border-radius: 2px;
             font-size: 9px;
+        }
+
+        /* Settings Panel Tabs */
+        .settings-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            margin-bottom: var(--space-3);
+        }
+
+        .settings-tab-btn {
+            background: var(--background);
+            color: var(--primary-dim);
+            border: 1px solid var(--border-dim);
+            padding: 5px 2px;
+            font-size: 8px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-align: center;
+            transition: all 0.2s ease;
+            line-height: 1.3;
+        }
+
+        .settings-tab-btn:hover {
+            background: var(--background-light);
+            color: var(--primary-bright);
+            border-color: var(--primary-dim);
+        }
+
+        .settings-tab-btn.active {
+            background: var(--background-light);
+            color: var(--primary-bright);
+            border-color: var(--primary-bright);
+            box-shadow: 0 0 6px rgba(0, 255, 0, 0.3);
+        }
+
+        .settings-tab-pane {
+            display: none;
+        }
+
+        .settings-tab-pane.active {
+            display: block;
         }
 
         /* MODAL - HIGHEST Z-INDEX for visibility above fullscreen */
@@ -6100,101 +6142,131 @@
     </div>
 
     <!-- Settings Panel -->
-    <button class="settings-toggle" onclick="toggleSettings()">⚙</button>
+    <button class="settings-toggle" onclick="toggleSettings()" title="System Settings | 系统设置">⚙</button>
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-title">SYSTEM SETTINGS | 系统设置</div>
-        
-        <!-- Timer Settings -->
-        <div class="setting-group">
-            <div class="setting-label">TIMER DURATION | 计时器时长</div>
-            <div class="timer-buttons">
-                <button class="timer-btn" onclick="setTimer(5)">5M</button>
-                <button class="timer-btn" onclick="setTimer(10)">10M</button>
-                <button class="timer-btn" onclick="setTimer(15)">15M</button>
-                <button class="timer-btn" onclick="setTimer(20)">20M</button>
-                <button class="timer-btn" onclick="setTimer(30)">30M</button>
-                <button class="timer-btn" onclick="setTimer(45)">45M</button>
-            </div>
-            <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
-                <label for="customTimer">
-                    <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
-                </label>
-                <span style="color: var(--primary-dim); font-size: 9px;">min</span>
-                <button class="timer-btn" onclick="setCustomTimer()">SET</button>
-            </div>
+
+        <!-- Tab Navigation -->
+        <div class="settings-tabs" role="tablist" aria-label="Settings categories">
+            <button class="settings-tab-btn active" id="sTab-display" role="tab" aria-selected="true" aria-controls="settingsTab-display" onclick="switchSettingsTab('display')">🖥️<br>DISPLAY</button>
+            <button class="settings-tab-btn" id="sTab-ai" role="tab" aria-selected="false" aria-controls="settingsTab-ai" onclick="switchSettingsTab('ai')">🤖<br>AI</button>
+            <button class="settings-tab-btn" id="sTab-lessons" role="tab" aria-selected="false" aria-controls="settingsTab-lessons" onclick="switchSettingsTab('lessons')">📚<br>LESSONS</button>
+            <button class="settings-tab-btn" id="sTab-storage" role="tab" aria-selected="false" aria-controls="settingsTab-storage" onclick="switchSettingsTab('storage')">💾<br>DATA</button>
         </div>
 
-        <!-- Theme Settings -->
-        <div class="setting-group">
-            <div class="setting-label">THEME | 主题</div>
-            <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
-                <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
-                <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
-            </div>
-            <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
-            <div style="margin-top: 8px;">
-                <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
-                    🧘 CALM MODE | 安静模式
-                </button>
-            </div>
-        </div>
+        <!-- ── Tab 1: Display ── -->
+        <div class="settings-tab-pane active" id="settingsTab-display" role="tabpanel" aria-labelledby="sTab-display">
 
-        <!-- Template Management -->
-        <div class="setting-group">
-            <div class="setting-label">TEMPLATES | 模板管理</div>
-            <div style="display: flex; gap: 4px; margin-bottom: 8px;">
-                <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
-                <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
+            <!-- Timer Settings -->
+            <div class="setting-group">
+                <div class="setting-label">TIMER DURATION | 计时器时长</div>
+                <div class="timer-buttons">
+                    <button class="timer-btn" onclick="setTimer(5)">5M</button>
+                    <button class="timer-btn" onclick="setTimer(10)">10M</button>
+                    <button class="timer-btn" onclick="setTimer(15)">15M</button>
+                    <button class="timer-btn" onclick="setTimer(20)">20M</button>
+                    <button class="timer-btn" onclick="setTimer(30)">30M</button>
+                    <button class="timer-btn" onclick="setTimer(45)">45M</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; margin-top: var(--space-2);">
+                    <label for="customTimer">
+                        <input type="number" id="customTimer" min="1" max="180" value="15" class="custom-input custom-timer-input" title="Enter custom timer duration (1-180 minutes)">
+                    </label>
+                    <span style="color: var(--primary-dim); font-size: 9px;">min</span>
+                    <button class="timer-btn" onclick="setCustomTimer()">SET</button>
+                </div>
             </div>
-            
-            <!-- APP DIFFICULTY SELECTOR -->
-            <div class="setting-label" style="margin-top: 8px; font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
+
+            <!-- Theme Settings -->
+            <div class="setting-group">
+                <div class="setting-label">THEME | 主题</div>
+                <div class="timer-buttons" style="grid-template-columns: repeat(2, 1fr);">
+                    <button class="timer-btn theme-btn" onclick="setTheme('matrix')" data-theme="matrix">MATRIX</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('amber')" data-theme="amber">AMBER</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('blue')" data-theme="blue">BLUE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('purple')" data-theme="purple">PURPLE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('red')" data-theme="red">RED</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('white')" data-theme="white">WHITE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('teal')" data-theme="teal">TEAL</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('gold')" data-theme="gold">GOLD</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('sunrise')" data-theme="sunrise" style="background: linear-gradient(90deg, #ff6b6b, #ffa500); color: #fff;">☀️ SUNRISE</button>
+                    <button class="timer-btn theme-btn" onclick="setTheme('electric')" data-theme="electric" style="background: linear-gradient(90deg, #7950f2, #da77f2); color: #fff;">⚡ ELECTRIC</button>
+                </div>
+                <!-- CALM/HAL MODE Toggle for IB/Cognia compliance -->
+                <div style="margin-top: 8px;">
+                    <button class="timer-btn" id="calmModeBtn" onclick="toggleCalmMode()" style="width: 100%; background: rgba(39,174,96,0.3); border-color: #27ae60; color: #2ecc71;">
+                        🧘 CALM MODE | 安静模式
+                    </button>
+                </div>
+            </div>
+
+        </div><!-- end #settingsTab-display -->
+
+        <!-- ── Tab 2: AI ── -->
+        <div class="settings-tab-pane" id="settingsTab-ai" role="tabpanel" aria-labelledby="sTab-ai">
+
             <!-- AI Source Indicator -->
-            <div id="currentAISource" style="background: rgba(139,0,255,0.2); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; font-size: 10px; text-align: center; border: 1px solid #8B00FF;">
-                🤖 AI: <span id="aiSourceLabel" style="font-weight: bold; color: #8B00FF;">Groq</span>
+            <div class="setting-group">
+                <div class="setting-label">AI PROVIDER | AI提供商</div>
+                <div id="currentAISource" style="background: rgba(139,0,255,0.2); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; font-size: 10px; text-align: center; border: 1px solid #8B00FF;">
+                    🤖 AI: <span id="aiSourceLabel" style="font-weight: bold; color: #8B00FF;">Groq</span>
+                </div>
+
+                <!-- Difficulty -->
+                <div class="setting-label" style="margin-top: 8px; font-size: 9px; color: #ff6666;">DIFFICULTY | 难度级别</div>
+                <div style="display: flex; gap: 3px; margin-bottom: 8px;">
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
+                    <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
+                </div>
+
+                <!-- Quick Setup -->
+                <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; margin-bottom: 8px; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
             </div>
-            
-            <div style="display: flex; gap: 3px; margin-bottom: 8px;">
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('beginner')" id="diffBeginner" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(39,174,96,0.3); border: 2px solid #27ae60; color: #2ecc71; line-height: 1.2;">🌱<br>BEGIN<br>初学</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('standard')" id="diffStandard" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(52,152,219,0.3); border: 2px solid #3498db; color: #5dade2; line-height: 1.2;">📚<br>STANDARD<br>标准</button>
-                <button class="timer-btn difficulty-btn" onclick="setAppDifficulty('advanced')" id="diffAdvanced" style="flex: 1; font-size: 8px; padding: 6px 2px; background: rgba(155,89,182,0.3); border: 2px solid #9b59b6; color: #a569bd; line-height: 1.2;">🚀<br>ADVANCED<br>进阶</button>
+
+            <!-- AI Generator actions -->
+            <div class="setting-group">
+                <div class="setting-label">AI GENERATOR | AI生成器</div>
+                <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
+                <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
             </div>
-            
-            <!-- Quick Setup Button -->
-            <button class="timer-btn" onclick="showStartupSetupModal()" style="width: 100%; margin-bottom: 8px; background: rgba(255,165,0,0.3); border-color: #ffa500; color: #ffa500;">⚙️ QUICK SETUP | 快速设置</button>
-            
-            <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
-            <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
-            <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
-            <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
-            <button class="timer-btn" onclick="resetToDefault()" style="width: 100%;">RESET SYSTEM</button>
-        </div>
 
-        <!-- AI Generator -->
-        <div class="setting-group">
-            <div class="setting-label">AI GENERATOR | AI生成器</div>
-            <button class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: #8B00FF;">🤖 AI GENERATE</button>
-            <button class="timer-btn" onclick="openLessonEditor()" style="width: 100%; margin: 2px 0; background: #FF6B00;">✏️ EDIT LESSON | 编辑课程</button>
-        </div>
+        </div><!-- end #settingsTab-ai -->
 
-        <!-- Storage Management -->
-        <div class="setting-group">
-            <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
-            <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
-            <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
-            <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
-            <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
-        </div>
+        <!-- ── Tab 3: Lessons ── -->
+        <div class="settings-tab-pane" id="settingsTab-lessons" role="tabpanel" aria-labelledby="sTab-lessons">
 
-        <!-- Emergency Controls -->
+            <div class="setting-group">
+                <div class="setting-label">LESSON DURATION | 课程时长</div>
+                <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                    <button class="timer-btn" onclick="setLessonDuration('20min')" id="btn20min" style="flex: 1;">20 MIN</button>
+                    <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-label">TEMPLATES | 模板管理</div>
+                <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
+                <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
+                <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
+                <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
+                <button class="timer-btn" onclick="resetToDefault()" style="width: 100%;">RESET SYSTEM</button>
+            </div>
+
+        </div><!-- end #settingsTab-lessons -->
+
+        <!-- ── Tab 4: Storage ── -->
+        <div class="settings-tab-pane" id="settingsTab-storage" role="tabpanel" aria-labelledby="sTab-storage">
+
+            <div class="setting-group">
+                <div class="setting-label">STORAGE MANAGEMENT | 存储管理</div>
+                <div id="storageInfo" style="color: var(--primary-bright); font-size: 10px; margin: 4px 0;">Loading...</div>
+                <button class="timer-btn" onclick="showStorageDetails()" style="width: 100%; margin: 2px 0;">VIEW DETAILS</button>
+                <button class="timer-btn" onclick="clearImageStorage()" style="width: 100%; margin: 2px 0; background: #aa0000;">CLEAR IMAGES</button>
+                <button class="timer-btn" onclick="clearAllStorage()" style="width: 100%; background: #550000;">CLEAR ALL DATA</button>
+            </div>
+
+        </div><!-- end #settingsTab-storage -->
 
     </div>
 
@@ -9427,6 +9499,24 @@ Chapter 5: Money and Banking
             playBeep();
         }
         window.toggleSettings = toggleSettings;
+
+        // Switch between settings panel tabs
+        function switchSettingsTab(tabName) {
+            // Deactivate all tab buttons and panes
+            document.querySelectorAll('.settings-tab-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+            document.querySelectorAll('.settings-tab-pane').forEach(function(pane) {
+                pane.classList.remove('active');
+            });
+            // Activate the selected tab
+            var btn = document.getElementById('sTab-' + tabName);
+            var pane = document.getElementById('settingsTab-' + tabName);
+            if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
+            if (pane) { pane.classList.add('active'); }
+        }
+        window.switchSettingsTab = switchSettingsTab;
         
         // ============================================
         // HAL AI ASSISTANT FUNCTIONS - SMART with Groq API
@@ -23632,7 +23722,7 @@ COACH: Iris Wang
           </button>
         <!-- Import students from loaded lesson template -->
         <button class="od-btn" id="odImportFromLesson">
-          <span class="od-glyph">�</span>
+          <span class="od-glyph">📂</span>
           <span class="od-label">FROM LESSON</span>
         </button>
         <!-- Shuffle existing teams -->
