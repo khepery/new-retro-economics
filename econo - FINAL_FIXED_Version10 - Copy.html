@@ -2787,6 +2787,333 @@
         line-height: 1.6;
     }
 
+    /* MVP Student Overlay Styles */
+    .mvp-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 20000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.95);
+    }
+
+    .mvp-background {
+        position: absolute;
+        inset: 0;
+        background: 
+            radial-gradient(circle at 30% 40%, rgba(255, 215, 0, 0.15), transparent 50%),
+            radial-gradient(circle at 70% 60%, rgba(255, 165, 0, 0.15), transparent 50%);
+        animation: mvpBackgroundPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes mvpBackgroundPulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.7; }
+    }
+
+    .mvp-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        animation: mvpContentEntry 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes mvpContentEntry {
+        from {
+            opacity: 0;
+            transform: scale(0.3) rotate(-10deg);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+    }
+
+    /* MVP Star - Retro Space Theme */
+    .mvp-star {
+        width: clamp(100px, 20vw, 180px);
+        height: clamp(100px, 20vw, 180px);
+        margin: 0 auto 30px;
+        position: relative;
+        animation: mvpStarOrbit 4s linear infinite;
+        filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8));
+    }
+
+    .mvp-star::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        background: 
+            linear-gradient(45deg, transparent 40%, cyan 40%, cyan 60%, transparent 60%),
+            linear-gradient(-45deg, transparent 40%, cyan 40%, cyan 60%, transparent 60%);
+        background-size: 100% 100%;
+        animation: mvpStarPulse 2s ease-in-out infinite;
+    }
+
+    .mvp-star::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        border: 3px solid cyan;
+        border-radius: 50%;
+        animation: mvpStarRing 3s ease-in-out infinite;
+    }
+
+    @keyframes mvpStarOrbit {
+        0%, 100% { 
+            transform: rotate(0deg);
+        }
+        50% { 
+            transform: rotate(180deg);
+        }
+    }
+
+    @keyframes mvpStarPulse {
+        0%, 100% { 
+            opacity: 0.8;
+            filter: brightness(1);
+        }
+        50% { 
+            opacity: 1;
+            filter: brightness(1.5);
+        }
+    }
+
+    @keyframes mvpStarRing {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.3);
+            opacity: 0.3;
+        }
+    }
+
+    .mvp-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(28px, 5vw, 48px);
+        font-weight: 900;
+        color: cyan;
+        text-shadow: 
+            0 0 10px cyan,
+            0 0 20px cyan,
+            0 0 30px rgba(0, 255, 255, 0.5),
+            0 5px 5px rgba(0, 0, 0, 0.8);
+        margin: 25px 0;
+        letter-spacing: 4px;
+        animation: mvpTitleGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes mvpTitleGlow {
+        0%, 100% { 
+            text-shadow: 
+                0 0 10px cyan,
+                0 0 20px cyan,
+                0 0 30px rgba(0, 255, 255, 0.5),
+                0 5px 5px rgba(0, 0, 0, 0.8);
+        }
+        50% { 
+            text-shadow: 
+                0 0 20px cyan,
+                0 0 40px cyan,
+                0 0 60px rgba(0, 255, 255, 0.7),
+                0 0 80px rgba(0, 200, 255, 0.5),
+                0 5px 5px rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    .mvp-subtitle {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(16px, 2.5vw, 24px);
+        color: var(--primary-bright);
+        margin-bottom: 25px;
+        text-shadow: 0 0 10px var(--primary-bright);
+    }
+
+    .mvp-student-name {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(32px, 6vw, 58px);
+        font-weight: 900;
+        background: linear-gradient(
+            135deg,
+            cyan,
+            #00ffff,
+            #0ff,
+            #00ccff
+        );
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: mvpNameShine 2s linear infinite;
+        margin: 25px 0;
+        letter-spacing: 3px;
+        padding: 15px;
+        position: relative;
+    }
+
+    @keyframes mvpNameShine {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 300% 50%; }
+    }
+
+    .mvp-team {
+        font-size: clamp(18px, 3.5vw, 28px);
+        color: var(--primary-bright);
+        font-weight: bold;
+        text-shadow: 0 0 15px var(--primary-bright);
+        margin: 18px 0;
+    }
+
+    /* Retro Space Particles instead of sparkles */
+    .mvp-sparkles {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .mvp-sparkle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: cyan;
+        border-radius: 50%;
+        box-shadow: 0 0 10px cyan;
+        animation: mvpParticle 3s ease-in-out infinite;
+    }
+
+    @keyframes mvpParticle {
+        0%, 100% { 
+            opacity: 0;
+            transform: translate(0, 0) scale(0);
+        }
+        50% { 
+            opacity: 1;
+            transform: translate(var(--tx), var(--ty)) scale(2);
+        }
+    }
+
+    /* MVP Selection Panel Styles */
+    .mvp-selection-panel {
+        position: relative;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid var(--primary-bright);
+        border-radius: 8px;
+        padding: 30px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 70vh;
+        overflow-y: auto;
+        box-shadow: 0 0 40px var(--primary-glow);
+    }
+
+    .mvp-selection-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(24px, 4vw, 32px);
+        font-weight: 900;
+        color: var(--primary-bright);
+        text-shadow: 0 0 20px var(--primary-bright);
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    .mvp-student-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .mvp-student-item {
+        background: rgba(0, 255, 0, 0.05);
+        border: 2px solid var(--border-dim);
+        border-radius: 6px;
+        padding: 18px 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Share Tech Mono', monospace;
+        color: var(--text-color);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mvp-student-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .mvp-student-item:hover {
+        background: rgba(0, 255, 255, 0.15);
+        border-color: var(--primary-bright);
+        box-shadow: 0 0 25px var(--primary-glow), inset 0 0 15px rgba(0, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+
+    .mvp-student-item:hover::before {
+        left: 100%;
+    }
+
+    .mvp-student-item-name {
+        font-size: clamp(14px, 1.8vw, 17px);
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: var(--primary-bright);
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+
+    .mvp-student-item-team {
+        font-size: clamp(10px, 1.5vw, 12px);
+        color: var(--text-muted);
+        line-height: 1.3;
+    }
+
+    .mvp-selection-panel {
+        background: rgba(0, 0, 0, 0.95);
+        border: 3px solid var(--primary-bright);
+        border-radius: 8px;
+        padding: 30px;
+        max-width: 90vw;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 0 40px var(--primary-glow), inset 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+
+    .mvp-selection-title {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(20px, 3vw, 28px);
+        color: var(--primary-bright);
+        text-align: center;
+        margin-bottom: 25px;
+        text-shadow: 0 0 15px var(--primary-color);
+        letter-spacing: 2px;
+    }
+
     </style>
 </head>
 <body>
@@ -2798,54 +3125,64 @@
       becomes visible.  The video file (intro.mp4) should reside in the
       same directory as this HTML file.
     -->
-    <!-- Epic Space Intro Animation -->
-    <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden; perspective: 1000px;">
-      <div id="introAnimation" style="width: 100%; height: 100%; position: relative;">
-        <!-- Star field background -->
-        <canvas id="starField" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+    <!-- Economics Terminal Intro Animation -->
+    <div id="introOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; display: none; justify-content: center; align-items: center; z-index: 10000; overflow: hidden;">
+      <div id="introAnimation" style="width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
+        <!-- Terminal scanline effect -->
+        <canvas id="scanlineCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.15;"></canvas>
         
-        <!-- Flying text crawl (Star Wars style) -->
-        <div id="crawlContainer" style="position: absolute; bottom: -100%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 800px; transform-style: preserve-3d; animation: crawlUp 15s linear forwards;">
-          <div style="transform: rotateX(25deg); color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: 32px; line-height: 1.8; text-align: justify; text-shadow: 0 0 10px var(--primary-color);">
-            <div style="text-align: center; font-size: 48px; font-weight: bold; margin-bottom: 40px; letter-spacing: 8px;">
-              RETRO ECONOMICS
+        <!-- Enhanced Matrix rain background -->
+        <canvas id="matrixRain" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.25;"></canvas>
+        
+        <!-- Main intro container - adjusted for better fit -->
+        <div id="introMainContent" style="text-align: center; z-index: 1; max-width: 85vw; max-height: 90vh; display: flex; flex-direction: column; justify-content: center;">
+          <!-- Terminal-style header -->
+          <div id="terminalHeader" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(10px, 1.5vw, 14px); color: var(--primary-dim); margin-bottom: 15px; opacity: 0; text-align: left; max-width: 550px; margin-left: auto; margin-right: auto;">
+            <div>SYSTEM: BULLETPROOF ADAPTIVE CLASSROOM v10.0</div>
+            <div>STATUS: INITIALIZING...</div>
+            <div>MODE: COLLABORATIVE LEARNING</div>
+          </div>
+          
+          <!-- Main title -->
+          <div id="economicsTitle" style="font-family: 'Orbitron', monospace; margin: 25px 0; opacity: 0;">
+            <div style="font-size: clamp(32px, 6vw, 70px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
+              ECONOMICS
             </div>
-            <div style="text-align: center; font-size: 24px; margin-bottom: 60px; color: var(--primary-dim);">
-              防弹自适应课堂
+            <div style="font-size: clamp(22px, 4vw, 42px); font-weight: 900; color: var(--primary-bright); text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color), 0 5px 0 var(--primary-dark); letter-spacing: 6px; line-height: 1.2;">
+              TERMINAL
             </div>
-            <p style="margin-bottom: 30px;">
-              In a world where knowledge flows like data through circuits, a new learning protocol emerges...
-            </p>
-            <p style="margin-bottom: 30px;">
-              The ADAPTIVE CLASSROOM SYSTEM combines ancient wisdom with cutting-edge technology to unlock the secrets of economics.
-            </p>
-            <p style="margin-bottom: 30px;">
-              Teams of explorers venture into the digital realm, guided by captains, documented by writers, and mentored by coaches.
-            </p>
-            <p>
-              Your journey begins now...
-            </p>
+          </div>
+          
+          <!-- Chinese subtitle -->
+          <div id="chineseSubtitle" style="font-family: 'Orbitron', monospace; font-size: clamp(14px, 2vw, 24px); color: var(--primary-dim); margin-bottom: 30px; opacity: 0; text-shadow: 0 0 10px var(--primary-color);">
+            复古经济学终端
+          </div>
+          
+          <!-- Team formation message -->
+          <div id="teamMessage" style="font-family: 'Share Tech Mono', monospace; font-size: clamp(11px, 1.5vw, 16px); color: var(--primary-bright); max-width: 500px; margin: 0 auto 20px; opacity: 0; line-height: 1.6; padding: 0 15px;">
+            <div style="margin-bottom: 10px; color: var(--primary-bright); font-weight: bold;">>>> COLLABORATIVE MODE ACTIVE</div>
+            <div style="color: var(--primary-dim);">• Form teams with CAPTAIN, WRITER, COACH</div>
+            <div style="color: var(--primary-dim);">• Analyze economic concepts together</div>
+            <div style="color: var(--primary-dim);">• Build knowledge through teamwork</div>
+          </div>
+          
+          <!-- Loading bar animation -->
+          <div id="loadingContainer" style="width: clamp(200px, 50vw, 350px); margin: 20px auto; opacity: 0;">
+            <div style="width: 100%; height: 6px; background: rgba(0, 255, 0, 0.1); border: 1px solid var(--primary-dim); border-radius: 4px; overflow: hidden;">
+              <div id="loadingBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-dark), var(--primary-bright), var(--primary-dark)); box-shadow: 0 0 10px var(--primary-color); transition: width 0.3s ease;"></div>
+            </div>
+            <div id="loadingText" style="margin-top: 8px; font-family: 'Share Tech Mono', monospace; font-size: clamp(10px, 1.2vw, 12px); color: var(--primary-dim);">LOADING SYSTEM...</div>
+          </div>
+          
+          <!-- Ready message -->
+          <div id="readyMessage" style="font-family: 'Orbitron', monospace; font-size: clamp(18px, 3vw, 32px); font-weight: bold; color: var(--primary-bright); opacity: 0; text-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--primary-color); letter-spacing: 4px; margin-top: 15px;">
+            SYSTEM READY
           </div>
         </div>
         
-        <!-- Epic logo zoom -->
-        <div id="logoZoom" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1); opacity: 0; animation: epicZoom 3s ease-out 1s forwards;">
-          <div style="font-family: 'Orbitron', monospace; font-size: 120px; font-weight: bold; color: var(--primary-bright); text-shadow: 0 0 40px var(--primary-color), 0 0 80px var(--primary-color), 0 0 120px var(--primary-color); white-space: nowrap;">
-            RETRO
-          </div>
-          <div style="font-family: 'Orbitron', monospace; font-size: 120px; font-weight: bold; color: var(--primary-bright); text-shadow: 0 0 40px var(--primary-color), 0 0 80px var(--primary-color), 0 0 120px var(--primary-color); white-space: nowrap;">
-            ECONOMICS
-          </div>
+        <div id="introPrompt" style="position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: clamp(12px, 1.5vw, 16px); letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright); padding: 0 20px;">
+          [ PRESS ANY KEY TO BEGIN ]
         </div>
-        
-        <!-- Particle burst effect -->
-        <canvas id="particleBurst" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
-        
-        <!-- Hyperspace lines -->
-        <canvas id="hyperspace" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
-      </div>
-      <div id="introPrompt" style="position: absolute; bottom: 40px; left: 0; right: 0; text-align: center; color: var(--primary-bright); font-family: 'Orbitron', monospace; font-size: 16px; letter-spacing: 2px; display: none; opacity: 0; animation: blink 1.5s ease-in-out infinite; text-shadow: 0 0 10px var(--primary-bright);">
-        [ PRESS ANY KEY TO ENTER ]
       </div>
     </div>
     
@@ -2978,6 +3315,8 @@
                 <button class="timer-btn" onclick="setLessonDuration('40min')" id="btn40min" style="flex: 1;">40 MIN</button>
             </div>
             <input type="file" id="templateUpload" accept=".txt,.json" class="file-input" onchange="loadTemplate(event)" title="Upload Template File">
+            <input type="file" id="aiFileUpload" accept=".pdf,.ppt,.pptx" class="file-input" style="display: none;" onchange="handleAIFileUpload(event)" title="Upload PDF/PowerPoint for AI Generation">
+            <button id="aiGenerateBtn" class="timer-btn" onclick="showAIGeneratorModal()" style="width: 100%; margin: 2px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-weight: bold;">🤖 AI GENERATE LESSON</button>
             <button class="timer-btn" onclick="downloadTemplate()" style="width: 100%; margin: 2px 0;">DOWNLOAD TEMPLATE</button>
             <button class="timer-btn" onclick="downloadWorksheet()" style="width: 100%; margin: 2px 0; background: #4CAF50;">📄 DOWNLOAD WORKSHEET</button>
             <button class="timer-btn" onclick="exportCurrentLesson()" style="width: 100%; margin: 2px 0;">EXPORT LESSON</button>
@@ -3904,7 +4243,7 @@
         // HOISTED INTRO VIDEO FUNCTION (SINGLE DEFINITION)
         // ============================================
         function showIntroAnimation() {
-            console.log('%c[INTRO] Starting EPIC space animation', 'color: var(--primary-bright); font-weight: bold');
+            console.log('%c[INTRO] Starting ECONOMICS TERMINAL animation', 'color: var(--primary-bright); font-weight: bold');
             
             var overlay = document.getElementById('introOverlay');
             var prompt = document.getElementById('introPrompt');
@@ -3923,22 +4262,24 @@
                 ensureAudioContext();
             }
             
-            // Initialize epic effects
-            initStarField();
-            initHyperspace();
-            initParticleBurst();
+            // Initialize effects
+            initScanlineEffect();
+            initMatrixRain();
             
-            // Play intro soundtrack with delay to ensure audio is ready
+            // Play terminal boot sounds
             setTimeout(function() {
-                playIntroSoundtrack();
+                playTerminalBootSound();
             }, 150);
+            
+            // Animate intro sequence
+            animateTerminalIntro();
             
             // Create skip button
             var skipBtn = document.createElement('button');
             skipBtn.textContent = 'SKIP [ESC]';
-            skipBtn.style.cssText = 'position:absolute;top:20px;right:20px;background:rgba(0,0,0,0.9);color:var(--primary-bright);border:2px solid var(--primary-bright);padding:12px 24px;font-family:Orbitron,monospace;font-size:16px;cursor:pointer;border-radius:4px;z-index:20001;transition:all 0.3s;box-shadow:0 0 20px rgba(0,255,0,0.3);';
+            skipBtn.style.cssText = 'position:absolute;top:20px;right:20px;background:rgba(0,0,0,0.9);color:var(--primary-bright);border:2px solid var(--primary-bright);padding:12px 24px;font-family:Orbitron,monospace;font-size:16px;cursor:pointer;border-radius:4px;z-index:20001;transition:all 0.3s;box-shadow:0 0 20px var(--primary-bright);';
             skipBtn.onmouseenter = function() { this.style.boxShadow = '0 0 30px var(--primary-bright)'; this.style.transform = 'scale(1.05)'; };
-            skipBtn.onmouseleave = function() { this.style.boxShadow = '0 0 20px rgba(0,255,0,0.3)'; this.style.transform = 'scale(1)'; };
+            skipBtn.onmouseleave = function() { this.style.boxShadow = '0 0 20px var(--primary-bright)'; this.style.transform = 'scale(1)'; };
             overlay.appendChild(skipBtn);
             
             var dismiss = function() {
@@ -3964,255 +4305,316 @@
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 };
-            }, 12000);
+            }, 8000);
             
-            // Auto-dismiss after 18 seconds
+            // Auto-dismiss after 14 seconds
             setTimeout(function() {
                 if (document.body.contains(overlay) && overlay.style.display !== 'none') {
                     console.log('[INTRO] Auto-dismiss timeout');
                     dismiss();
                     document.removeEventListener('keydown', escapeHandler);
                 }
-            }, 18000);
+            }, 14000);
         }
 
-        // Epic intro sound effects
+        // Terminal intro animation sequence
+        function animateTerminalIntro() {
+            var header = document.getElementById('terminalHeader');
+            var title = document.getElementById('economicsTitle');
+            var subtitle = document.getElementById('chineseSubtitle');
+            var message = document.getElementById('teamMessage');
+            var loading = document.getElementById('loadingContainer');
+            var loadingBar = document.getElementById('loadingBar');
+            var loadingText = document.getElementById('loadingText');
+            var ready = document.getElementById('readyMessage');
+            
+            if (!header || !title || !subtitle || !message || !loading || !ready) return;
+            
+            // Terminal header types in
+            setTimeout(function() {
+                header.style.transition = 'opacity 0.5s ease-out';
+                header.style.opacity = '1';
+            }, 200);
+            
+            // Economics icon and title zoom in
+            setTimeout(function() {
+                title.style.transition = 'opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                title.style.opacity = '1';
+                title.style.transform = 'scale(1)';
+            }, 800);
+            
+            // Subtitle fade in
+            setTimeout(function() {
+                subtitle.style.transition = 'opacity 0.5s ease-out';
+                subtitle.style.opacity = '1';
+            }, 1600);
+            
+            // Team formation message
+            setTimeout(function() {
+                message.style.transition = 'opacity 0.6s ease-out';
+                message.style.opacity = '1';
+            }, 2400);
+            
+            // Loading bar appears
+            setTimeout(function() {
+                loading.style.transition = 'opacity 0.4s ease-out';
+                loading.style.opacity = '1';
+                
+                // Animate loading bar from 0 to 100%
+                var progress = 0;
+                var loadingMessages = [
+                    'LOADING SYSTEM...',
+                    'INITIALIZING TEAMS...',
+                    'LOADING ECONOMICS DATA...',
+                    'PREPARING WORKSPACE...',
+                    'READY TO START!'
+                ];
+                var msgIndex = 0;
+                
+                var loadInterval = setInterval(function() {
+                    progress += Math.random() * 15 + 10;
+                    if (progress >= 100) {
+                        progress = 100;
+                        loadingBar.style.width = '100%';
+                        loadingText.textContent = loadingMessages[4];
+                        clearInterval(loadInterval);
+                        
+                        // Show ready message
+                        setTimeout(function() {
+                            ready.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                            ready.style.opacity = '1';
+                            ready.style.transform = 'scale(1.1)';
+                            setTimeout(function() {
+                                ready.style.transform = 'scale(1)';
+                            }, 300);
+                        }, 200);
+                    } else {
+                        loadingBar.style.width = progress + '%';
+                        msgIndex = Math.min(Math.floor(progress / 25), loadingMessages.length - 2);
+                        loadingText.textContent = loadingMessages[msgIndex];
+                    }
+                }, 350);
+            }, 3200);
+        }
+
+        // Terminal boot sounds - more thematic to economics/classroom
         var introSoundInterval;
-        function playIntroSoundtrack() {
+        var matrixRainInterval;
+        
+        function playTerminalBootSound() {
             if (!soundEnabled || !ensureAudioContext()) return;
             
-            // Deep bass rumble
-            setTimeout(function() { playDeepBass(40, 2000); }, 0);
-            
-            // Ascending tones (space launch)
+            // System power-on sound (deep hum)
             setTimeout(function() { 
-                playMultiTone([100, 150, 200, 300, 400, 600, 800, 1000], 200);
-            }, 1000);
+                playSystemHum(60, 0.8);
+            }, 0);
             
-            // Epic whoosh
-            setTimeout(function() { playWhoosh(); }, 3000);
-            
-            // Triumphant fanfare
+            // Boot sequence beeps (system checks)
             setTimeout(function() { 
-                playMultiTone([523, 659, 784, 1047], 300); // C major chord arpeggio
-            }, 4000);
+                playSystemBeep(440, 0.12, 0.08);  // A
+            }, 400);
+            setTimeout(function() { 
+                playSystemBeep(554, 0.12, 0.08);  // C#
+            }, 600);
+            setTimeout(function() { 
+                playSystemBeep(659, 0.12, 0.08);  // E
+            }, 800);
             
-            // Power up sound
-            setTimeout(function() { playPowerUp(); }, 6000);
+            // Data loading sound (ascending sweep)
+            setTimeout(function() { 
+                playDataLoadSound();
+            }, 2500);
+            
+            // Progress beeps during loading
+            setTimeout(function() { 
+                playSystemBeep(523, 0.08, 0.06);
+            }, 3600);
+            setTimeout(function() { 
+                playSystemBeep(587, 0.08, 0.06);
+            }, 4200);
+            setTimeout(function() { 
+                playSystemBeep(659, 0.08, 0.06);
+            }, 4800);
+            setTimeout(function() { 
+                playSystemBeep(784, 0.08, 0.06);
+            }, 5400);
+            
+            // System ready chord (triumphant)
+            setTimeout(function() { 
+                playReadyChord([523, 659, 784, 1047], 0.7);  // C major chord
+            }, 6800);
         }
         
-        function playDeepBass(freq, duration) {
+        function playSystemHum(freq, duration) {
             if (!soundEnabled || !ensureAudioContext()) return;
             var osc = audioContext.createOscillator();
             var gain = audioContext.createGain();
-            var filter = audioContext.createBiquadFilter();
             
             osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(200, audioContext.currentTime);
             
-            gain.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration/1000);
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioContext.destination);
-            
-            osc.start();
-            osc.stop(audioContext.currentTime + duration/1000);
-        }
-        
-        function playWhoosh() {
-            if (!soundEnabled || !ensureAudioContext()) return;
-            var osc = audioContext.createOscillator();
-            var gain = audioContext.createGain();
-            
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(2000, audioContext.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.5);
-            
-            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
             
             osc.connect(gain);
             gain.connect(audioContext.destination);
             
             osc.start();
-            osc.stop(audioContext.currentTime + 0.5);
+            osc.stop(audioContext.currentTime + duration);
         }
         
-        function playPowerUp() {
+        function playSystemBeep(freq, duration, volume) {
             if (!soundEnabled || !ensureAudioContext()) return;
             var osc = audioContext.createOscillator();
             var gain = audioContext.createGain();
             
             osc.type = 'square';
-            osc.frequency.setValueAtTime(100, audioContext.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1000, audioContext.currentTime + 0.8);
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
             
-            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+            gain.gain.setValueAtTime(volume || 0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
             
             osc.connect(gain);
             gain.connect(audioContext.destination);
             
             osc.start();
-            osc.stop(audioContext.currentTime + 0.8);
+            osc.stop(audioContext.currentTime + duration);
+        }
+        
+        function playDataLoadSound() {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            var osc = audioContext.createOscillator();
+            var gain = audioContext.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioContext.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.6);
+            
+            gain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.6);
+        }
+        
+        function playReadyChord(frequencies, duration) {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            
+            frequencies.forEach(function(freq, index) {
+                setTimeout(function() {
+                    var osc = audioContext.createOscillator();
+                    var gain = audioContext.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.12, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + duration);
+                }, index * 100);
+            });
         }
 
-        // Star field effect
-        var starFieldInterval;
-        function initStarField() {
-            var canvas = document.getElementById('starField');
+        // Matrix rain effect for background - ENHANCED
+        function initMatrixRain() {
+            var canvas = document.getElementById('matrixRain');
             if (!canvas) return;
             
             var ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            var stars = [];
-            for (var i = 0; i < 200; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2,
-                    speed: Math.random() * 2 + 1
-                });
+            var columns = Math.floor(canvas.width / 18);
+            var drops = [];
+            for (var i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height;
             }
             
-            function drawStars() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            // Enhanced characters for better visibility
+            var chars = '01$¥€£₿←→↑↓◆◇▲▼';
+            
+            function drawMatrix() {
+                // Slightly darker fade for better visibility
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                ctx.fillStyle = '#ffffff';
-                for (var i = 0; i < stars.length; i++) {
-                    var s = stars[i];
-                    ctx.fillRect(s.x, s.y, s.size, s.size);
-                    s.x -= s.speed;
-                    if (s.x < 0) {
-                        s.x = canvas.width;
-                        s.y = Math.random() * canvas.height;
+                // Brighter green for enhanced visibility
+                ctx.fillStyle = '#0ff';
+                ctx.font = 'bold 16px monospace';
+                
+                for (var i = 0; i < drops.length; i++) {
+                    var text = chars[Math.floor(Math.random() * chars.length)];
+                    var x = i * 18;
+                    var y = drops[i];
+                    
+                    // Add glow effect
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = '#0ff';
+                    ctx.fillText(text, x, y);
+                    ctx.shadowBlur = 0;
+                    
+                    // Draw fading trail
+                    if (y > 20) {
+                        ctx.fillStyle = 'rgba(0, 255, 255, 0.3)';
+                        ctx.fillText(chars[Math.floor(Math.random() * chars.length)], x, y - 18);
+                        ctx.fillStyle = '#0ff';
                     }
+                    
+                    if (drops[i] > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i] += 18;
                 }
             }
             
-            starFieldInterval = setInterval(drawStars, 30);
+            matrixRainInterval = setInterval(drawMatrix, 40);
         }
-        
-        // Hyperspace lines effect
-        var hyperspaceInterval;
-        function initHyperspace() {
-            var canvas = document.getElementById('hyperspace');
+
+        // Scanline CRT effect
+        var scanlineInterval;
+        function initScanlineEffect() {
+            var canvas = document.getElementById('scanlineCanvas');
             if (!canvas) return;
             
             var ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            var lines = [];
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
+            var scanlineY = 0;
+            var scanlineSpeed = 3;
             
-            function drawHyperspace() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Add new lines
-                if (Math.random() > 0.7) {
-                    var angle = Math.random() * Math.PI * 2;
-                    var distance = Math.random() * 100 + 50;
-                    lines.push({
-                        x: centerX + Math.cos(angle) * distance,
-                        y: centerY + Math.sin(angle) * distance,
-                        vx: Math.cos(angle) * 15,
-                        vy: Math.sin(angle) * 15,
-                        length: 0
-                    });
-                }
-                
-                // Draw and update lines
-                for (var i = lines.length - 1; i >= 0; i--) {
-                    var line = lines[i];
-                    
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(line.x, line.y);
-                    ctx.lineTo(line.x + line.vx * line.length, line.y + line.vy * line.length);
-                    ctx.stroke();
-                    
-                    line.length += 0.5;
-                    line.x += line.vx;
-                    line.y += line.vy;
-                    
-                    if (line.x < 0 || line.x > canvas.width || line.y < 0 || line.y > canvas.height) {
-                        lines.splice(i, 1);
-                    }
-                }
-            }
-            
-            hyperspaceInterval = setInterval(drawHyperspace, 30);
-        }
-        
-        // Particle burst effect
-        var particleBurstInterval;
-        function initParticleBurst() {
-            var canvas = document.getElementById('particleBurst');
-            if (!canvas) return;
-            
-            var ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            var particles = [];
-            var centerX = canvas.width / 2;
-            var centerY = canvas.height / 2;
-            
-            // Create initial burst
-            setTimeout(function() {
-                for (var i = 0; i < 100; i++) {
-                    var angle = Math.random() * Math.PI * 2;
-                    var speed = Math.random() * 8 + 2;
-                    particles.push({
-                        x: centerX,
-                        y: centerY,
-                        vx: Math.cos(angle) * speed,
-                        vy: Math.sin(angle) * speed,
-                        life: 1.0,
-                        size: Math.random() * 3 + 1
-                    });
-                }
-            }, 3500);
-            
-            function drawParticles() {
+            function drawScanline() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                for (var i = particles.length - 1; i >= 0; i--) {
-                    var p = particles[i];
-                    
-                    ctx.fillStyle = 'rgba(0, 255, 0, ' + p.life + ')';
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.life -= 0.01;
-                    
-                    if (p.life <= 0) {
-                        particles.splice(i, 1);
-                    }
+                // Draw horizontal scanlines
+                for (var i = 0; i < canvas.height; i += 4) {
+                    ctx.fillStyle = 'rgba(0, 255, 0, 0.03)';
+                    ctx.fillRect(0, i, canvas.width, 2);
                 }
+                
+                // Draw moving scanline
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+                ctx.fillRect(0, scanlineY, canvas.width, 3);
+                
+                scanlineY += scanlineSpeed;
+                if (scanlineY > canvas.height) scanlineY = 0;
             }
             
-            particleBurstInterval = setInterval(drawParticles, 30);
+            scanlineInterval = setInterval(drawScanline, 30);
         }
         
         function stopIntroEffects() {
-            if (starFieldInterval) clearInterval(starFieldInterval);
-            if (hyperspaceInterval) clearInterval(hyperspaceInterval);
-            if (particleBurstInterval) clearInterval(particleBurstInterval);
+            if (scanlineInterval) clearInterval(scanlineInterval);
+            if (matrixRainInterval) clearInterval(matrixRainInterval);
             if (introSoundInterval) clearInterval(introSoundInterval);
         }
 
@@ -8787,16 +9189,39 @@ function renderWriteScene() {
         }
         
         .keywords-grid {
-            display: grid;
-            grid-template-columns: ${is40min ? '80px' : '100px'} 1fr;
-            gap: ${is40min ? '3px' : '4px'};
+            display: block;
             font-size: ${is40min ? '7.5pt' : '8pt'};
+        }
+        
+        .keyword-item {
+            margin-bottom: ${is40min ? '8px' : '10px'};
+            padding: 4px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            background: #fafafa;
         }
         
         .keyword-term {
             font-weight: bold;
             padding: 2px 4px;
             background: #e8f4fd;
+            display: inline-block;
+            margin-bottom: 3px;
+            border-radius: 2px;
+        }
+        
+        .keyword-definition-label {
+            font-size: ${is40min ? '7pt' : '7.5pt'};
+            color: #666;
+            margin-top: 2px;
+            margin-bottom: 1px;
+        }
+        
+        .keyword-sentence-label {
+            font-size: ${is40min ? '7pt' : '7.5pt'};
+            color: #666;
+            margin-top: 3px;
+            margin-bottom: 1px;
         }
         
         .mcq-options {
@@ -8847,8 +9272,17 @@ function renderWriteScene() {
                 <div class="section-title">📝 2. KEY TERMS | 关键术语 (${keywords.length})</div>
                 <div class="keywords-grid">
                     ${keywords.map(kw => `
-                        <div class="keyword-term">${kw.term}</div>
-                        <div class="answer-lines"></div>
+                        <div class="keyword-item">
+                            <div class="keyword-term">${kw.term}</div>
+                            <div class="keyword-definition-label">Definition | 定义:</div>
+                            <div class="answer-lines" style="min-height: ${is40min ? '12px' : '14px'};"></div>
+                            <div class="keyword-sentence-label">Example Sentence | 例句:</div>
+                            <div class="answer-lines" style="min-height: ${is40min ? '16px' : '18px'}; border-bottom: none;">
+                                ${Array(2).fill(0).map(() => 
+                                    `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '8px' : '9px'};"></div>`
+                                ).join('')}
+                            </div>
+                        </div>
                     `).join('')}
                 </div>
             </div>
@@ -8876,9 +9310,9 @@ function renderWriteScene() {
                 ${writePrompts.map((prompt, index) => `
                     <div class="question">
                         <div class="question-text">${index + 1}. ${prompt.en || prompt}</div>
-                        <div class="answer-lines" style="min-height: ${is40min ? '25px' : '30px'}; border-bottom: none;">
-                            ${Array(is40min ? 3 : 4).fill(0).map(() => 
-                                `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '8px' : '10px'};"></div>`
+                        <div class="answer-lines" style="min-height: ${is40min ? '35px' : '40px'}; border-bottom: none;">
+                            ${Array(is40min ? 4 : 5).fill(0).map(() => 
+                                `<div style="border-bottom: 1px solid #ccc; margin: 2px 0; height: ${is40min ? '9px' : '10px'};"></div>`
                             ).join('')}
                         </div>
                     </div>
@@ -9038,6 +9472,30 @@ function renderWriteScene() {
                 },
                 "sections": {
                     "dataAnalysis": {
+                        "_STORY_WRITING_INSTRUCTIONS": {
+                            "CRITICAL_RULES": [
+                                "Write a STORY, not a textbook explanation",
+                                "Create characters, setting, conflict, and resolution",
+                                "The story must naturally demonstrate economic concepts",
+                                "Use vivid details and realistic dialogue",
+                                `Length: ${rules.storyLength} (${is40min ? 'more detailed plot with subplots' : 'focused single narrative'})`,
+                                `Must include ${rules.keywordCount} economics keywords marked with <span class='keyword' data-term='term'>term</span>`
+                            ],
+                            "STORY_ELEMENTS": {
+                                "SETTING": "Real-world location (school, market, neighborhood, business, etc.)",
+                                "CHARACTERS": "Named individuals with goals and motivations",
+                                "PLOT": "A situation that demonstrates economic principles through action",
+                                "CONFLICT": "Economic problem or decision the characters face",
+                                "RESOLUTION": "How economic concepts explain or solve the situation"
+                            },
+                            "GOOD_STORY_EXAMPLE": "Emma runs a popular food truck near the university. Last week, she noticed something strange: when she raised her sandwich price from $5 to $7, her sales dropped from 50 to 30 sandwiches per day. This confused her until her friend explained the <span class='keyword' data-term='law-of-demand'>law of demand</span>—as prices increase, the quantity consumers are willing to buy decreases. Emma also realized she faced <span class='keyword' data-term='scarcity'>scarcity</span> because her small truck could only make 60 sandwiches daily...",
+                            "BAD_STORY_EXAMPLE_1": "❌ Supply is when producers make goods. Demand is when consumers buy goods. Equilibrium is where they meet. Price elasticity measures responsiveness...",
+                            "BAD_STORY_EXAMPLE_2": "❌ Let's learn about markets. Markets have buyers and sellers. The price mechanism allocates resources. Competition improves efficiency...",
+                            "LENGTH_GUIDELINES": {
+                                "20min": "100 words = tight narrative, one main situation, 2-3 characters maximum",
+                                "40min": "200 words = developed story, multiple scenes, 4-5 characters, can include subplots"
+                            }
+                        },
                         "_KEYWORDS_INSTRUCTIONS": {
                             "CRITICAL": `Each keyword MUST have ${rules.examplesPerKeyword} examples that USE that keyword`,
                             "KEY_FORMAT": "Use lowercase-with-dashes: 'price-elasticity' not 'Price Elasticity'",
@@ -9061,7 +9519,7 @@ function renderWriteScene() {
                             }
                         },
                         "story": {
-                            "_WRITE_HERE": `Write ${rules.storyLength} story with ${rules.keywordCount} marked keywords`,
+                            "_WRITE_HERE": `Write ${rules.storyLength} NARRATIVE STORY (not textbook text) with ${rules.keywordCount} marked keywords`,
                             "text": `YOUR_STORY_HERE with <span class='keyword' data-term='TERM'>TERM</span> markers (${rules.storyLength})`,
                             "keywords": {
                                 "_EXAMPLE_FORMAT": {
@@ -9648,6 +10106,369 @@ function renderWriteScene() {
             }
         };
 
+        // ═══════════════════════════════════════════════════════════════════════
+        // OFFLINE AI LESSON GENERATOR - Improved with Topic Input & PowerPoint Support
+        // ═══════════════════════════════════════════════════════════════════════
+        
+        /**
+         * Show AI Generator Modal with topic input and file selection
+         */
+        window.showAIGeneratorModal = function() {
+            console.log('[AI GENERATOR] showAIGeneratorModal called');
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 600px;">
+                    <div style="font-size: clamp(18px, 3vw, 28px); font-weight: bold; margin-bottom: 15px; color: var(--primary-bright); text-align: center;">
+                        🤖 AI LESSON GENERATOR | AI课程生成器
+                    </div>
+                    <div style="font-size: clamp(12px, 2vw, 16px); margin-bottom: 20px; line-height: 1.6;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                            <strong>📋 IMPORTANT SETUP | 重要设置：</strong><br><br>
+                            <strong style="color: #ff6b6b;">⚠️ BEFORE USING:</strong><br>
+                            1. Start <strong>ai_server.exe</strong> (double-click it)<br>
+                            &nbsp;&nbsp;&nbsp;双击 ai_server.exe 启动服务器<br><br>
+                            2. Run command to enable CORS:<br>
+                            &nbsp;&nbsp;&nbsp;<code style="background: #000; padding: 2px 8px; border-radius: 3px; font-size: 11px;">ai_server.exe --host 0.0.0.0 --port 8080</code><br><br>
+                            3. Wait for: "listening at http://127.0.0.1:8080"<br>
+                            &nbsp;&nbsp;&nbsp;等待显示：正在监听 8080 端口<br><br>
+                            4. Keep terminal window open | 保持窗口打开
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+                                📝 Topic/Focus (Optional) | 主题/重点（可选）:
+                            </label>
+                            <input type="text" id="aiTopicInput" 
+                                placeholder="e.g., Supply & Demand, Chapter 3, Pages 45-50, Inflation concepts"
+                                style="width: 100%; padding: 10px; font-size: 14px; border: 2px solid var(--primary-color); background: rgba(0,0,0,0.3); color: var(--primary-color); border-radius: 5px; font-family: inherit;">
+                            <div style="font-size: 11px; color: #888; margin-top: 5px;">
+                                Specify topics, page numbers, or concepts to focus on from your file<br>
+                                指定要关注的主题、页码或概念
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: bold;">
+                                📄 Upload File | 上传文件:
+                            </label>
+                            <input type="file" id="aiFileInput" 
+                                accept=".pdf,.ppt,.pptx,.txt"
+                                style="width: 100%; padding: 10px; font-size: 14px; border: 2px solid var(--primary-color); background: rgba(0,0,0,0.3); color: var(--primary-color); border-radius: 5px;">
+                            <div style="font-size: 11px; color: #888; margin-top: 5px;">
+                                Supported: PDF, PowerPoint (PPT/PPTX), Text files<br>
+                                支持：PDF、PowerPoint (PPT/PPTX)、文本文件
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button id="generateLessonBtn" class="timer-btn" style="flex: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; font-size: 16px;">
+                                🚀 GENERATE LESSON | 生成课程
+                            </button>
+                            <button onclick="this.closest('.modal-overlay').remove()" class="timer-btn" style="flex: 1; background: #666; padding: 12px; font-size: 16px;">
+                                ❌ CANCEL | 取消
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';  // Make modal visible
+            
+            // Attach event listener to generate button
+            const generateBtn = document.getElementById('generateLessonBtn');
+            if (generateBtn) {
+                generateBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('[AI GENERATOR] Generate button clicked!');
+                    startAIGeneration();
+                });
+            } else {
+                console.error('[AI GENERATOR] Generate button not found!');
+            }
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        };
+        
+        /**
+         * Start AI generation process
+         */
+        window.startAIGeneration = async function() {
+            console.log('[AI GENERATOR] startAIGeneration called');
+            const fileInput = document.getElementById('aiFileInput');
+            const topicInput = document.getElementById('aiTopicInput');
+            
+            console.log('[AI GENERATOR] fileInput element:', fileInput);
+            console.log('[AI GENERATOR] fileInput.files:', fileInput?.files);
+            console.log('[AI GENERATOR] fileInput.files.length:', fileInput?.files?.length);
+            
+            const file = fileInput?.files[0];
+            const topic = topicInput?.value.trim();
+            
+            console.log('[AI GENERATOR] file object:', file);
+            
+            if (!file) {
+                console.log('[AI GENERATOR] No file selected - showing error');
+                showModal('ERROR | 错误', 'Please select a file first!\n请先选择一个文件！');
+                return;
+            }
+            
+            console.log('[AI GENERATOR] File selected:', file.name, 'Topic:', topic || '(none)');
+            
+            // Close the input modal
+            document.querySelector('.modal-overlay').remove();
+            
+            // Show progress modal
+            const statusModal = showModal('AI GENERATION | AI生成', 
+                '🤖 Initializing AI lesson generator...\n正在初始化AI课程生成器...\n\n⏳ Please wait...');
+            
+            try {
+                // Step 1: Check if Llamafile is running
+                updateModalContent(statusModal, 
+                    '🔍 Step 1/5: Checking AI server connection...\n步骤 1/5：检查AI服务器连接...\n\n⏳ Connecting to localhost:8080...');
+                
+                try {
+                    const healthCheck = await fetch('http://localhost:8080/health', {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+                } catch (error) {
+                    throw new Error(`❌ Cannot connect to AI server (localhost:8080)
+
+请确保：
+1. ai_server.exe is running | 确保 ai_server.exe 正在运行
+2. Start it with CORS enabled | 使用 CORS 启动：
+   
+   Command | 命令:
+   ai_server.exe --host 0.0.0.0 --port 8080
+   
+3. Terminal shows: "listening at http://127.0.0.1:8080"
+4. Keep terminal window open | 保持终端窗口打开
+
+Error: ${error.message}`);
+                }
+                
+                // Step 2: Read file content
+                updateModalContent(statusModal, 
+                    '📄 Step 2/5: Reading file content...\n步骤 2/5：读取文件内容...\n\n⏳ Processing ' + file.name + '...');
+                
+                const fileText = await readFileContent(file);
+                
+                if (!fileText || fileText.length < 50) {
+                    throw new Error('File content is too short or empty. Please use a file with more content.\n文件内容太短或为空。请使用内容更多的文件。');
+                }
+                
+                // Step 3: Prepare content with topic focus
+                updateModalContent(statusModal, 
+                    '📝 Step 3/5: Preparing content...\n步骤 3/5：准备内容...\n\n⏳ Analyzing ' + (topic ? `topic: ${topic}` : 'full content') + '...');
+                
+                let contentToUse = fileText.substring(0, 4000); // Use more context
+                let userInstructions = topic ? 
+                    `Focus specifically on: ${topic}\n\nRelated content from file:\n${contentToUse}` :
+                    `Content from file:\n${contentToUse}`;
+                
+                // Step 4: Generate template
+                updateModalContent(statusModal, 
+                    '🎨 Step 4/5: Creating lesson template...\n步骤 4/5：创建课程模板...\n\n⏳ Preparing structure...');
+                
+                const template = createAdaptiveTemplate();
+                
+                // Step 5: Generate lesson with AI
+                updateModalContent(statusModal, 
+                    '🧠 Step 5/5: AI is generating your lesson...\n步骤 5/5：AI正在生成您的课程...\n\n⏳ This may take 30-90 seconds...\n\n🤖 Phi-3 Mini is analyzing the content\n    and creating engaging lesson...');
+                
+                const generatedLesson = await generateLessonWithAI(userInstructions, template, topic);
+                
+                // Validate and apply the generated lesson
+                const validation = validateTemplate(generatedLesson);
+                
+                if (!validation.isValid) {
+                    console.error('Validation errors:', validation.errors);
+                    throw new Error('AI generated invalid lesson structure. Please try again.\nAI生成的课程结构无效。请重试。');
+                }
+                
+                // Apply the lesson
+                applyGeneratedLesson(generatedLesson);
+                
+                updateModalContent(statusModal, 
+                    `✅ AI Lesson Generated Successfully!\nAI课程生成成功！\n\n📚 Title: ${lessonConfig.title}\n⏱️ Duration: ${generatedLesson.metadata.duration}min\n🎯 Type: ${templateType}\n${topic ? `\n🎯 Topic: ${topic}` : ''}\n\n🤖 Generated by Phi-3 Mini (Llamafile)\n\nClick anywhere to start your lesson!`);
+                
+            } catch (error) {
+                console.error('AI Generation Error:', error);
+                playError();
+                updateModalContent(statusModal, 
+                    `❌ AI Generation Failed\nAI生成失败\n\n${error.message}\n\nTroubleshooting | 故障排除:\n• Start ai_server.exe with CORS\n  使用 CORS 启动 ai_server.exe\n• Use command: ai_server.exe --host 0.0.0.0 --port 8080\n• Check file is readable\n  检查文件可读\n• Try different content\n  尝试不同内容`);
+            }
+        };
+        
+        /**
+         * Read file content (supports PDF, PPT, PPTX, TXT)
+         */
+        async function readFileContent(file) {
+            const fileName = file.name.toLowerCase();
+            
+            // For text files - direct read
+            if (fileName.endsWith('.txt')) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsText(file);
+                });
+            }
+            
+            // For PDF and PowerPoint - read as text approximation
+            // Since we removed PDF.js dependency, we'll use a simplified approach
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const arrayBuffer = e.target.result;
+                        const uint8Array = new Uint8Array(arrayBuffer);
+                        
+                        // Convert binary to text (approximation)
+                        // This extracts readable text from binary files
+                        let text = '';
+                        for (let i = 0; i < uint8Array.length; i++) {
+                            const char = uint8Array[i];
+                            // Only keep printable ASCII and common characters
+                            if ((char >= 32 && char <= 126) || char === 10 || char === 13) {
+                                text += String.fromCharCode(char);
+                            }
+                        }
+                        
+                        // Clean up extracted text
+                        text = text.replace(/\s+/g, ' ').trim();
+                        
+                        if (text.length < 50) {
+                            reject(new Error('Could not extract readable text from file. Please ensure file contains text content.'));
+                        } else {
+                            resolve(text);
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        /**
+         * Generate lesson using Llamafile (localhost:8080)
+         */
+        async function generateLessonWithAI(contentText, template, topic) {
+            const systemPrompt = `You are an expert economics educator and curriculum designer. Your task is to generate a complete economics lesson plan in STRICT JSON format.
+
+CRITICAL RULES:
+1. Output ONLY valid JSON - NO markdown, NO code blocks, NO explanations
+2. Start with { and end with } - nothing else
+3. Follow the template structure EXACTLY
+4. All text fields must be filled with relevant economics content
+5. Keywords must appear in <span class='keyword'> tags in the story
+6. Maintain bilingual content (English and Chinese)
+7. ${topic ? `Focus specifically on the topic: ${topic}` : 'Use the provided content'}
+
+Generate an engaging, educational lesson that students will enjoy learning from.`;
+
+            const userPrompt = `${contentText}
+
+=== TEMPLATE TO FILL ===
+${JSON.stringify(template, null, 2)}
+
+Fill this template with relevant economics content. Return ONLY the completed JSON template. NO other text.`;
+
+            const response = await fetch('http://localhost:8080/v1/chat/completions', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    model: 'phi-3-mini',
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userPrompt }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 4000,
+                    stream: false
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`AI Server Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const content = data.choices[0].message.content;
+            
+            // Try to extract JSON from response (handle markdown code blocks if present)
+            let jsonText = content.trim();
+            if (jsonText.startsWith('```json')) {
+                jsonText = jsonText.substring(7);
+            }
+            if (jsonText.startsWith('```')) {
+                jsonText = jsonText.substring(3);
+            }
+            if (jsonText.endsWith('```')) {
+                jsonText = jsonText.substring(0, jsonText.length - 3);
+            }
+            jsonText = jsonText.trim();
+            
+            return JSON.parse(jsonText);
+        }
+        
+        /**
+         * Apply generated lesson to the app
+         */
+        function applyGeneratedLesson(generatedLesson) {
+            currentTemplate = generatedLesson;
+            templateType = generatedLesson.metadata.classType || '20min';
+            
+            // Update lessonConfig
+            lessonConfig.title = generatedLesson.metadata.title || 'AI Generated Lesson';
+            lessonConfig.title_zh = generatedLesson.metadata.title_zh || 'AI生成课程';
+            lessonConfig.story = generatedLesson.sections.dataAnalysis.story;
+            lessonConfig.frames = generatedLesson.sections.logicConstruction.frames || [];
+            lessonConfig.wordBank = generatedLesson.sections.logicConstruction.wordBank || [];
+            lessonConfig.definitions = generatedLesson.sections.dataRepository.definitions || [];
+            lessonConfig.writePrompts = generatedLesson.sections.dataEntry.writingPrompts || [];
+            lessonConfig.mcqs = generatedLesson.sections.systemValidation.assessments || [];
+            lessonConfig.summary = generatedLesson.sections.feedback.summary || [];
+            
+            // Update timers if provided
+            if (generatedLesson.adaptation?.timers) {
+                Object.assign(adaptiveTimers, generatedLesson.adaptation.timers);
+            }
+            
+            // Reset scene
+            currentScene = 0;
+            currentMCQIndex = 0;
+            mcqAnswers = [];
+            
+            // Render and show success
+            renderAllScenes();
+            updateTimer();
+            playSuccess();
+        }
+        
+        /**
+         * Helper to update modal content dynamically
+         */
+        function updateModalContent(modal, content) {
+            if (modal && modal.querySelector) {
+                const contentDiv = modal.querySelector('.modal-content div:last-child');
+                if (contentDiv) {
+                    contentDiv.textContent = content;
+                }
+            }
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             initApp();
@@ -9663,6 +10484,17 @@ function renderWriteScene() {
                         audio.click();
                     }
                     showGameOver();
+                });
+            }
+
+            // MVP button handler
+            const mvpBtn = document.getElementById('odMVP');
+            if (mvpBtn) {
+                mvpBtn.addEventListener('click', () => {
+                    if (typeof audio === 'object' && typeof audio.click === 'function') {
+                        audio.click();
+                    }
+                    showMVPSelection();
                 });
             }
 
@@ -11651,12 +12483,227 @@ COACH: Iris Wang
             }
           };
 
+          // ============================================
+          // MVP (MOST VALUABLE STUDENT) FEATURE
+          // ============================================
+          window.showMVPSelection = function() {
+            if (!STATE.teams || STATE.teams.length === 0) {
+                showModal('NO TEAMS', 'Add teams before selecting an MVP student.');
+                return;
+            }
+            
+            // Collect all students from all teams
+            const students = [];
+            STATE.teams.forEach(team => {
+                // Teams store members in the 'members' object
+                if (team.members) {
+                    if (team.members.captain) {
+                        students.push({ name: team.members.captain, team: team.name, role: 'Captain' });
+                    }
+                    if (team.members.writer) {
+                        students.push({ name: team.members.writer, team: team.name, role: 'Writer' });
+                    }
+                    if (team.members.coach) {
+                        students.push({ name: team.members.coach, team: team.name, role: 'Coach' });
+                    }
+                }
+            });
+            
+            if (students.length === 0) {
+                showModal('NO STUDENTS', 'Add students to teams before selecting an MVP.');
+                return;
+            }
+            
+            // Show MVP selection panel
+            const overlay = document.getElementById('mvpOverlay');
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const studentList = document.getElementById('mvpStudentList');
+            
+            if (!overlay || !selectionPanel || !studentList) return;
+            
+            // Clear previous list
+            studentList.innerHTML = '';
+            
+            // Create student items
+            students.forEach(student => {
+                const item = document.createElement('div');
+                item.className = 'mvp-student-item';
+                item.innerHTML = `
+                    <div class="mvp-student-item-name">${student.name}</div>
+                    <div class="mvp-student-item-team">${student.team} - ${student.role}</div>
+                `;
+                item.onclick = () => {
+                    selectMVPStudent(student);
+                };
+                studentList.appendChild(item);
+            });
+            
+            // Show overlay and selection panel
+            overlay.style.display = 'flex';
+            selectionPanel.style.display = 'block';
+            displayContent.style.display = 'none';
+          };
+          
+          function selectMVPStudent(student) {
+            // Play sound effect
+            if (STATE.audioCtx && typeof audio === 'object' && typeof audio.click === 'function') {
+                audio.click();
+            }
+            
+            // Play MVP celebration sound
+            playMVPCelebrationSound();
+            
+            // Hide selection panel, show display content
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const studentNameEl = document.getElementById('mvpStudentName');
+            const teamNameEl = document.getElementById('mvpTeamName');
+            
+            if (!selectionPanel || !displayContent || !studentNameEl || !teamNameEl) return;
+            
+            selectionPanel.style.display = 'none';
+            displayContent.style.display = 'block';
+            
+            // Set student info
+            studentNameEl.textContent = student.name;
+            teamNameEl.textContent = `${student.team} - ${student.role}`;
+            
+            // Create sparkle effect
+            createMVPSparkles();
+            
+            // Voice announcement
+            if (STATE.voiceEnabled && STATE.chosenVoice) {
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(`Congratulations! ${student.name} is the Most Valuable Student!`);
+                    utterance.voice = STATE.chosenVoice;
+                    speechSynthesis.speak(utterance);
+                }, 500);
+            }
+          }
+          
+          function playMVPCelebrationSound() {
+            if (!soundEnabled || !ensureAudioContext()) return;
+            
+            // Triumphant fanfare
+            const notes = [523, 659, 784, 1047, 1319];  // C, E, G, C, E (major chord arpeggio)
+            notes.forEach((freq, index) => {
+                setTimeout(() => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    
+                    osc.start();
+                    osc.stop(audioContext.currentTime + 0.5);
+                }, index * 100);
+            });
+            
+            // Bell sound
+            setTimeout(() => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(2000, audioContext.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1500, audioContext.currentTime + 0.3);
+                
+                gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.start();
+                osc.stop(audioContext.currentTime + 0.3);
+            }, 600);
+          }
+          
+          function createMVPSparkles() {
+            const container = document.getElementById('mvpSparkles');
+            if (!container) return;
+            
+            // Clear previous particles
+            container.innerHTML = '';
+            
+            // Create retro space particles at random positions
+            const particleCount = 12;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'mvp-sparkle';
+                
+                // Random positions
+                const angle = (Math.PI * 2 / particleCount) * i;
+                const distance = 100 + Math.random() * 150;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.top = '50%';
+                particle.style.left = '50%';
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.animationDelay = `${i * 0.15}s`;
+                
+                container.appendChild(particle);
+            }
+          }
+          
+          window.closeMVPSelection = function() {
+            const overlay = document.getElementById('mvpOverlay');
+            const selectionPanel = document.getElementById('mvpSelectionPanel');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            
+            if (overlay) overlay.style.display = 'none';
+            if (selectionPanel) selectionPanel.style.display = 'none';
+            if (displayContent) displayContent.style.display = 'none';
+          };
+          
+          window.closeMVPDisplay = function() {
+            const overlay = document.getElementById('mvpOverlay');
+            const displayContent = document.getElementById('mvpDisplayContent');
+            const sparklesContainer = document.getElementById('mvpSparkles');
+            
+            if (overlay) overlay.style.display = 'none';
+            if (displayContent) displayContent.style.display = 'none';
+            if (sparklesContainer) sparklesContainer.innerHTML = '';
+          };
+
           if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
           } else {
             init();
           }
         })();
+        
+        // Log AI Generator function availability
+        console.log('[AI GENERATOR] Function registered:', typeof window.showAIGeneratorModal);
+        
+        // Add direct event listener as fallback for AI Generate button
+        document.addEventListener('DOMContentLoaded', function() {
+            const aiBtn = document.getElementById('aiGenerateBtn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', function(e) {
+                    console.log('[AI GENERATOR] Button clicked via event listener');
+                    if (typeof window.showAIGeneratorModal === 'function') {
+                        window.showAIGeneratorModal();
+                    } else {
+                        console.error('[AI GENERATOR] showAIGeneratorModal function not found!');
+                        alert('AI Generator function not loaded. Please refresh the page.');
+                    }
+                });
+                console.log('[AI GENERATOR] Event listener attached to button');
+            } else {
+                console.error('[AI GENERATOR] Button #aiGenerateBtn not found in DOM');
+            }
+        });
     </script>
 
     <!-- ============================================
@@ -11700,6 +12747,10 @@ COACH: Iris Wang
       <button id="odGameOver" class="od-btn" type="button" title="End Game and Show Winner" aria-label="Game over">
         <span class="od-glyph">🏆</span>
         <span class="od-label">GAME OVER</span>
+      </button>
+      <button id="odMVP" class="od-btn" type="button" title="Select Most Valuable Student" aria-label="Select MVP">
+        <span class="od-glyph">⭐</span>
+        <span class="od-label">MVP</span>
       </button>
     </div>
 
@@ -11958,6 +13009,29 @@ console.log('[UPGRADE] Hints system disabled');
         <div class="winner-score" id="winnerScore"></div>
         <div class="winner-fireworks" id="winnerFireworks"></div>
         <button class="btn success" onclick="closeWinnerOverlay()" style="margin-top: 30px; font-size: 18px; padding: 15px 40px;">
+            CLOSE | 关闭
+        </button>
+    </div>
+</div>
+
+<!-- MVP Student Overlay -->
+<div id="mvpOverlay" class="mvp-overlay">
+    <div class="mvp-background"></div>
+    <div id="mvpSelectionPanel" class="mvp-selection-panel" style="display: none;">
+        <div class="mvp-selection-title">SELECT MVP STUDENT | 选择最有价值学生</div>
+        <div class="mvp-student-list" id="mvpStudentList"></div>
+        <button class="btn" onclick="closeMVPSelection()" style="width: 100%; margin-top: 10px; font-size: 16px; padding: 12px;">
+            CANCEL | 取消
+        </button>
+    </div>
+    <div id="mvpDisplayContent" class="mvp-content" style="display: none;">
+        <div class="mvp-star"></div>
+        <div class="mvp-title">MOST VALUABLE STUDENT</div>
+        <div class="mvp-subtitle">最有价值学生</div>
+        <div class="mvp-student-name" id="mvpStudentName"></div>
+        <div class="mvp-team" id="mvpTeamName"></div>
+        <div class="mvp-sparkles" id="mvpSparkles"></div>
+        <button class="btn success" onclick="closeMVPDisplay()" style="margin-top: 40px; font-size: 18px; padding: 15px 40px;">
             CLOSE | 关闭
         </button>
     </div>
