@@ -3142,6 +3142,80 @@
             line-height: 1.3;
         }
 
+        /* ── Scene 3: Flip-Card Interaction ───────────────────────────── */
+        .def-flip-card {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .def-flip-card-inner {
+            display: grid;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .def-flip-card.flipped .def-flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .def-flip-card-front,
+        .def-flip-card-back {
+            grid-area: 1 / 1;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            padding: var(--space-5);
+            border-radius: 3px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: clamp(130px, 16cqh, 200px);
+            background: linear-gradient(135deg, #000, #001100);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .def-flip-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #001100, #002200);
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .def-flip-card:hover .def-flip-card-front {
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        .def-flip-term {
+            font-size: var(--text-lg);
+            color: var(--primary-bright);
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .def-flip-hint {
+            font-size: var(--text-sm);
+            color: var(--primary-dim);
+            margin-top: var(--space-3);
+            opacity: 0.7;
+            letter-spacing: 0.05em;
+        }
+
+        .def-flip-def-en {
+            font-size: var(--text-base);
+            color: var(--primary-bright);
+            line-height: 1.5;
+            margin-bottom: var(--space-3);
+        }
+
+        .def-flip-def-zh {
+            font-size: var(--text-sm);
+            color: var(--primary-dim);
+            line-height: 1.5;
+        }
+        /* ─────────────────────────────────────────────────────────────── */
+
         /* IB Learning Goal Banner - Collapsible */
         .ib-banner {
             background: linear-gradient(90deg, rgba(0,100,50,0.3), rgba(0,50,100,0.3));
@@ -17543,12 +17617,32 @@ Output ONLY the JSON object now:`
 
         function renderDefinitionsScene() {
             const definitionsContainer = document.getElementById('definitionsContainer');
-            definitionsContainer.innerHTML = lessonConfig.definitions.map(def => `
-                <div class="terminal-card">
-                    <div class="card-title" style="text-align: left; margin-bottom: var(--space-3); line-height: 1.3;">${def.en}</div>
-                    <div class="card-subtitle" style="text-align: left; line-height: 1.3;">${def.zh}</div>
-                </div>
-            `).join('');
+            definitionsContainer.innerHTML = lessonConfig.definitions.map((def) => {
+                // Extract term (text before first ':') and the body for the front face
+                const colonIdx = def.en.indexOf(':');
+                const term = escapeHtml(colonIdx > -1 ? def.en.slice(0, colonIdx).trim() : def.en);
+                const safeEn = escapeHtml(def.en);
+                const safeZh = escapeHtml(def.zh);
+                return `
+                    <div class="def-flip-card"
+                         onclick="this.classList.toggle('flipped')"
+                         role="button"
+                         tabindex="0"
+                         aria-label="Definition card for ${term}"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){this.classList.toggle('flipped');event.preventDefault();}">
+                        <div class="def-flip-card-inner">
+                            <div class="def-flip-card-front">
+                                <div class="def-flip-term">${term}</div>
+                                <div class="def-flip-hint">[ CLICK / ENTER TO REVEAL | 点击查看 ]</div>
+                            </div>
+                            <div class="def-flip-card-back">
+                                <div class="def-flip-def-en">${safeEn}</div>
+                                <div class="def-flip-def-zh">${safeZh}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         // renderWriteScene: Renders the write prompts for Scene 4 (Data Entry)
@@ -18275,21 +18369,23 @@ Output ONLY the JSON object now:`
 
         // Definitions Management
         window.toggleDefinitions = function() {
-            const definitions = document.querySelectorAll('#definitionsContainer .terminal-card');
+            const flipCards = document.querySelectorAll('#definitionsContainer .def-flip-card');
+            const legacyCards = document.querySelectorAll('#definitionsContainer .terminal-card');
+            const cards = flipCards.length ? flipCards : legacyCards;
             const toggleBtn = document.getElementById('toggleBtn');
-            
+
             definitionsVisible = !definitionsVisible;
-            
-            definitions.forEach(def => {
-                def.style.display = definitionsVisible ? 'flex' : 'none';
+
+            cards.forEach(card => {
+                card.style.display = definitionsVisible ? '' : 'none';
             });
-            
+
             // Update button text to reflect current state
             toggleBtn.textContent = definitionsVisible ? 'HIDE DEFINITIONS | 隐藏定义' : 'SHOW DEFINITIONS | 显示定义';
             toggleBtn.classList.toggle('active', !definitionsVisible);
-            
+
             playBeep();
-            
+
             // Re-fit after toggle
             setTimeout(() => fitCurrentScene(), 100);
         };
